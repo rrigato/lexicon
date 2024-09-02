@@ -5,6 +5,7 @@ class TestLexiconEntityModel(unittest.TestCase):
 
     def test_message_board_post_bad_input(self):
         """invalid datatypes for entity raise TypeError"""
+        from fixtures.lexicon_fixtures import mock_flash_cards
         from lexicon.entities.lexicon_entity_model import FlashCard
 
         mock_invalid_types = [
@@ -32,3 +33,5 @@ class TestLexiconEntityModel(unittest.TestCase):
                             object_property,
                             mock_invalid_type
                         )
+
+        mock_flash_cards(3)

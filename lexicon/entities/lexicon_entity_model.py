@@ -5,22 +5,8 @@ class FlashCard():
     """Represents a flash car in a spaced repition system"""
     def __init__(self):
         """Initialize all attributes to None"""
-        self.flash_card_type = None
         self.front_text = None
-
-    @property
-    def flash_card_type(self) -> Optional[str]:
-        return(self._flash_card_type)
-
-    @flash_card_type.setter
-    def flash_card_type(self, flash_card_type: Optional[str]):
-        if type(flash_card_type) not in (
-            str, type(None)):
-            raise TypeError(
-                "MessageBoardPost - flash_card_type datatype " +
-                "must be a str or None"
-            )
-        self._flash_card_type = flash_card_type
+        self.note_type = None
 
     @property
     def front_text(self) -> Optional[str]:
@@ -35,3 +21,17 @@ class FlashCard():
                 "must be a str or None"
             )
         self._front_text = front_text
+
+    @property
+    def note_type(self) -> Optional[str]:
+        return(self._note_type)
+
+    @note_type.setter
+    def note_type(self, note_type: Optional[str]):
+        if type(note_type) not in (
+            str, type(None)):
+            raise TypeError(
+                "MessageBoardPost - note_type datatype " +
+                "must be a str or None"
+            )
+        self._note_type = note_type
