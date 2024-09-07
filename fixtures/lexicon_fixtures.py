@@ -37,6 +37,9 @@ def mock_flash_cards(
 
         mock_entity = FlashCard()
 
+        mock_entity.english_defintion = (
+            f"mock english_defintion {entity_num}"
+        )
         mock_entity.front_text = f"mock front_text {entity_num}"
         mock_entity.note_type = f"mock note_type {entity_num}"
 
