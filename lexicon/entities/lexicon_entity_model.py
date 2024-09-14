@@ -7,6 +7,8 @@ class FlashCard():
         """Initialize all attributes to None"""
         self.english_definition = None
         self.front_text = None
+        self.hiragana_text = None
+        self.kanji_text = None
         self.note_type = None
 
     @property
@@ -52,6 +54,21 @@ class FlashCard():
                 "must be a str or None"
             )
         self._hiragana_text = hiragana_text
+
+    @property
+    def kanji_text(self) -> Optional[str]:
+        """hiragana representation of kanji or katakana word"""
+        return(self._kanji_text)
+
+    @kanji_text.setter
+    def kanji_text(self, kanji_text: Optional[str]):
+        if type(kanji_text) not in (
+            str, type(None)):
+            raise TypeError(
+                "FlashCard - kanji_text datatype " +
+                "must be a str or None"
+            )
+        self._kanji_text = kanji_text
 
     @property
     def note_type(self) -> Optional[str]:
