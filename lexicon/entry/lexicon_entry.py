@@ -1,5 +1,16 @@
-# lexicon_entry.py
 
-# TODO: Implement the entry point or application setup for the lexicon domain
-# This module likely includes classes or functions related to entry points or application setup in the lexicon domain.
-# Add your code here.
+import logging
+
+
+def orchestrate_japanese_vocab(
+    create_japanese_vocab_request: CreateJapaneseVocabRequest
+    ) -> None:
+    """Provide a CreateJapaneseVocabRequest and this interface
+    will orchestrate the creation of a japanese audio and reading
+    vocab card
+    """
+    logging.info(f"orchestrate_japanese_vocab - invocation begin")
+
+    logging.info(f"orchestrate_japanese_vocab - invocation end")
+    return(None)
+
