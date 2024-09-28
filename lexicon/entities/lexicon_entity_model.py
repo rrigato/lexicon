@@ -83,3 +83,6 @@ class FlashCard():
                 "must be a str or None"
             )
         self._note_type = note_type
+
+class JapaneseVocabRequest():
+    pass

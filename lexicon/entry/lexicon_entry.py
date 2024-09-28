@@ -1,11 +1,13 @@
 
 import logging
 
+from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
+
 
 def orchestrate_japanese_vocab(
-    create_japanese_vocab_request: CreateJapaneseVocabRequest
+    create_japanese_vocab_request: JapaneseVocabRequest
     ) -> None:
-    """Provide a CreateJapaneseVocabRequest and this interface
+    """Provide a JapaneseVocabRequest and this interface
     will orchestrate the creation of a japanese audio and reading
     vocab card
     """
