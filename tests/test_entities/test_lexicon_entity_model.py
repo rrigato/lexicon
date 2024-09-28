@@ -36,17 +36,18 @@ class TestLexiconEntityModel(unittest.TestCase):
 
         mock_flash_cards(3)
 
-    @unittest.skip("todo create JapaneseVocabRequest")
+
     def test_japanese_vocab_request(self):
         """invalid datatypes for entity raise TypeError"""
-        from fixtures.lexicon_fixtures import mock_valid_japanese_vocab_request
+        from fixtures.lexicon_fixtures import mock_japanese_vocab_request
         from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
 
         mock_invalid_types = [
             set(["a", "b"]),
             (1, 2, 3),
             {},
-            ["a", "list"]
+            1,
+            "string"
         ]
 
         object_properties = [

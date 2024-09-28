@@ -1,7 +1,8 @@
 
 from copy import deepcopy
+import random
 
-from lexicon.entities.lexicon_entity_model import FlashCard
+from lexicon.entities.lexicon_entity_model import FlashCard, JapaneseVocabRequest
 
 
 
@@ -54,3 +55,21 @@ def mock_flash_cards(
         mock_entities_list.append(mock_entity)
 
     return(deepcopy(mock_entities_list))
+
+
+def mock_japanese_vocab_request(
+    ) -> JapaneseVocabRequest:
+    """Creates a list of mock JapaneseVocabRequest entities"""
+
+    mock_japanese_vocab_request = JapaneseVocabRequest()
+
+    mock_japanese_vocab_request.kanji_vocab_to_create = []
+
+    for num_kanji in range(random.randint(1, 5)):
+        mock_japanese_vocab_request.kanji_vocab_to_create.append(
+            f"例{num_kanji}"
+        )
+
+    _validate_drift(mock_japanese_vocab_request)
+
+    return(deepcopy(JapaneseVocabRequest))

@@ -84,5 +84,23 @@ class FlashCard():
             )
         self._note_type = note_type
 
+
 class JapaneseVocabRequest():
-    pass
+    """Valid required input to create FlashCard of type Japanese"""
+    def __init__(self):
+        """Initialize all attributes to None"""
+        self.kanji_vocab_to_create = None
+
+    @property
+    def kanji_vocab_to_create(self) -> Optional[list[str]]:
+        return(self._kanji_vocab_to_create)
+    @kanji_vocab_to_create.setter
+    def kanji_vocab_to_create(self, kanji_vocab_to_create: Optional[list[str]]):
+        if type(kanji_vocab_to_create) not in (
+            list, type(None)):
+            raise TypeError(
+                "JapaneseVocabRequest - kanji_vocab_to_create datatype " +
+                "must be a list of str or None"
+            )
+        self._kanji_vocab_to_create = kanji_vocab_to_create
+
