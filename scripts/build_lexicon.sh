@@ -4,13 +4,19 @@ set -e
 cd addon
 
 #externals for interactng with anki
-zip -r ../lexicon.myaddon .
+# q for quiet, r for recursive, x for exclude
+zip -qr ../lexicon.myaddon . -x '**/__pycache__/*'
 
 cd ..
 
 # lexicon application clean architecture
-zip -r lexicon.myaddon lexicon -x '**/__pycache__/*'
+# q for quiet, r for recursive, x for exclude
+zip -qr lexicon.myaddon lexicon -x '**/__pycache__/*'
 
-# move the zip file to the anki addon folder
-unzip lexicon.myaddon -d \
+# move the zip file contents to the anki addon folder
+# d for destination, o for overwrite, q for quiet
+unzip -oq lexicon.myaddon -d \
 '/Users/ryan/Library/Application Support/Anki2/addons21/lexicon'
+
+rm lexicon.myaddon
+

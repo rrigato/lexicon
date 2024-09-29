@@ -1,13 +1,21 @@
 Anki add-on to create flash cards
 
-### anki-debug-console
+### anki-debugging
 
+
+#### anki-debug-console
+Run the following from a terminal
+```bash
+/Applications/Anki.app/Contents/MacOS/anki
+```
+
+#### run-anki-from-terminal
 ```shell
 cmd+shift+;
 ```
 [debug-documentation](https://docs.ankiweb.net/misc.html#debug-console)
 
-### python-debug-breakpoint
+#### python-debug-breakpoint
 ```python
 from aqt.qt import debug; debug()
 ```
