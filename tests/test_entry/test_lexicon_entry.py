@@ -19,5 +19,4 @@ class TestLexiconEntry(unittest.TestCase):
         '''
         orchestrate_japanese_vocab(mock_japanese_vocab_request())
 
-
         mock_create_audio_vocab_card.assert_called_once()

@@ -33,17 +33,17 @@ python -m unittest
 
 pyenv deactivate
 
-# TODO - push to dev
-# git push origin dev
 
-# echo "pushed to remote"
+git push origin dev
 
-# gh pr create --title "$1" \
-# --body "Automated PR creation" \
-# --head dev \
-# --base master
+echo "pushed to remote"
 
-# echo "created PR"
+gh pr create --title "$1" \
+--body "Automated PR creation" \
+--head dev \
+--base master
+
+echo "created PR"
 
 
 echo "----------------------"
