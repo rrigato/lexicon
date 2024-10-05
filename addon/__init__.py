@@ -1,4 +1,7 @@
 import logging
+import os
+from logging.handlers import RotatingFileHandler
+from time import strftime
 
 # import the main window object (mw) from aqt
 from aqt import mw
@@ -7,7 +10,36 @@ from aqt.qt import QAction, QMessageBox
 from aqt.utils import qconnect
 
 
-logging.getLogger().setLevel(logging.INFO)
+# from aqt.qt import debug;
+# debug()
+# TODO - Find the directory where the add-on is installed
+
+addon_path = "."
+# addon_path = mw.addonManager.getAddonDir("lexicon")
+
+
+
+lexicon_handler = RotatingFileHandler(filename=os.path.join(
+    addon_path,
+    "user_files",
+    "lexicon_addon.log"
+    ),
+    maxBytes=10000,
+    backupCount=3
+)
+
+
+lexicon_handler.setFormatter(logging.Formatter(
+            fmt="%(levelname)s | %(asctime)s.%(msecs)03d" +
+            strftime("%z") + " | %(message)s",
+            datefmt="%Y-%m-%dT%H:%M:%S",
+        )
+)
+lexicon_handler.setLevel(logging.DEBUG)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.addHandler(lexicon_handler)
+logging.info(os.getcwd())
 
 def e2e_test_validation():
     """End to end test for validation"""
