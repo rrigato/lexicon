@@ -19,11 +19,15 @@ addon_path = "."
 
 
 
-lexicon_handler = RotatingFileHandler(filename=os.path.join(
-    addon_path,
-    "user_files",
-    "lexicon_addon.log"
-    ),
+# lexicon_handler = RotatingFileHandler(filename=os.path.join(
+#     "user_files",
+#     "lexicon_addon.log"
+#     ),
+#     maxBytes=10000,
+#     backupCount=3
+# )
+lexicon_handler = RotatingFileHandler(
+    filename="/Users/ryan/Library/Application Support/Anki2/addons21/lexicon/user_files/lexicon_addon.log",
     maxBytes=10000,
     backupCount=3
 )

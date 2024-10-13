@@ -13,10 +13,7 @@ cd ..
 # q for quiet, r for recursive, x for exclude
 zip -qr lexicon.myaddon lexicon -x '**/__pycache__/*'
 
-# move the zip file contents to the anki addon folder
-# d for destination, o for overwrite, q for quiet
-unzip -oq lexicon.myaddon -d \
-'/Users/ryan/Library/Application Support/Anki2/addons21/lexicon'
-
-rm lexicon.myaddon
+#add user_files to the zip file
+# q for quiet, r for recursive, x for exclude
+zip -qr lexicon.myaddon user_files -x '*.log'
 
