@@ -12,23 +12,14 @@ from aqt.utils import qconnect
 
 # from aqt.qt import debug;
 # debug()
-# TODO - Find the directory where the add-on is installed
 
-addon_path = "."
-# addon_path = mw.addonManager.getAddonDir("lexicon")
-
-
-
-# lexicon_handler = RotatingFileHandler(filename=os.path.join(
-#     "user_files",
-#     "lexicon_addon.log"
-#     ),
-#     maxBytes=10000,
-#     backupCount=3
-# )
 lexicon_handler = RotatingFileHandler(
-    filename="/Users/ryan/Library/Application Support/Anki2/addons21/lexicon/user_files/lexicon_addon.log",
-    maxBytes=10000,
+    filename=os.path.join(
+        mw.addonManager.addonsFolder(__name__),
+        "user_files",
+        "lexicon_addon.log"
+    ),
+    maxBytes=3 * 1024 * 1024,
     backupCount=3
 )
 
@@ -44,9 +35,12 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(lexicon_handler)
 logging.info(os.getcwd())
+logging.info(mw.addonManager.addonsFolder(__name__))
+
 
 def e2e_test_validation():
     """End to end test for validation"""
+    logging.info(mw.addonManager.addonConfigFolder())
     QMessageBox.information(mw, "Validated Lexicon addon", "Hello from external")
     logging.info("Validated Lexicon addon")
 
