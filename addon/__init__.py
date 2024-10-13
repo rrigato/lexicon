@@ -1,6 +1,7 @@
 import logging
 import os
 from logging.handlers import RotatingFileHandler
+import sys
 from time import strftime
 
 # import the main window object (mw) from aqt
@@ -8,11 +9,13 @@ from aqt import mw
 from aqt.qt import QAction, QMessageBox
 # import the "show info" tool from utils.py
 from aqt.utils import qconnect
+from pathlib import Path
 
-
-# from aqt.qt import debug;
-# debug()
-
+# sys.path.append(os.path.join(
+#         Path(__file__).resolve().parent,
+#         "lexicon"
+#     )
+# )
 lexicon_handler = RotatingFileHandler(
     filename=os.path.join(
         mw.addonManager.addonsFolder(__name__),
@@ -34,9 +37,42 @@ lexicon_handler.setLevel(logging.DEBUG)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(lexicon_handler)
-logging.info(os.getcwd())
-logging.info(mw.addonManager.addonsFolder(__name__))
 
+#     )
+# )
+lexicon_handler = RotatingFileHandler(
+    filename=os.path.join(
+        mw.addonManager.addonsFolder(__name__),
+        "user_files",
+        "lexicon_addon.log"
+    ),
+    maxBytes=3 * 1024 * 1024,
+    backupCount=3
+)
+
+
+lexicon_handler.setFormatter(logging.Formatter(
+            fmt="%(levelname)s | %(asctime)s.%(msecs)03d" +
+            strftime("%z") + " | %(message)s",
+            datefmt="%Y-%m-%dT%H:%M:%S",
+        )
+)
+lexicon_handler.setLevel(logging.DEBUG)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.addHandler(lexicon_handler)
+
+
+logging.info(os.listdir(os.path.dirname(__file__)))
+logging.info(os.path.join(os.path.dirname(__file__), "lexicon"))
+sys.path.append("/Users/ryan/Library/Application Support/Anki2/addons21/lexicon/")
+from lexicon.repo.lexicon_repo import set_logger
+
+
+# from aqt.qt import debug;
+# debug()
+
+# set_logger()
 
 def e2e_test_validation():
     """End to end test for validation"""
