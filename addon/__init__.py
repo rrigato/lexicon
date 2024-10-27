@@ -13,28 +13,7 @@ from aqt.utils import qconnect
 from pathlib import Path
 
 
-
-lexicon_handler = RotatingFileHandler(
-    filename=os.path.join(
-        mw.addonManager.addonsFolder(__name__),
-        "user_files",
-        "lexicon_addon.log"
-    ),
-    maxBytes=3 * 1024 * 1024,
-    backupCount=3
-)
-
-
-lexicon_handler.setFormatter(logging.Formatter(
-            fmt="%(levelname)s | %(asctime)s.%(msecs)03d" +
-            strftime("%z") + " | %(message)s",
-            datefmt="%Y-%m-%dT%H:%M:%S",
-        )
-)
-lexicon_handler.setLevel(logging.DEBUG)
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.addHandler(lexicon_handler)
+set_logger()
 
 
 

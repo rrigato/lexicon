@@ -20,11 +20,11 @@ def set_logger() -> None:
     """Set logger configuration
     https://github.com/abdnh/ankiutils/blob/master/src/ankiutils/log.py
     https://github.com/abdnh/anki-zim-reader/blob/master/src/consts.py#L4
-    
+
     """
     lexicon_handler = RotatingFileHandler(
         filename=os.path.join(
-            mw.addonManager.addonsFolder(__name__),
+            mw.addonManager.addonsFolder("lexicon"),
             "user_files",
             "lexicon_addon.log"
         ),
