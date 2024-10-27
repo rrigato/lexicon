@@ -12,11 +12,7 @@ from aqt.qt import QAction, QMessageBox
 from aqt.utils import qconnect
 from pathlib import Path
 
-# sys.path.append(os.path.join(
-#         Path(__file__).resolve().parent,
-#         "lexicon"
-#     )
-# )
+
 lexicon_handler = RotatingFileHandler(
     filename=os.path.join(
         mw.addonManager.addonsFolder(__name__),
@@ -39,8 +35,6 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(lexicon_handler)
 
-#     )
-# )
 lexicon_handler = RotatingFileHandler(
     filename=os.path.join(
         mw.addonManager.addonsFolder(__name__),
@@ -64,17 +58,6 @@ logger.setLevel(logging.INFO)
 logger.addHandler(lexicon_handler)
 
 
-logging.info(os.listdir(os.path.dirname(__file__)))
-logging.info(os.getcwd())
-sys.path.remove("/Users/ryan/Library/Application Support/Anki2/addons21")
-sys.path.insert(0, "/Users/ryan/Library/Application Support/Anki2/addons21/lexicon/lexicon")
-# from lexicon.repo.lexicon_repo import set_logger
-logging.info(sys.path)
-
-# from aqt.qt import debug;
-# debug()
-
-# set_logger()
 
 def e2e_test_validation():
     """End to end test for validation"""
@@ -99,3 +82,14 @@ action = QAction("lexicon", mw)
 qconnect(action.triggered, e2e_test_validation)
 # and add it to the tools menu
 mw.form.menuTools.addAction(action)
+'''
+NOTE -
+anki addons working directory is /
+The following directory is included in the sys.path:
+    - /Users/<mac_user>/Library/Application Support/Anki2/addons21
+
+entry point is the __init__.py file in
+/Users/<mac_user>/Library/Application Support/Anki2/addons21/<addon_name>
+in this case
+/Users/<mac_user>/Library/Application Support/Anki2/addons21/lexicon
+'''
