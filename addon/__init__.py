@@ -13,27 +13,6 @@ from aqt.utils import qconnect
 from pathlib import Path
 
 
-lexicon_handler = RotatingFileHandler(
-    filename=os.path.join(
-        mw.addonManager.addonsFolder(__name__),
-        "user_files",
-        "lexicon_addon.log"
-    ),
-    maxBytes=3 * 1024 * 1024,
-    backupCount=3
-)
-
-
-lexicon_handler.setFormatter(logging.Formatter(
-            fmt="%(levelname)s | %(asctime)s.%(msecs)03d" +
-            strftime("%z") + " | %(message)s",
-            datefmt="%Y-%m-%dT%H:%M:%S",
-        )
-)
-lexicon_handler.setLevel(logging.DEBUG)
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.addHandler(lexicon_handler)
 
 lexicon_handler = RotatingFileHandler(
     filename=os.path.join(
@@ -74,14 +53,6 @@ def get_user_input():
         show_greeting(name)
 
 
-
-logging.info("Lexicon addon loaded")
-logging.debug("Lexicon addon debug loaded")
-action = QAction("lexicon", mw)
-# set it to call testFunction when it's clicked
-qconnect(action.triggered, e2e_test_validation)
-# and add it to the tools menu
-mw.form.menuTools.addAction(action)
 '''
 NOTE -
 anki addons working directory is /
@@ -93,3 +64,10 @@ entry point is the __init__.py file in
 in this case
 /Users/<mac_user>/Library/Application Support/Anki2/addons21/lexicon
 '''
+logging.info("Lexicon addon loaded")
+logging.debug("Lexicon addon debug loaded")
+action = QAction("lexicon", mw)
+# set it to call testFunction when it's clicked
+qconnect(action.triggered, e2e_test_validation)
+# and add it to the tools menu
+mw.form.menuTools.addAction(action)
