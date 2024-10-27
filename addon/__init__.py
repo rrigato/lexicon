@@ -3,6 +3,7 @@ import os
 from logging.handlers import RotatingFileHandler
 import sys
 from time import strftime
+from lexicon.repo.lexicon_repo import set_logger
 
 # import the main window object (mw) from aqt
 from aqt import mw
@@ -64,10 +65,11 @@ logger.addHandler(lexicon_handler)
 
 
 logging.info(os.listdir(os.path.dirname(__file__)))
-logging.info(os.path.join(os.path.dirname(__file__), "lexicon"))
-sys.path.append("/Users/ryan/Library/Application Support/Anki2/addons21/lexicon/")
-from lexicon.repo.lexicon_repo import set_logger
-
+logging.info(os.getcwd())
+sys.path.remove("/Users/ryan/Library/Application Support/Anki2/addons21")
+sys.path.insert(0, "/Users/ryan/Library/Application Support/Anki2/addons21/lexicon/lexicon")
+# from lexicon.repo.lexicon_repo import set_logger
+logging.info(sys.path)
 
 # from aqt.qt import debug;
 # debug()
@@ -76,7 +78,7 @@ from lexicon.repo.lexicon_repo import set_logger
 
 def e2e_test_validation():
     """End to end test for validation"""
-    logging.info(mw.addonManager.addonConfigFolder())
+    logging.info(mw.addonManager.addonsFolder(__name__))
     QMessageBox.information(mw, "Validated Lexicon addon", "Hello from external")
     logging.info("Validated Lexicon addon")
 
