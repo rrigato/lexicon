@@ -1,21 +1,8 @@
 import logging
-import os
-from logging.handlers import RotatingFileHandler
-import sys
-from time import strftime
-from lexicon.repo.lexicon_repo import set_logger
-
-# import the main window object (mw) from aqt
 from aqt import mw
 from aqt.qt import QAction, QMessageBox
-# import the "show info" tool from utils.py
 from aqt.utils import qconnect
-from pathlib import Path
-
-
-set_logger()
-
-
+from lexicon.repo.lexicon_repo import set_logger
 
 def e2e_test_validation():
     """End to end test for validation"""
@@ -23,14 +10,12 @@ def e2e_test_validation():
     QMessageBox.information(mw, "Validated Lexicon addon", "Hello from external")
     logging.info("Validated Lexicon addon")
 
-
 def get_user_input():
     # Open a dialog box to get the user's name
     name, ok = QInputDialog.getText(mw, "Input Dialog", "Please enter your name:")
 
     if ok and name:  # Check if input was provided and OK was pressed
         show_greeting(name)
-
 
 '''
 NOTE -
@@ -43,6 +28,7 @@ entry point is the __init__.py file in
 in this case
 /Users/<mac_user>/Library/Application Support/Anki2/addons21/lexicon
 '''
+set_logger()
 logging.info("Lexicon addon loaded")
 logging.debug("Lexicon addon debug loaded")
 action = QAction("lexicon", mw)
