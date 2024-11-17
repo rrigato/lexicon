@@ -1,6 +1,6 @@
 import logging
 from aqt import mw
-from aqt.qt import QAction, QMessageBox
+from aqt.qt import QAction, QMessageBox, QInputDialog
 from aqt.utils import qconnect
 from lexicon.repo.lexicon_repo import set_logger
 
@@ -11,11 +11,14 @@ def e2e_test_validation():
     logging.info("Validated Lexicon addon")
 
 def get_user_input():
-    # Open a dialog box to get the user's name
-    name, ok = QInputDialog.getText(mw, "Input Dialog", "Please enter your name:")
+    """Get user input and display greeting"""
+    logging.info("Lexicon input dialog")
+    vocab_word, no_errors = QInputDialog.getText(
+        mw, "Input Dialog", "Please enter the vocabulary word:"
+    )
 
-    if ok and name:  # Check if input was provided and OK was pressed
-        show_greeting(name)
+    if no_errors and vocab_word:  # Check if input was provided and OK was pressed
+        logging.info(vocab_word)
 
 '''
 NOTE -
@@ -34,5 +37,6 @@ logging.debug("Lexicon addon debug loaded")
 action = QAction("lexicon", mw)
 # set it to call testFunction when it's clicked
 qconnect(action.triggered, e2e_test_validation)
+qconnect(action.triggered, get_user_input)
 # and add it to the tools menu
 mw.form.menuTools.addAction(action)
