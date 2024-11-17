@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
+from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
+
 
 class TestLexiconRepo(unittest.TestCase):
 
@@ -29,3 +31,44 @@ class TestLexiconRepo(unittest.TestCase):
 
         main_window_mock.addonManager.addonsFolder.assert_called_once()
         logging_mock.handlers.RotatingFileHandler.assert_called_once()
+
+
+    @unittest.skip("skipping")
+    def test_valid_japanese_vocab_request(self):
+        """input text is japansesse"""
+        mock_input_texts = [
+            {
+                "mock_vocab_request": JapaneseVocabRequest(
+                    kanji_vocab_to_create="輪廻"
+                ),
+                "expected_output": True
+            },
+            {
+                "mock_vocab_request": JapaneseVocabRequest(
+                    kanji_vocab_to_create="ちょっぴり"
+                ),
+                "expected_output": True
+            },
+            {
+                "mock_vocab_request": JapaneseVocabRequest(
+                    kanji_vocab_to_create="トントン"
+                ),
+                "expected_output": True
+            },
+            {
+                "mock_vocab_request": JapaneseVocabRequest(
+                    kanji_vocab_to_create="じゃねlater"
+                ),
+                "expected_output": False
+            },
+
+        ]
+        for mock_input_text in mock_input_texts:
+            with self.subTest(mock_input_text=mock_input_text):
+
+                self.assertEqual(
+                    valid_japanese_vocab_request(
+                        mock_input_text["mock_vocab_request"]
+                    ),
+                    mock_input_text["expected_output"]
+                )

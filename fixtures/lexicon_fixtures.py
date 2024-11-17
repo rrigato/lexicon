@@ -63,12 +63,7 @@ def mock_japanese_vocab_request(
 
     mock_japanese_vocab_request = JapaneseVocabRequest()
 
-    mock_japanese_vocab_request.kanji_vocab_to_create = []
-
-    for num_kanji in range(random.randint(1, 5)):
-        mock_japanese_vocab_request.kanji_vocab_to_create.append(
-            f"例{num_kanji}"
-        )
+    mock_japanese_vocab_request.vocab_to_create = "例"
 
     _validate_drift(mock_japanese_vocab_request)
 
