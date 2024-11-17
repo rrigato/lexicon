@@ -1,1 +1,1 @@
-Directory for storing logs and user data
+used for storing logs or user data that needs [to be persisted locally on the client](https://addon-docs.ankiweb.net/addon-config.html) between upgrades of anki plugins

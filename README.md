@@ -1,5 +1,14 @@
 Anki add-on to create flash cards
 
+### getting-started
+```
+pyenv install 3.9
+pyenv virtualenv 3.9 lexicon
+pyenv activate lexicon
+pip install requirements/requirements-dev.txt
+```
+
+
 ### anki-debugging
 
 
@@ -18,13 +27,5 @@ cmd+shift+;
 #### python-debug-breakpoint
 ```python
 from aqt.qt import debug; debug()
-```
-
-### getting-started
-```
-pyenv install 3.12
-pyenv virtualenv 3.12 lexicon
-pyenv activate lexicon
-pip install requirements/requirements-dev.txt
 ```
 
