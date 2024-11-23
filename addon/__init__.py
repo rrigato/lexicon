@@ -33,7 +33,7 @@ entry point is the __init__.py file in
 in this case
 /Users/<mac_user>/Library/Application Support/Anki2/addons21/lexicon
 '''
-if "unittest" not in sys.modules.keys():
+if "unittest" not in sys.modules:
     '''TODO - setup tox configuration and check for environment variable?'''
     set_logger()
     logging.info("Lexicon addon loaded")
