@@ -19,6 +19,7 @@ Run the following from a terminal
 ```
 
 #### run-anki-from-terminal
+- inside anki
 ```shell
 cmd+shift+;
 ```

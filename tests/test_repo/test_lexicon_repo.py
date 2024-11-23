@@ -3,10 +3,10 @@ from unittest.mock import MagicMock, patch
 
 from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
 
-
+@patch("lexicon.repo.lexicon_repo.mw")
 class TestLexiconRepo(unittest.TestCase):
 
-    def test_create_audio_vocab_card(self):
+    def test_create_audio_vocab_card(self, main_window_mock: MagicMock):
         """audio vocab card created for FlashCard"""
         from fixtures.lexicon_fixtures import mock_flash_cards
         from lexicon.repo.lexicon_repo import create_audio_vocab_card
@@ -18,7 +18,6 @@ class TestLexiconRepo(unittest.TestCase):
 
 
     @patch("lexicon.repo.lexicon_repo.logging")
-    @patch("lexicon.repo.lexicon_repo.mw")
     def test_set_logger(
         self,
         main_window_mock: MagicMock,
@@ -34,7 +33,8 @@ class TestLexiconRepo(unittest.TestCase):
 
 
     @unittest.skip("skipping")
-    def test_valid_japanese_vocab_request(self):
+    def test_valid_japanese_vocab_request(self,
+        main_window_mock: MagicMock,):
         """input text is japansesse"""
         mock_input_texts = [
             {

@@ -1,5 +1,7 @@
 import logging
+import sys
 from aqt import mw
+
 from aqt.qt import QAction, QMessageBox, QInputDialog
 from aqt.utils import qconnect
 from lexicon.repo.lexicon_repo import set_logger
@@ -31,12 +33,14 @@ entry point is the __init__.py file in
 in this case
 /Users/<mac_user>/Library/Application Support/Anki2/addons21/lexicon
 '''
-set_logger()
-logging.info("Lexicon addon loaded")
-logging.debug("Lexicon addon debug loaded")
-action = QAction("lexicon", mw)
-# set it to call testFunction when it's clicked
-qconnect(action.triggered, e2e_test_validation)
-qconnect(action.triggered, get_user_input)
-# and add it to the tools menu
-mw.form.menuTools.addAction(action)
+if "unittest" not in sys.modules.keys():
+    '''TODO - setup tox configuration and check for environment variable?'''
+    set_logger()
+    logging.info("Lexicon addon loaded")
+    logging.debug("Lexicon addon debug loaded")
+    action = QAction("lexicon", mw)
+    # set it to call testFunction when it's clicked
+    qconnect(action.triggered, e2e_test_validation)
+    qconnect(action.triggered, get_user_input)
+    # and add it to the tools menu
+    mw.form.menuTools.addAction(action)
