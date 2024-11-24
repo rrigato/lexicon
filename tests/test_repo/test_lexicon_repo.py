@@ -34,33 +34,29 @@ class TestLexiconRepo(unittest.TestCase):
         rotating_file_handler_mock.assert_called_once()
 
 
-    @unittest.skip("skipping")
-    def test_valid_japanese_vocab_request(self,
-        main_window_mock: MagicMock,):
+
+    def test_is_only_japanese_characters(self):
         """input text is japansesse"""
+        from lexicon.repo.lexicon_repo import FlashCardRepo
         mock_input_texts = [
             {
-                "mock_vocab_request": JapaneseVocabRequest(
-                    kanji_vocab_to_create="輪廻"
-                ),
+                "mock_vocab_request": "輪廻",
                 "expected_output": True
             },
             {
-                "mock_vocab_request": JapaneseVocabRequest(
-                    kanji_vocab_to_create="ちょっぴり"
-                ),
+                "mock_vocab_request": "ちょっぴり",
                 "expected_output": True
             },
             {
-                "mock_vocab_request": JapaneseVocabRequest(
-                    kanji_vocab_to_create="トントン"
-                ),
+                "mock_vocab_request": "トントン",
                 "expected_output": True
             },
             {
-                "mock_vocab_request": JapaneseVocabRequest(
-                    kanji_vocab_to_create="じゃねlater"
-                ),
+                "mock_vocab_request": "じゃねlater",
+                "expected_output": False
+            },
+            {
+                "mock_vocab_request": "hello world",
                 "expected_output": False
             },
 
@@ -69,8 +65,9 @@ class TestLexiconRepo(unittest.TestCase):
             with self.subTest(mock_input_text=mock_input_text):
 
                 self.assertEqual(
-                    valid_japanese_vocab_request(
+                    FlashCardRepo.is_only_japanese_characters(
                         mock_input_text["mock_vocab_request"]
                     ),
-                    mock_input_text["expected_output"]
+                    mock_input_text["expected_output"],
+                    msg=f"\n check when {mock_input_text['mock_vocab_request']} is passed to interface"
                 )
