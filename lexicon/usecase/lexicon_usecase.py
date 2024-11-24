@@ -1,14 +1,19 @@
-# lexicon_usecase.py
+from abc import ABC, abstractmethod
+import logging
 
-# This file contains the implementation of the lexicon_usecase module.
-# You can define your use case classes or functions related to business logic in the lexicon domain here.
-# Remember to import any necessary modules or dependencies.
-
-class LexiconUseCase:
-    def __init__(self):
-        # Initialize your use case here
+class LearnJapaneseWordInterface(ABC):
+    @abstractmethod
+    def is_only_japanese_characters(self, str) -> bool:
         pass
 
-    def perform_action(self):
-        # Implement your use case logic here
-        pass
+def learn_japanese_word(
+        input_for_creating_flashcard: str,
+        japanese_word_plugin: LearnJapaneseWordInterface
+    )-> bool:
+    """Usecase for storing a new japanese word in
+    the spaced repetition system"""
+    is_japanese = japanese_word_plugin.is_only_japanese_characters("word")
+    if not is_japanese:
+        logging.info(f"learn_japanese_word - Input is not Japanese: {input_for_creating_flashcard}")
+        return(False)
+    
