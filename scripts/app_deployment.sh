@@ -1,13 +1,12 @@
 #! /bin/bash
 
-#exits program immediately if a command is not sucessful
+#exits program immediately if a command is not successful
 set -e
 
 if [ -z "$1" ]; then
-    echo "Missing commit message arguement 1"
+    echo "Missing commit message argument 1"
     exit 1
 fi
-
 
 git add -A
 
@@ -18,7 +17,12 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
+#deactivate pyenv if it is active
+if pyenv version-name > /dev/null 2>&1; then
+    pyenv deactivate lexicon
+fi
 pyenv activate lexicon
+
 
 secret_scan_results=$(detect-secrets scan | \
 python3 -c "import sys, json; print(json.load(sys.stdin)['results'])" )
@@ -31,8 +35,6 @@ fi
 
 python -m unittest
 
-pyenv deactivate
-
 
 git push origin dev
 
@@ -44,7 +46,6 @@ gh pr create --title "$1" \
 --base master
 
 echo "created PR"
-
 
 echo "----------------------"
 echo "deployment successful"
