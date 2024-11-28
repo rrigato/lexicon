@@ -1,0 +1,1 @@
+ADDON_FOLDER_NAME = "lexicon"

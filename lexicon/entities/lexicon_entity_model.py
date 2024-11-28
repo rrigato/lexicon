@@ -89,18 +89,18 @@ class JapaneseVocabRequest():
     """Valid required input to create FlashCard of type Japanese"""
     def __init__(self):
         """Initialize all attributes to None"""
-        self.kanji_vocab_to_create = None
+        self.vocab_to_create = None
 
     @property
-    def kanji_vocab_to_create(self) -> Optional[list[str]]:
-        return(self._kanji_vocab_to_create)
-    @kanji_vocab_to_create.setter
-    def kanji_vocab_to_create(self, kanji_vocab_to_create: Optional[list[str]]):
-        if type(kanji_vocab_to_create) not in (
-            list, type(None)):
+    def vocab_to_create(self) -> Optional[str]:
+        return(self._vocab_to_create)
+    @vocab_to_create.setter
+    def vocab_to_create(self, vocab_to_create: Optional[str]):
+        if type(vocab_to_create) not in (
+            str, type(None)):
             raise TypeError(
-                "JapaneseVocabRequest - kanji_vocab_to_create datatype " +
-                "must be a list of str or None"
+                "JapaneseVocabRequest - vocab_to_create datatype " +
+                "must be a str or None"
             )
-        self._kanji_vocab_to_create = kanji_vocab_to_create
+        self._vocab_to_create = vocab_to_create
 

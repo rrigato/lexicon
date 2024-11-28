@@ -47,7 +47,7 @@ class TestLexiconEntityModel(unittest.TestCase):
             (1, 2, 3),
             {},
             1,
-            "string"
+            ["a", "list"]
         ]
 
         object_properties = [

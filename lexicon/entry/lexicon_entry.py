@@ -2,6 +2,7 @@
 import logging
 
 from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
+from lexicon.repo.lexicon_repo import create_audio_vocab_card
 
 
 def orchestrate_japanese_vocab(
@@ -12,7 +13,7 @@ def orchestrate_japanese_vocab(
     vocab card
     """
     logging.info(f"orchestrate_japanese_vocab - invocation begin")
-
+    create_audio_vocab_card(japanese_vocab_request)
     logging.info(f"orchestrate_japanese_vocab - invocation end")
     return(None)
 
