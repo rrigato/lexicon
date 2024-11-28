@@ -1,9 +1,12 @@
 import logging
 import os
 from logging.handlers import RotatingFileHandler
+import re
 from time import strftime
 from lexicon.entities.lexicon_entity_model import FlashCard
 from aqt import mw
+
+from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
 
 def create_audio_vocab_card(
     flash_card_to_create: FlashCard
@@ -45,3 +48,30 @@ def set_logger() -> None:
     logger.addHandler(lexicon_handler)
 
     return(None)
+
+
+class FlashCardRepo(LearnJapaneseWordInterface):
+    """"""
+    @staticmethod
+    def is_only_japanese_characters(
+        potential_japanese_input: str
+    ) -> bool:
+        """checks if the input string is only japanese characters
+        """
+        logging.info(f"is_only_japanese_characters - invocation begin")
+        '''
+        Unicode ranges for Japanese characters
+        '''
+        japanese_characters = re.compile(
+            r"^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\uFF01-\uFF60\u3000-\u303F]+$"
+        )
+
+        japanese_character_count = len(
+            re.findall(r"[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\uFF01-\uFF60\u3000-\u303F]",
+                       potential_japanese_input)
+        )
+
+        is_entirely_japanese = bool(japanese_characters.match(potential_japanese_input))
+
+        logging.info(f"is_only_japanese_characters - invocation end")
+        return(is_entirely_japanese)

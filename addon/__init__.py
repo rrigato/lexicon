@@ -32,6 +32,8 @@ entry point is the __init__.py file in
 /Users/<mac_user>/Library/Application Support/Anki2/addons21/<addon_name>
 in this case
 /Users/<mac_user>/Library/Application Support/Anki2/addons21/lexicon
+
+This block is ignored when running tests
 '''
 if "unittest" not in sys.modules.keys():
     '''TODO - setup tox configuration and check for environment variable?'''
