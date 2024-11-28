@@ -1,10 +1,11 @@
 import logging
+import os
 import sys
 from aqt import mw
 
 from aqt.qt import QAction, QMessageBox, QInputDialog
 from aqt.utils import qconnect
-from lexicon.repo.lexicon_repo import set_logger
+
 
 def e2e_test_validation():
     """End to end test for validation"""
@@ -38,8 +39,17 @@ This block is ignored when running tests
 if "unittest" not in sys.modules.keys():
     '''TODO - setup tox configuration and check for environment variable?'''
     set_logger()
-    logging.info("Lexicon addon loaded")
-    logging.debug("Lexicon addon debug loaded")
+    logging.info("addon.__init__.py - Lexicon addon loaded")
+    os.sys.path.insert(
+        0,
+        os.path.join(
+            mw.addonManager.addonsFolder("lexicon"),
+            "third_party_dependencies"
+        )
+    )
+    logging.info("addon.__init__.py - sys.path: %s", sys.path)
+    from lexicon.repo.lexicon_repo import set_logger
+
     action = QAction("lexicon", mw)
     # set it to call testFunction when it's clicked
     qconnect(action.triggered, e2e_test_validation)

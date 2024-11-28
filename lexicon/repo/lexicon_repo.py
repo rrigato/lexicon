@@ -55,6 +55,26 @@ def set_logger() -> None:
 
 class FlashCardRepo(LearnJapaneseWordInterface):
     """"""
+    def create_audio_vocab_card(
+        self,
+        vocab_request: JapaneseVocabRequest
+    ) -> bool:
+        """
+        """
+        logging.info(f"create_reading_vocab_card - invocation begin")
+
+        logging.info(f"create_reading_vocab_card - invocation end")
+
+    def create_reading_vocab_card(
+        self,
+        vocab_request: JapaneseVocabRequest
+    ) -> bool:
+        """
+        """
+        logging.info(f"create_reading_vocab_card - invocation begin")
+
+        logging.info(f"create_reading_vocab_card - invocation end")
+
     @staticmethod
     def is_only_japanese_characters(
         potential_japanese_input: str
@@ -109,3 +129,4 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         logging.info(f"populate_hiragana_text - invocation end")
 
         return(cloned_vocab_request)
+
