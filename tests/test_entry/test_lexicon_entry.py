@@ -20,3 +20,12 @@ class TestLexiconEntry(unittest.TestCase):
         orchestrate_japanese_vocab(mock_japanese_vocab_request())
 
         mock_create_audio_vocab_card.assert_called_once()
+
+
+    def test_anki_input_handler(self):
+        """entry only invocation for creating jpaanese vocav"""
+        from lexicon.entry.lexicon_entry import anki_input_handler
+
+        anki_input_handler()
+
+        
