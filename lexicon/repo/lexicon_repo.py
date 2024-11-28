@@ -4,6 +4,8 @@ import os
 from logging.handlers import RotatingFileHandler
 import re
 from time import strftime
+
+import pykakasi
 from lexicon.entities.lexicon_entity_model import FlashCard, JapaneseVocabRequest
 from aqt import mw
 
@@ -83,12 +85,26 @@ class FlashCardRepo(LearnJapaneseWordInterface):
     ) -> JapaneseVocabRequest:
         """Creates a new JapaneseVocabRequest where hiragana_text
         is populated from initial_vocab_request.vocab_to_create
+
+        invariants:
+            - initial_vocab_request.vocab_to_create
+            is only one japanese word
         """
         logging.info(f"populate_hiragana_text - invocation begin")
 
         cloned_vocab_request = deepcopy(initial_vocab_request)
 
-        cloned_vocab_request.hiragana_text = "りんね"
+        pykakasi_instance = pykakasi.kakasi()
+
+
+        '''
+        Documentation for pykakasi convert, note it returns a list of dictionaries,
+        assuming only one japanese word is passed in
+        https://pykakasi.readthedocs.io/en/stable/api.html#api-documents-ref
+        '''
+        cloned_vocab_request.hiragana_text = pykakasi_instance.convert(
+            cloned_vocab_request.vocab_to_create
+        )[0]["hira"]
 
         logging.info(f"populate_hiragana_text - invocation end")
 

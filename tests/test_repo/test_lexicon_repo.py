@@ -74,15 +74,29 @@ class TestLexiconRepo(unittest.TestCase):
 
 
     def test_populate_hiraragana_text(self):
-        """hiragana text populated"""
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
-        mock_vocab_request = JapaneseVocabRequest()
-        mock_vocab_request.kanji_text = "輪廻"
-
-        vocab_request_with_hiragana = FlashCardRepo.populate_hiragana_text(mock_vocab_request)
-
         self.assertEqual(
-            vocab_request_with_hiragana.hiragana_text,
+            FlashCardRepo.populate_hiragana_text(
+                JapaneseVocabRequest(
+                    vocab_to_create="輪廻"
+                )
+            ).hiragana_text,
             "りんね"
+        )
+        self.assertEqual(
+            FlashCardRepo.populate_hiragana_text(
+                JapaneseVocabRequest(
+                    vocab_to_create="バッチリ"
+                )
+            ).hiragana_text,
+            "ばっちり"
+        )
+        self.assertEqual(
+            FlashCardRepo.populate_hiragana_text(
+                JapaneseVocabRequest(
+                    vocab_to_create="まったり"
+                )
+            ).hiragana_text,
+            "まったり"
         )
