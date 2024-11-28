@@ -1,9 +1,10 @@
+from copy import deepcopy
 import logging
 import os
 from logging.handlers import RotatingFileHandler
 import re
 from time import strftime
-from lexicon.entities.lexicon_entity_model import FlashCard
+from lexicon.entities.lexicon_entity_model import FlashCard, JapaneseVocabRequest
 from aqt import mw
 
 from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
@@ -75,3 +76,20 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         logging.info(f"is_only_japanese_characters - invocation end")
         return(is_entirely_japanese)
+
+    @staticmethod
+    def populate_hiragana_text(
+        initial_vocab_request: JapaneseVocabRequest
+    ) -> JapaneseVocabRequest:
+        """Creates a new JapaneseVocabRequest where hiragana_text
+        is populated from initial_vocab_request.vocab_to_create
+        """
+        logging.info(f"populate_hiragana_text - invocation begin")
+
+        cloned_vocab_request = deepcopy(initial_vocab_request)
+
+        cloned_vocab_request.hiragana_text = "りんね"
+
+        logging.info(f"populate_hiragana_text - invocation end")
+
+        return(cloned_vocab_request)

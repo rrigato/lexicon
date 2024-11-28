@@ -71,3 +71,18 @@ class TestLexiconRepo(unittest.TestCase):
                     mock_input_text["expected_output"],
                     msg=f"\n check when {mock_input_text['mock_vocab_request']} is passed to interface"
                 )
+
+
+    def test_populate_hiraragana_text(self):
+        """hiragana text populated"""
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        mock_vocab_request = JapaneseVocabRequest()
+        mock_vocab_request.kanji_text = "輪廻"
+
+        vocab_request_with_hiragana = FlashCardRepo.populate_hiragana_text(mock_vocab_request)
+
+        self.assertEqual(
+            vocab_request_with_hiragana.hiragana_text,
+            "りんね"
+        )
