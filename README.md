@@ -11,22 +11,23 @@ pip install requirements/requirements-dev.txt
 
 ### anki-debugging
 
+#### add-python-debug-breakpoint
+```python
+from aqt.qt import debug; debug()
+```
 
-#### anki-debug-console
+#### anki-debug-in-terminal
 Run the following from a terminal
 ```bash
 /Applications/Anki.app/Contents/MacOS/anki
 ```
 
-#### run-anki-from-terminal
+
+### run-a-terminal-inside-anki
 - inside anki
 ```shell
 cmd+shift+;
 ```
 [debug-documentation](https://docs.ankiweb.net/misc.html#debug-console)
 
-#### python-debug-breakpoint
-```python
-from aqt.qt import debug; debug()
-```
 
