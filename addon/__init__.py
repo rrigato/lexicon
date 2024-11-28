@@ -27,7 +27,7 @@ except ModuleNotFoundError:
 def e2e_test_validation():
     """End to end test for validation"""
     logging.info(mw.addonManager.addonsFolder(__name__))
-    QMessageBox.information(mw, "Validated Lexicon addon", "Hello from external")
+    # QMessageBox.information(mw, "Validated Lexicon addon", "Hello from external")
     logging.info("Validated Lexicon addon")
 
 def get_user_input():
@@ -39,6 +39,28 @@ def get_user_input():
 
     if no_errors and vocab_word:  # Check if input was provided and OK was pressed
         logging.info(vocab_word)
+    from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
+    from lexicon.repo.lexicon_repo import FlashCardRepo
+
+    flash_card_with_hiragana = FlashCardRepo.populate_hiragana_text(
+        JapaneseVocabRequest(vocab_to_create=vocab_word)
+    )
+    logging.info(
+        flash_card_with_hiragana.hiragana_text
+    )
+    logging.info(
+        type(flash_card_with_hiragana.hiragana_text)
+    )
+    try:
+        QMessageBox.information(
+            mw,
+            "Hiragana translation",
+            "Hiragana of {vocab_word}\n".format(vocab_word=vocab_word) + flash_card_with_hiragana.hiragana_text
+        )
+    except Exception as unexpected_error:
+        '''log any exceptions'''
+        logging.exception("addon.__init__.py - unexpected error")
+
 
 '''
 NOTE -
@@ -56,11 +78,19 @@ This block is ignored when running tests
 if "unittest" not in sys.modules.keys():
     '''TODO - setup tox configuration and check for environment variable?'''
     set_logger()
+
     logging.info("addon.__init__.py - Lexicon addon loaded")
     logging.info("addon.__init__.py - sys.path: %s", sys.path)
     action = QAction("lexicon", mw)
-    # set it to call testFunction when it's clicked
+
+    '''Note that qconnec
+        is registering a slot that listens to emitted signals
+    outside the flow of control of the the main thread'''
     qconnect(action.triggered, e2e_test_validation)
     qconnect(action.triggered, get_user_input)
-    # and add it to the tools menu
+
+    # add addon to the tools menu
     mw.form.menuTools.addAction(action)
+
+    '''log any exceptions'''
+    logging.exception("addon.__init__.py - unexpected error")
