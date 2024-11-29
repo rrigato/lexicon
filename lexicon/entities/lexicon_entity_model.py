@@ -87,9 +87,30 @@ class FlashCard():
 
 class JapaneseVocabRequest():
     """Valid required input to create FlashCard of type Japanese"""
-    def __init__(self):
+    def __init__(
+        self,
+        hiragana_text: Optional[str] = None,
+        vocab_to_create: Optional[str] = None
+    ):
         """Initialize all attributes to None"""
-        self.vocab_to_create = None
+        self.hiragana_text = hiragana_text
+        self.vocab_to_create = vocab_to_create
+
+
+    @property
+    def hiragana_text(self) -> Optional[str]:
+        """hiragana representation of kanji or katakana word"""
+        return(self._hiragana_text)
+
+    @hiragana_text.setter
+    def hiragana_text(self, hiragana_text: Optional[str]):
+        if type(hiragana_text) not in (
+            str, type(None)):
+            raise TypeError(
+                "FlashCard - hiragana_text datatype " +
+                "must be a str or None"
+            )
+        self._hiragana_text = hiragana_text
 
     @property
     def vocab_to_create(self) -> Optional[str]:

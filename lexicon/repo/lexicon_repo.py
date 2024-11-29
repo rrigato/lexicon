@@ -1,9 +1,12 @@
+from copy import deepcopy
 import logging
 import os
 from logging.handlers import RotatingFileHandler
 import re
 from time import strftime
-from lexicon.entities.lexicon_entity_model import FlashCard
+
+import pykakasi
+from lexicon.entities.lexicon_entity_model import FlashCard, JapaneseVocabRequest
 from aqt import mw
 
 from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
@@ -52,6 +55,26 @@ def set_logger() -> None:
 
 class FlashCardRepo(LearnJapaneseWordInterface):
     """"""
+    def create_audio_vocab_card(
+        self,
+        vocab_request: JapaneseVocabRequest
+    ) -> bool:
+        """
+        """
+        logging.info(f"create_reading_vocab_card - invocation begin")
+
+        logging.info(f"create_reading_vocab_card - invocation end")
+
+    def create_reading_vocab_card(
+        self,
+        vocab_request: JapaneseVocabRequest
+    ) -> bool:
+        """
+        """
+        logging.info(f"create_reading_vocab_card - invocation begin")
+
+        logging.info(f"create_reading_vocab_card - invocation end")
+
     @staticmethod
     def is_only_japanese_characters(
         potential_japanese_input: str
@@ -75,3 +98,35 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         logging.info(f"is_only_japanese_characters - invocation end")
         return(is_entirely_japanese)
+
+    @staticmethod
+    def populate_hiragana_text(
+        initial_vocab_request: JapaneseVocabRequest
+    ) -> JapaneseVocabRequest:
+        """Creates a new JapaneseVocabRequest where hiragana_text
+        is populated from initial_vocab_request.vocab_to_create
+
+        invariants:
+            - initial_vocab_request.vocab_to_create
+            is only one japanese word
+        """
+        logging.info(f"populate_hiragana_text - invocation begin")
+
+        cloned_vocab_request = deepcopy(initial_vocab_request)
+
+        pykakasi_instance = pykakasi.kakasi()
+
+
+        '''
+        Documentation for pykakasi convert, note it returns a list of dictionaries,
+        assuming only one japanese word is passed in
+        https://pykakasi.readthedocs.io/en/stable/api.html#api-documents-ref
+        '''
+        cloned_vocab_request.hiragana_text = pykakasi_instance.convert(
+            cloned_vocab_request.vocab_to_create
+        )[0]["hira"]
+
+        logging.info(f"populate_hiragana_text - invocation end")
+
+        return(cloned_vocab_request)
+
