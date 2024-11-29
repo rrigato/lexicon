@@ -57,7 +57,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
     """"""
     def create_audio_vocab_card(
         self,
-        vocab_request: JapaneseVocabRequest
+        create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         """
         """
@@ -67,7 +67,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
     def create_reading_vocab_card(
         self,
-        vocab_request: JapaneseVocabRequest
+        create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         """
         """
@@ -118,8 +118,9 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
 
         '''
-        Documentation for pykakasi convert, note it returns a list of dictionaries,
-        assuming only one japanese word is passed in
+        Documentation for pykakasi convert,
+        note it returns a list of dictionaries for all japanese words
+        in the input string
         https://pykakasi.readthedocs.io/en/stable/api.html#api-documents-ref
         '''
         cloned_vocab_request.hiragana_text = pykakasi_instance.convert(

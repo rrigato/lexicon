@@ -107,7 +107,7 @@ class JapaneseVocabRequest():
         if type(hiragana_text) not in (
             str, type(None)):
             raise TypeError(
-                "FlashCard - hiragana_text datatype " +
+                "JapaneseVocabRequest - hiragana_text datatype " +
                 "must be a str or None"
             )
         self._hiragana_text = hiragana_text
