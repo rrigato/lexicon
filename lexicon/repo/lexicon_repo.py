@@ -8,18 +8,8 @@ from time import strftime
 import pykakasi
 from lexicon.entities.lexicon_entity_model import FlashCard, JapaneseVocabRequest
 from aqt import mw
-
 from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
 
-def create_audio_vocab_card(
-    flash_card_to_create: FlashCard
-    ) -> None:
-    """creates an audio flash card in external system
-    """
-    logging.info(f"create_audio_vocab_card - invocation begin")
-
-    logging.info(f"create_audio_vocab_card - invocation end")
-    return(None)
 
 
 def set_logger() -> None:
@@ -55,18 +45,26 @@ def set_logger() -> None:
 
 class FlashCardRepo(LearnJapaneseWordInterface):
     """"""
+    @staticmethod
     def create_audio_vocab_card(
-        self,
         create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         """
         """
         logging.info(f"create_reading_vocab_card - invocation begin")
+        current_collection = mw.col
 
+        card_template_model = current_collection.models.by_name("Basic")
+
+        card_deck = current_collection.decks.by_name("software_engineering")
+
+        from aqt.qt import debug; debug();
         logging.info(f"create_reading_vocab_card - invocation end")
 
+        return(card_template_model, card_deck)
+
+    @staticmethod
     def create_reading_vocab_card(
-        self,
         create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         """

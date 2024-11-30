@@ -6,15 +6,23 @@ from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
 
 class TestLexiconRepo(unittest.TestCase):
 
-    def test_create_audio_vocab_card(self):
-        """audio vocab card created for FlashCard"""
-        from fixtures.lexicon_fixtures import mock_flash_cards
-        from lexicon.repo.lexicon_repo import create_audio_vocab_card
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_create_audio_vocab_card(
+        self,
+        main_window_mock: MagicMock
+    ):
+        """Anki Note created"""
+        from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+        from lexicon.repo.lexicon_repo import FlashCardRepo
 
 
-        create_audio_vocab_card(
-            mock_flash_cards(3)
+        FlashCardRepo.create_audio_vocab_card(
+            mock_japanese_vocab_request()[0]
         )
+
+        main_window_mock.col.assert_called_once()
+        main_window_mock.col.models.assert_called_once()
+        main_window_mock.col.decks.assert_called_once()
 
 
     @patch("lexicon.repo.lexicon_repo.RotatingFileHandler")
