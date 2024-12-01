@@ -42,8 +42,11 @@ def get_user_input():
     from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
     from lexicon.repo.lexicon_repo import FlashCardRepo
 
+    vocab_with_hiragana = FlashCardRepo.populate_hiragana_text(
+        JapaneseVocabRequest(vocab_to_create=vocab_word)
+    )
     _ = FlashCardRepo.create_audio_vocab_card(
-        create_vocab_request=JapaneseVocabRequest(vocab_to_create=vocab_word)
+        create_vocab_request=vocab_with_hiragana
     )
 
 

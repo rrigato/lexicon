@@ -70,9 +70,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         )
 
         new_note.fields[0] = create_vocab_request.vocab_to_create
-        new_note.fields[1] = FlashCardRepo.populate_hiragana_text(
-            create_vocab_request
-        ).hiragana_text
+        new_note.fields[1] = create_vocab_request.hiragana_text
 
         logging.info(f"create_reading_vocab_card - populated new_note")
 
