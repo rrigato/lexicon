@@ -72,6 +72,9 @@ if "unittest" not in sys.modules.keys():
     logging.info("addon.__init__.py - sys.path: %s", sys.path)
     action = QAction("lexicon", mw)
 
+    '''CMD on mac'''
+    action.setShortcut("Ctrl+Shift+L")
+
     '''Note that qconnec
         is registering a slot that listens to emitted signals
     outside the flow of control of the the main thread'''

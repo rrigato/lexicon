@@ -54,11 +54,13 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         logging.info(f"create_reading_vocab_card - invocation begin")
         current_collection = mw.col
 
-        card_template_model = current_collection.models.by_name("Basic")
+        card_template_model = mw.col.models.by_name("Basic")
 
-        card_deck = current_collection.decks.by_name("software_engineering")
+        user_defined_config = mw.addonManager.getConfig(__name__)
 
-        from aqt.qt import debug; debug();
+        card_deck = mw.col.decks.by_name(user_defined_config["audio_vocab_deck_name"])
+
+        # import pdb; pdb.set_trace()
         logging.info(f"create_reading_vocab_card - invocation end")
 
         return(card_template_model, card_deck)

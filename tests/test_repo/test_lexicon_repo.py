@@ -15,14 +15,21 @@ class TestLexiconRepo(unittest.TestCase):
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
+        main_window_mock.addonManager.getConfig.return_value = {
+            "audio_vocab_deck_name": "mock_audio_vocab_deck_name",
+            "audio_vocab_note_type": "mock_audio_vocab_note_type",
+            "reading_vocab_deck_name": "mock_reading_vocab_deck_name",
+            "reading_vocab_note_type": "mock_reading_vocab_note_type",
+        }
 
         FlashCardRepo.create_audio_vocab_card(
-            mock_japanese_vocab_request()[0]
+            mock_japanese_vocab_request()
         )
 
-        main_window_mock.col.assert_called_once()
-        main_window_mock.col.models.assert_called_once()
-        main_window_mock.col.decks.assert_called_once()
+
+        main_window_mock.col.models.by_name.assert_called_once()
+        main_window_mock.col.decks.by_name.assert_called_once()
+        main_window_mock.addonManager.getConfig.assert_called_once()
 
 
     @patch("lexicon.repo.lexicon_repo.RotatingFileHandler")
