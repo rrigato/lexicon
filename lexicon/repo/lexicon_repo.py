@@ -54,16 +54,22 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         logging.info(f"create_reading_vocab_card - invocation begin")
         current_collection = mw.col
 
-        card_template_model = mw.col.models.by_name("Basic")
+        card_note_model = mw.col.models.by_name(
+            user_defined_config["audio_vocab_note_type"]
+        )
 
         user_defined_config = mw.addonManager.getConfig(__name__)
 
         card_deck = mw.col.decks.by_name(user_defined_config["audio_vocab_deck_name"])
 
+        mw.col.new_note(
+            card_note_model
+        )
+
         # import pdb; pdb.set_trace()
         logging.info(f"create_reading_vocab_card - invocation end")
 
-        return(card_template_model, card_deck)
+        return(True)
 
     @staticmethod
     def create_reading_vocab_card(

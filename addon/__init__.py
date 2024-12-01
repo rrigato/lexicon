@@ -42,13 +42,9 @@ def get_user_input():
     from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
     from lexicon.repo.lexicon_repo import FlashCardRepo
 
-    card_model_type, deck_to_insert_card = FlashCardRepo.create_audio_vocab_card(
+    _ = FlashCardRepo.create_audio_vocab_card(
         create_vocab_request=JapaneseVocabRequest(vocab_to_create=vocab_word)
     )
-
-    logging.info(f"Card model type: {card_model_type}")
-    logging.info(f"Deck to insert card: {deck_to_insert_card}")
-
 
 
 '''
