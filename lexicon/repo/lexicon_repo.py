@@ -50,24 +50,37 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         """
+        Invariants:
+            - collection (mw.col) is loaded
         """
         logging.info(f"create_reading_vocab_card - invocation begin")
         current_collection = mw.col
+
+        user_defined_config = mw.addonManager.getConfig(__name__)
 
         card_note_model = mw.col.models.by_name(
             user_defined_config["audio_vocab_note_type"]
         )
 
-        user_defined_config = mw.addonManager.getConfig(__name__)
-
         card_deck = mw.col.decks.by_name(user_defined_config["audio_vocab_deck_name"])
 
-        mw.col.new_note(
+        logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
+        new_note = mw.col.new_note(
             card_note_model
         )
 
-        # import pdb; pdb.set_trace()
-        logging.info(f"create_reading_vocab_card - invocation end")
+        new_note.fields[0] = create_vocab_request.vocab_to_create
+        new_note.fields[1] = FlashCardRepo.populate_hiragana_text(
+            create_vocab_request
+        ).hiragana_text
+
+        logging.info(f"create_reading_vocab_card - populated new_note")
+
+
+        mw.col.add_note(new_note, card_deck["id"])
+
+        logging.info(f"create_reading_vocab_card - saved new_note")
+
 
         return(True)
 
@@ -133,7 +146,8 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             cloned_vocab_request.vocab_to_create
         )[0]["hira"]
 
-        logging.info(f"populate_hiragana_text - invocation end")
+        logging.info(f"populate_hiragana_text - initial_vocab_request.vocab_to_create: {initial_vocab_request.vocab_to_create}")
+        logging.info(f"populate_hiragana_text - cloned_vocab_request.hiragana_text: {cloned_vocab_request.vocab_to_create}")
 
         return(cloned_vocab_request)
 

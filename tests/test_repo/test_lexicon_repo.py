@@ -21,15 +21,19 @@ class TestLexiconRepo(unittest.TestCase):
             "reading_vocab_deck_name": "mock_reading_vocab_deck_name",
             "reading_vocab_note_type": "mock_reading_vocab_note_type",
         }
+        main_window_mock.col.decks.by_name.return_value = {
+            "id": 0
+        }
 
         FlashCardRepo.create_audio_vocab_card(
             mock_japanese_vocab_request()
         )
 
 
-        main_window_mock.col.models.by_name.assert_called_once()
-        main_window_mock.col.decks.by_name.assert_called_once()
         main_window_mock.addonManager.getConfig.assert_called_once()
+        main_window_mock.col.models.by_name.assert_called_once()
+        main_window_mock.col.new_note.assert_called_once()
+        main_window_mock.col.add_note.assert_called_once()
 
 
     @patch("lexicon.repo.lexicon_repo.RotatingFileHandler")
