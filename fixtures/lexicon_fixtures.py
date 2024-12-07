@@ -33,7 +33,9 @@ def mock_app_config(
     mock_app_config = AppConfig()
 
     mock_app_config.audio_deck_name = "mock_audio_deck_name"
-    mock_app_config.audio_deck_card_template = "mock_audio_deck_card_template"
+    mock_app_config.audio_note_template_name = "mock_audio_note_template_name"
+    mock_app_config.reading_deck_name = "mock_reading_deck_name"
+    mock_app_config.reading_note_template_name = "mock_reading_note_template_name"
 
     _validate_drift(mock_app_config)
 
