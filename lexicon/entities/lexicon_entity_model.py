@@ -1,6 +1,47 @@
 from typing import Optional
 
 
+class AppConfig():
+    """storing application configuration"""
+    def __init__(
+        self,
+        audio_deck_name: Optional[str] = None,
+        audio_deck_card_template: Optional[str] = None
+    ):
+        """Initialize all attributes to None"""
+        self.audio_deck_name = audio_deck_name
+        self.audio_deck_card_template = audio_deck_card_template
+
+
+    @property
+    def audio_deck_name(self) -> Optional[str]:
+        return(self._audio_deck_name)
+
+    @audio_deck_name.setter
+    def audio_deck_name(self, audio_deck_name: Optional[str]):
+        if type(audio_deck_name) not in (
+            str, type(None)):
+            raise TypeError(
+                "AppConfig - audio_deck_name datatype " +
+                "must be a str or None"
+            )
+        self._audio_deck_name = audio_deck_name
+
+    @property
+    def audio_deck_card_template(self) -> Optional[str]:
+        return(self._audio_deck_card_template)
+    @audio_deck_card_template.setter
+    def audio_deck_card_template(self, audio_deck_card_template: Optional[str]):
+        if type(audio_deck_card_template) not in (
+            str, type(None)):
+            raise TypeError(
+                "AppConfig - audio_deck_card_template datatype " +
+                "must be a str or None"
+            )
+        self._audio_deck_card_template = audio_deck_card_template
+
+
+
 class FlashCard():
     """Represents a flash car in a spaced repition system"""
     def __init__(self):
