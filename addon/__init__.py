@@ -42,24 +42,12 @@ def get_user_input():
     from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
     from lexicon.repo.lexicon_repo import FlashCardRepo
 
-    flash_card_with_hiragana = FlashCardRepo.populate_hiragana_text(
+    vocab_with_hiragana = FlashCardRepo.populate_hiragana_text(
         JapaneseVocabRequest(vocab_to_create=vocab_word)
     )
-    logging.info(
-        flash_card_with_hiragana.hiragana_text
+    _ = FlashCardRepo.create_audio_vocab_card(
+        create_vocab_request=vocab_with_hiragana
     )
-    logging.info(
-        type(flash_card_with_hiragana.hiragana_text)
-    )
-    try:
-        QMessageBox.information(
-            mw,
-            "Hiragana translation",
-            "Hiragana of {vocab_word}\n".format(vocab_word=vocab_word) + flash_card_with_hiragana.hiragana_text
-        )
-    except Exception as unexpected_error:
-        '''log any exceptions'''
-        logging.exception("addon.__init__.py - unexpected error")
 
 
 '''
@@ -82,6 +70,9 @@ if "unittest" not in sys.modules.keys():
     logging.info("addon.__init__.py - Lexicon addon loaded")
     logging.info("addon.__init__.py - sys.path: %s", sys.path)
     action = QAction("lexicon", mw)
+
+    '''CMD on mac'''
+    action.setShortcut("Ctrl+Shift+L")
 
     '''Note that qconnec
         is registering a slot that listens to emitted signals

@@ -8,18 +8,8 @@ from time import strftime
 import pykakasi
 from lexicon.entities.lexicon_entity_model import FlashCard, JapaneseVocabRequest
 from aqt import mw
-
 from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
 
-def create_audio_vocab_card(
-    flash_card_to_create: FlashCard
-    ) -> None:
-    """creates an audio flash card in external system
-    """
-    logging.info(f"create_audio_vocab_card - invocation begin")
-
-    logging.info(f"create_audio_vocab_card - invocation end")
-    return(None)
 
 
 def set_logger() -> None:
@@ -55,18 +45,45 @@ def set_logger() -> None:
 
 class FlashCardRepo(LearnJapaneseWordInterface):
     """"""
+    @staticmethod
     def create_audio_vocab_card(
-        self,
         create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         """
+        Invariants:
+            - collection (mw.col) is loaded
         """
         logging.info(f"create_reading_vocab_card - invocation begin")
+        current_collection = mw.col
 
-        logging.info(f"create_reading_vocab_card - invocation end")
+        user_defined_config = mw.addonManager.getConfig(__name__)
 
+        card_note_model = mw.col.models.by_name(
+            user_defined_config["audio_vocab_note_type"]
+        )
+
+        card_deck = mw.col.decks.by_name(user_defined_config["audio_vocab_deck_name"])
+
+        logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
+        new_note = mw.col.new_note(
+            card_note_model
+        )
+
+        new_note.fields[0] = create_vocab_request.vocab_to_create
+        new_note.fields[1] = create_vocab_request.hiragana_text
+
+        logging.info(f"create_reading_vocab_card - populated new_note")
+
+
+        mw.col.add_note(new_note, card_deck["id"])
+
+        logging.info(f"create_reading_vocab_card - saved new_note")
+
+
+        return(True)
+
+    @staticmethod
     def create_reading_vocab_card(
-        self,
         create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         """
@@ -127,7 +144,8 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             cloned_vocab_request.vocab_to_create
         )[0]["hira"]
 
-        logging.info(f"populate_hiragana_text - invocation end")
+        logging.info(f"populate_hiragana_text - initial_vocab_request.vocab_to_create: {initial_vocab_request.vocab_to_create}")
+        logging.info(f"populate_hiragana_text - cloned_vocab_request.hiragana_text: {cloned_vocab_request.vocab_to_create}")
 
         return(cloned_vocab_request)
 

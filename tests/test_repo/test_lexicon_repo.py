@@ -6,15 +6,34 @@ from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
 
 class TestLexiconRepo(unittest.TestCase):
 
-    def test_create_audio_vocab_card(self):
-        """audio vocab card created for FlashCard"""
-        from fixtures.lexicon_fixtures import mock_flash_cards
-        from lexicon.repo.lexicon_repo import create_audio_vocab_card
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_create_audio_vocab_card(
+        self,
+        main_window_mock: MagicMock
+    ):
+        """Anki Note created"""
+        from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+        from lexicon.repo.lexicon_repo import FlashCardRepo
 
+        main_window_mock.addonManager.getConfig.return_value = {
+            "audio_vocab_deck_name": "mock_audio_vocab_deck_name",
+            "audio_vocab_note_type": "mock_audio_vocab_note_type",
+            "reading_vocab_deck_name": "mock_reading_vocab_deck_name",
+            "reading_vocab_note_type": "mock_reading_vocab_note_type",
+        }
+        main_window_mock.col.decks.by_name.return_value = {
+            "id": 0
+        }
 
-        create_audio_vocab_card(
-            mock_flash_cards(3)
+        FlashCardRepo.create_audio_vocab_card(
+            mock_japanese_vocab_request()
         )
+
+
+        main_window_mock.addonManager.getConfig.assert_called_once()
+        main_window_mock.col.models.by_name.assert_called_once()
+        main_window_mock.col.new_note.assert_called_once()
+        main_window_mock.col.add_note.assert_called_once()
 
 
     @patch("lexicon.repo.lexicon_repo.RotatingFileHandler")
