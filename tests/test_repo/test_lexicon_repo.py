@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
+from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
 
 
 class TestLexiconRepo(unittest.TestCase):
@@ -119,3 +119,33 @@ class TestLexiconRepo(unittest.TestCase):
             ).hiragana_text,
             "まったり"
         )
+
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_retrieve_app_config(
+        self,
+        main_window_mock: MagicMock
+    ):
+        """AppConfig returned"""
+        from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        main_window_mock.addonManager.getConfig.return_value = {
+            "audio_vocab_deck_name": "mock_audio_vocab_deck_name",
+            "audio_vocab_note_type": "mock_audio_vocab_note_type",
+            "reading_vocab_deck_name": "mock_reading_vocab_deck_name",
+            "reading_vocab_note_type": "mock_reading_vocab_note_type",
+        }
+
+
+        mock_app_config = FlashCardRepo.retrieve_app_config()
+
+
+        [
+            self.assertIsNotNone(
+                getattr(mock_app_config, attr_name),
+                msg=f"validate the following attribute is populated - {attr_name} "
+            )
+            for attr_name in dir(AppConfig)
+            if not attr_name.startswith("_")
+
+        ]

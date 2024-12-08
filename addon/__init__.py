@@ -71,7 +71,9 @@ if "unittest" not in sys.modules.keys():
     logging.info("addon.__init__.py - sys.path: %s", sys.path)
     action = QAction("lexicon", mw)
 
-    '''CMD on mac'''
+    '''CMD on mac
+    adds a shortcut to run the addon
+    '''
     action.setShortcut("Ctrl+Shift+L")
 
     '''Note that qconnec

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import logging
 
-from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
+from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
 
 class LearnJapaneseWordInterface(ABC):
     @abstractmethod
@@ -25,6 +25,12 @@ class LearnJapaneseWordInterface(ABC):
     def populate_hiragana_text(
         self, initial_vocab_request: JapaneseVocabRequest
     ) -> JapaneseVocabRequest:
+        pass
+
+    @abstractmethod
+    def retrieve_app_config(
+        self
+    ) -> AppConfig:
         pass
 
 

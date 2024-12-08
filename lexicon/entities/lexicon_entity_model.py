@@ -12,8 +12,8 @@ class AppConfig():
     ):
         """Initialize all attributes to None"""
         self.audio_deck_name = audio_deck_name
-        self.audio_deck_name = audio_deck_name
-        self.reading_note_template_name = reading_note_template_name
+        self.audio_note_template_name =  audio_note_template_name
+        self.reading_deck_name = reading_deck_name
         self.reading_note_template_name = reading_note_template_name
 
 
