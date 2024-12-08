@@ -54,19 +54,16 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             - collection (mw.col) is loaded
         """
         logging.info(f"create_reading_vocab_card - invocation begin")
+        app_config = FlashCardRepo.retrieve_app_config()
+
         current_collection = mw.col
 
-        user_defined_config = mw.addonManager.getConfig(__name__)
 
-        card_note_model = mw.col.models.by_name(
-            user_defined_config["audio_vocab_note_type"]
-        )
-
-        card_deck = mw.col.decks.by_name(user_defined_config["audio_vocab_deck_name"])
+        card_deck = mw.col.decks.by_name(app_config.audio_deck_name)
 
         logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
         new_note = mw.col.new_note(
-            card_note_model
+            app_config.audio_note_template_name
         )
 
         new_note.fields[0] = create_vocab_request.vocab_to_create
