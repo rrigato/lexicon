@@ -33,6 +33,32 @@ class TestLexiconRepo(unittest.TestCase):
         main_window_mock.col.new_note.assert_called_once()
         main_window_mock.col.add_note.assert_called_once()
 
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_create_reading_vocab_card(
+        self,
+        main_window_mock: MagicMock
+    ):
+        """Anki reading Note created"""
+        from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+        from fixtures.lexicon_fixtures import mock_app_config
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        main_window_mock.col.decks.by_name.return_value = {
+            "id": 1
+        }
+        mock_runtime_config = mock_app_config()
+
+        FlashCardRepo.create_reading_vocab_card(
+            mock_japanese_vocab_request(),
+            mock_runtime_config
+
+        )
+
+        main_window_mock.col.models.by_name.assert_called_once()
+        main_window_mock.col.decks.by_name.assert_called_once()
+        main_window_mock.col.new_note.assert_called_once()
+        main_window_mock.col.add_note.assert_called_once()
+
 
     @patch("lexicon.repo.lexicon_repo.RotatingFileHandler")
     @patch("lexicon.repo.lexicon_repo.logging")

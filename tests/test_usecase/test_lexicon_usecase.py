@@ -21,3 +21,4 @@ class TestLexiconRepo(unittest.TestCase):
             new_word_learned
         )
         mock_plugin.create_audio_vocab_card.assert_called()
+        mock_plugin.create_reading_vocab_card.assert_called()
