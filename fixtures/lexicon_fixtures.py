@@ -28,7 +28,7 @@ def _validate_drift(entity_instance) -> None:
 
 def mock_app_config(
     ) -> AppConfig:
-    """Creates a list of mock AppConfig entities"""
+    """Creates a mock AppConfig entity with all attributes populated"""
 
     mock_app_config = AppConfig()
 
@@ -39,7 +39,7 @@ def mock_app_config(
 
     _validate_drift(mock_app_config)
 
-    return(deepcopy(AppConfig))
+    return(deepcopy(mock_app_config))
 
 def mock_flash_cards(
         number_of_entities: int
@@ -82,4 +82,4 @@ def mock_japanese_vocab_request(
 
     _validate_drift(mock_japanese_vocab_request)
 
-    return(deepcopy(JapaneseVocabRequest))
+    return(deepcopy(mock_japanese_vocab_request))

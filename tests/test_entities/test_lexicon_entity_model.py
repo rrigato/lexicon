@@ -34,7 +34,7 @@ class TestLexiconEntityModel(unittest.TestCase):
                             mock_invalid_type
                         )
 
-        mock_app_config()
+        isinstance(mock_app_config(), AppConfig)
 
 
     def test_flash_card_bad_input(self):
@@ -103,4 +103,4 @@ class TestLexiconEntityModel(unittest.TestCase):
                             mock_invalid_type
                         )
 
-        mock_japanese_vocab_request()
+        isinstance(mock_japanese_vocab_request(), JapaneseVocabRequest)
