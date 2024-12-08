@@ -39,16 +39,14 @@ def get_user_input():
 
     if no_errors and vocab_word:  # Check if input was provided and OK was pressed
         logging.info(vocab_word)
-    from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
+    from lexicon.usecase.lexicon_usecase import learn_japanese_word
     from lexicon.repo.lexicon_repo import FlashCardRepo
 
-    vocab_with_hiragana = FlashCardRepo.populate_hiragana_text(
-        JapaneseVocabRequest(vocab_to_create=vocab_word)
+    learn_japanese_word(
+        input_for_creating_flashcard=vocab_word,
+        japanese_word_plugin=FlashCardRepo
     )
-    _ = FlashCardRepo.create_audio_vocab_card(
-        create_vocab_request=vocab_with_hiragana
-    )
-
+    
 
 '''
 NOTE -

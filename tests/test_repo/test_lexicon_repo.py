@@ -28,6 +28,7 @@ class TestLexiconRepo(unittest.TestCase):
         )
 
 
+        main_window_mock.col.models.by_name.assert_called_once()
         main_window_mock.col.decks.by_name.assert_called_once()
         main_window_mock.col.new_note.assert_called_once()
         main_window_mock.col.add_note.assert_called_once()

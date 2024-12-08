@@ -49,5 +49,22 @@ def learn_japanese_word(
         logging.info(f"learn_japanese_word - Input is not Japanese: {input_for_creating_flashcard}")
         return(False)
 
+    valid_vocab_request = JapaneseVocabRequest(
+        vocab_to_create=input_for_creating_flashcard
+    )
+    logging.info(f"learn_japanese_word - Obtained valid_vocab_request")
+
+    vocab_request_with_hiragana = japanese_word_plugin.populate_hiragana_text(
+        valid_vocab_request
+    )
+
+    runtime_config = japanese_word_plugin.retrieve_app_config()
+
+    logging.info(f"learn_japanese_word - Obtained runtime_config")
+
+    japanese_word_plugin.create_audio_vocab_card(
+        vocab_request_with_hiragana
+    )
+
     logging.info(f"learn_japanese_word - Obtaining hiragana")
 

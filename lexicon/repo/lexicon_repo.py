@@ -59,11 +59,15 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         current_collection = mw.col
 
 
+        card_note_model = mw.col.models.by_name(
+            app_config.audio_note_template_name
+        )
         card_deck = mw.col.decks.by_name(app_config.audio_deck_name)
 
         logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
+        
         new_note = mw.col.new_note(
-            app_config.audio_note_template_name
+            card_note_model
         )
 
         new_note.fields[0] = create_vocab_request.vocab_to_create
@@ -142,7 +146,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         )[0]["hira"]
 
         logging.info(f"populate_hiragana_text - initial_vocab_request.vocab_to_create: {initial_vocab_request.vocab_to_create}")
-        logging.info(f"populate_hiragana_text - cloned_vocab_request.hiragana_text: {cloned_vocab_request.vocab_to_create}")
+        logging.info(f"populate_hiragana_text - cloned_vocab_request.hiragana_text: {cloned_vocab_request.hiragana_text}")
 
         return(cloned_vocab_request)
 
