@@ -2,7 +2,7 @@
 from copy import deepcopy
 import random
 
-from lexicon.entities.lexicon_entity_model import FlashCard, JapaneseVocabRequest
+from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 
 
 
@@ -26,7 +26,20 @@ def _validate_drift(entity_instance) -> None:
             )
     return(None)
 
+def mock_app_config(
+    ) -> AppConfig:
+    """Creates a list of mock AppConfig entities"""
 
+    mock_app_config = AppConfig()
+
+    mock_app_config.audio_deck_name = "mock_audio_deck_name"
+    mock_app_config.audio_note_template_name = "mock_audio_note_template_name"
+    mock_app_config.reading_deck_name = "mock_reading_deck_name"
+    mock_app_config.reading_note_template_name = "mock_reading_note_template_name"
+
+    _validate_drift(mock_app_config)
+
+    return(deepcopy(AppConfig))
 
 def mock_flash_cards(
         number_of_entities: int
@@ -55,6 +68,7 @@ def mock_flash_cards(
         mock_entities_list.append(mock_entity)
 
     return(deepcopy(mock_entities_list))
+
 
 
 def mock_japanese_vocab_request(

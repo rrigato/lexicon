@@ -1,6 +1,78 @@
 from typing import Optional
 
 
+class AppConfig():
+    """storing application configuration"""
+    def __init__(
+        self,
+        audio_deck_name: Optional[str] = None,
+        audio_note_template_name: Optional[str] = None,
+        reading_deck_name: Optional[str] = None,
+        reading_note_template_name: Optional[str] = None
+    ):
+        """Initialize all attributes to None"""
+        self.audio_deck_name = audio_deck_name
+        self.audio_note_template_name =  audio_note_template_name
+        self.reading_deck_name = reading_deck_name
+        self.reading_note_template_name = reading_note_template_name
+
+
+    @property
+    def audio_deck_name(self) -> Optional[str]:
+        return(self._audio_deck_name)
+
+    @audio_deck_name.setter
+    def audio_deck_name(self, audio_deck_name: Optional[str]):
+        if type(audio_deck_name) not in (
+            str, type(None)):
+            raise TypeError(
+                "AppConfig - audio_deck_name datatype " +
+                "must be a str or None"
+            )
+        self._audio_deck_name = audio_deck_name
+
+    @property
+    def audio_note_template_name(self) -> Optional[str]:
+        return(self._audio_note_template_name)
+    @audio_note_template_name.setter
+    def audio_note_template_name(self, audio_note_template_name: Optional[str]):
+        if type(audio_note_template_name) not in (
+            str, type(None)):
+            raise TypeError(
+                "AppConfig - audio_note_template_name datatype " +
+                "must be a str or None"
+            )
+        self._audio_note_template_name = audio_note_template_name
+
+    @property
+    def reading_deck_name(self) -> Optional[str]:
+        return(self._reading_deck_name)
+
+    @reading_deck_name.setter
+    def reading_deck_name(self, reading_deck_name: Optional[str]):
+        if type(reading_deck_name) not in (
+            str, type(None)):
+            raise TypeError(
+                "AppConfig - reading_deck_name datatype " +
+                "must be a str or None"
+            )
+        self._reading_deck_name = reading_deck_name
+
+    @property
+    def reading_note_template_name(self) -> Optional[str]:
+        return(self._reading_note_template_name)
+    @reading_note_template_name.setter
+    def reading_note_template_name(self, reading_note_template_name: Optional[str]):
+        if type(reading_note_template_name) not in (
+            str, type(None)):
+            raise TypeError(
+                "AppConfig - reading_note_template_name datatype " +
+                "must be a str or None"
+            )
+        self._reading_note_template_name = reading_note_template_name
+
+
+
 class FlashCard():
     """Represents a flash car in a spaced repition system"""
     def __init__(self):

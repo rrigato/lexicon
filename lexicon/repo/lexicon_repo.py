@@ -6,7 +6,7 @@ import re
 from time import strftime
 
 import pykakasi
-from lexicon.entities.lexicon_entity_model import FlashCard, JapaneseVocabRequest
+from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 from aqt import mw
 from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
 
@@ -149,3 +149,20 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         return(cloned_vocab_request)
 
+    @staticmethod
+    def retrieve_app_config() -> AppConfig:
+        """retrieves the app configuration
+        """
+        logging.info(f"retrieve_app_config - invocation begin")
+
+        user_defined_config = mw.addonManager.getConfig(__name__)
+
+        app_config = AppConfig(
+            audio_deck_name=user_defined_config["audio_vocab_deck_name"],
+            audio_note_template_name=user_defined_config["audio_vocab_note_type"],
+            reading_deck_name=user_defined_config["reading_vocab_deck_name"],
+            reading_note_template_name=user_defined_config["reading_vocab_note_type"]
+        )
+
+        logging.info(f"retrieve_app_config - invocation end")
+        return(app_config)
