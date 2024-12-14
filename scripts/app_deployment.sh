@@ -12,6 +12,8 @@
 
     git commit -m "$1"
 
+    which python
+    
     export PYENV_ROOT="$HOME/.pyenv"
     export PATH="$PYENV_ROOT/bin:$PATH"
 
@@ -20,6 +22,8 @@
     pyenv which python
 
     pyenv shell lexicon
+
+    pyenv which python
 
 
     secret_scan_results=$(detect-secrets scan | \
