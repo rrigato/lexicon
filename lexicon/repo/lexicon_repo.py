@@ -53,17 +53,54 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         Invariants:
             - collection (mw.col) is loaded
         """
-        logging.info(f"create_reading_vocab_card - invocation begin")
+        logging.info(f"create_audio_vocab_card - invocation begin")
         app_config = FlashCardRepo.retrieve_app_config()
 
         current_collection = mw.col
 
 
+        card_note_model = mw.col.models.by_name(
+            app_config.audio_note_template_name
+        )
         card_deck = mw.col.decks.by_name(app_config.audio_deck_name)
 
-        logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
+        logging.info(f"create_audio_vocab_card - found card_note_model and card_deck")
+
         new_note = mw.col.new_note(
-            app_config.audio_note_template_name
+            card_note_model
+        )
+
+        new_note.fields[0] = create_vocab_request.vocab_to_create
+        new_note.fields[1] = create_vocab_request.hiragana_text
+
+        logging.info(f"create_audio_vocab_card - populated new_note")
+
+
+        mw.col.add_note(new_note, card_deck["id"])
+
+        logging.info(f"create_audio_vocab_card - saved new_note")
+
+
+        return(True)
+
+    @staticmethod
+    def create_reading_vocab_card(
+        create_vocab_request: JapaneseVocabRequest,
+        app_config: AppConfig
+    ) -> bool:
+        """Creates a new reading vocab card
+        """
+        logging.info(f"create_reading_vocab_card - invocation begin")
+
+        card_note_model = mw.col.models.by_name(
+            app_config.reading_note_template_name
+        )
+        card_deck = mw.col.decks.by_name(app_config.reading_deck_name)
+
+        logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
+
+        new_note = mw.col.new_note(
+            card_note_model
         )
 
         new_note.fields[0] = create_vocab_request.vocab_to_create
@@ -76,18 +113,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         logging.info(f"create_reading_vocab_card - saved new_note")
 
-
         return(True)
-
-    @staticmethod
-    def create_reading_vocab_card(
-        create_vocab_request: JapaneseVocabRequest
-    ) -> bool:
-        """
-        """
-        logging.info(f"create_reading_vocab_card - invocation begin")
-
-        logging.info(f"create_reading_vocab_card - invocation end")
 
     @staticmethod
     def is_only_japanese_characters(
@@ -142,7 +168,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         )[0]["hira"]
 
         logging.info(f"populate_hiragana_text - initial_vocab_request.vocab_to_create: {initial_vocab_request.vocab_to_create}")
-        logging.info(f"populate_hiragana_text - cloned_vocab_request.hiragana_text: {cloned_vocab_request.vocab_to_create}")
+        logging.info(f"populate_hiragana_text - cloned_vocab_request.hiragana_text: {cloned_vocab_request.hiragana_text}")
 
         return(cloned_vocab_request)
 

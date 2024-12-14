@@ -12,7 +12,9 @@ class LearnJapaneseWordInterface(ABC):
 
     @abstractmethod
     def create_reading_vocab_card(
-        self, create_vocab_request: JapaneseVocabRequest
+        self,
+        app_config: AppConfig,
+        create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         pass
 
@@ -49,5 +51,30 @@ def learn_japanese_word(
         logging.info(f"learn_japanese_word - Input is not Japanese: {input_for_creating_flashcard}")
         return(False)
 
-    logging.info(f"learn_japanese_word - Obtaining hiragana")
+    valid_vocab_request = JapaneseVocabRequest(
+        vocab_to_create=input_for_creating_flashcard
+    )
+    logging.info(f"learn_japanese_word - Obtained valid_vocab_request")
+
+    vocab_request_with_hiragana = japanese_word_plugin.populate_hiragana_text(
+        valid_vocab_request
+    )
+
+    logging.info(f"learn_japanese_word - populated hiragana_text")
+
+    runtime_config = japanese_word_plugin.retrieve_app_config()
+
+    logging.info(f"learn_japanese_word - Obtained runtime_config")
+
+    japanese_word_plugin.create_audio_vocab_card(
+        vocab_request_with_hiragana
+    )
+    logging.info(f"learn_japanese_word - created audio card")
+
+    japanese_word_plugin.create_reading_vocab_card(
+        vocab_request_with_hiragana,
+        runtime_config
+    )
+    logging.info(f"learn_japanese_word - created reading vocab card")
+
 
