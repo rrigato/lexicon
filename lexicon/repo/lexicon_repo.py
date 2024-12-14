@@ -195,3 +195,21 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         logging.info(f"retrieve_app_config - invocation end")
         return(app_config)
+
+    @staticmethod
+    def set_flash_card_due_date_in_embeded_application(
+        app_config: AppConfig,
+        flash_card: FlashCard
+    ) -> None:
+        """Sets the due date for the flash card in
+        the external spaced repetition system SRS application Anki
+        """
+        logging.info(f"set_flash_card_due_date_in_embeded_application - invocation begin")
+
+        mw.col.sched.set_due_date(
+            card_ids=flash_card.anki_card_id,
+            days=str(app_config.flash_card_due_date)
+        )
+
+        logging.info(f"set_flash_card_due_date_in_embeded_application - invocation end")
+        return(None)

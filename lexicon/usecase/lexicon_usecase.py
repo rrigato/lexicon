@@ -38,8 +38,9 @@ class LearnJapaneseWordInterface(ABC):
         pass
 
     @abstractmethod
-    def set_flash_card_due_date_in_srs(
+    def set_flash_card_due_date_in_embeded_application(
         self,
+        app_config: AppConfig,
         flash_card: FlashCard
     ) -> None:
         pass

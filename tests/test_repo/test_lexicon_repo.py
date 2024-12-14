@@ -189,3 +189,20 @@ class TestLexiconRepo(unittest.TestCase):
             if not attr_name.startswith("_")
 
         ]
+
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def set_flash_card_due_date_in_embeded_application(
+        self,
+        main_window_mock: MagicMock
+    ):
+        """Outgoing arguement to set due date"""
+        from fixtures.lexicon_fixtures import mock_flash_cards
+        from fixtures.lexicon_fixtures import mock_app_config
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        FlashCardRepo.set_flash_card_due_date_in_embeded_application(
+            mock_app_config(),
+            mock_flash_cards(1)[0]
+        )
+
+        main_window_mock.col.sched.set_due_date.assert_called_once()
