@@ -19,7 +19,7 @@ eval "$(pyenv init -)"
 
 pyenv which python
 
-pyvenv shell lexicon
+pyenv shell lexicon
 
 
 secret_scan_results=$(detect-secrets scan | \
