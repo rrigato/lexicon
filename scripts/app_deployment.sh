@@ -14,14 +14,12 @@ git commit -m "$1"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
+
 eval "$(pyenv init -)"
 
-#deactivate pyenv if it is active
-if pyenv version-name > /dev/null 2>&1; then
-    pyenv deactivate lexicon
-fi
-pyenv activate lexicon
+pyenv which python
+
+pyvenv shell lexicon
 
 
 secret_scan_results=$(detect-secrets scan | \
