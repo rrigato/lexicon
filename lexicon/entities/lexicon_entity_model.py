@@ -75,13 +75,50 @@ class AppConfig():
 
 class FlashCard():
     """Represents a flash car in a spaced repition system"""
-    def __init__(self):
+    def __init__(
+            self,
+            anki_card_id: Optional[int] = None,
+            anki_note_id: Optional[int] = None,
+        ):
         """Initialize all attributes to None"""
+        self.anki_card_id = anki_card_id
+        self.anki_note_id = anki_note_id
         self.english_definition = None
         self.front_text = None
         self.hiragana_text = None
         self.kanji_text = None
         self.note_type = None
+
+    @property
+    def anki_card_id(self) -> Optional[int]:
+        """each note can have multiple cards
+        that each have a unique id"""
+        return(self._anki_card_id)
+
+    @anki_card_id.setter
+    def anki_card_id(self, anki_card_id: Optional[int]):
+        if type(anki_card_id) not in (
+            int, type(None)):
+            raise TypeError(
+                "FlashCard - anki_card_id datatype " +
+                "must be a int or None"
+            )
+        self._anki_card_id = anki_card_id
+
+    @property
+    def anki_note_id(self) -> Optional[int]:
+        """Unique identifier for the flash card in the Anki database"""
+        return(self._anki_note_id)
+
+    @anki_note_id.setter
+    def anki_note_id(self, anki_note_id: Optional[int]):
+        if type(anki_note_id) not in (
+            int, type(None)):
+            raise TypeError(
+                "FlashCard - anki_note_id datatype " +
+                "must be a int or None"
+            )
+        self._anki_note_id = anki_note_id
 
     @property
     def english_definition(self) -> Optional[str]:

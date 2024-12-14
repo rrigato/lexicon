@@ -74,7 +74,13 @@ class TestLexiconRepo(unittest.TestCase):
 
         set_logger()
 
-        rotating_file_handler_mock.assert_called_once()
+        args, kwargs = rotating_file_handler_mock.call_args
+
+        self.assertEqual(
+            kwargs["encoding"],
+            "utf-8",
+            msg="e2e bug where not setting encoding cannot log non-ascii characters"
+        )
 
 
 

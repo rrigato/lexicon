@@ -51,6 +51,8 @@ def mock_flash_cards(
 
         mock_entity = FlashCard()
 
+        mock_entity.anki_card_id = entity_num
+        mock_entity.anki_note_id = entity_num
         mock_entity.english_definition = (
             f"mock english_definition {entity_num}"
         )

@@ -25,7 +25,8 @@ def set_logger() -> None:
             "lexicon_addon.log"
         ),
         maxBytes=3 * 1024 * 1024,
-        backupCount=3
+        backupCount=3,
+        encoding="utf-8"
     )
 
 
