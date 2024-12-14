@@ -7,12 +7,14 @@ class AppConfig():
         self,
         audio_deck_name: Optional[str] = None,
         audio_note_template_name: Optional[str] = None,
+        audio_vocab_card_due_date: Optional[int] = None,
         reading_deck_name: Optional[str] = None,
         reading_note_template_name: Optional[str] = None
     ):
         """Initialize all attributes to None"""
         self.audio_deck_name = audio_deck_name
         self.audio_note_template_name =  audio_note_template_name
+        self.audio_vocab_card_due_date =  audio_vocab_card_due_date
         self.reading_deck_name = reading_deck_name
         self.reading_note_template_name = reading_note_template_name
 
@@ -43,6 +45,19 @@ class AppConfig():
                 "must be a str or None"
             )
         self._audio_note_template_name = audio_note_template_name
+
+    @property
+    def audio_vocab_card_due_date(self) -> Optional[int]:
+        return(self._audio_vocab_card_due_date)
+    @audio_vocab_card_due_date.setter
+    def audio_vocab_card_due_date(self, audio_vocab_card_due_date: Optional[int]):
+        if type(audio_vocab_card_due_date) not in (
+            int, type(None)):
+            raise TypeError(
+                "AppConfig - audio_vocab_card_due_date datatype " +
+                "must be a int or None"
+            )
+        self._audio_vocab_card_due_date = audio_vocab_card_due_date
 
     @property
     def reading_deck_name(self) -> Optional[str]:

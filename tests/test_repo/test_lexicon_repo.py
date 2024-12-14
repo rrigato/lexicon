@@ -172,6 +172,7 @@ class TestLexiconRepo(unittest.TestCase):
         main_window_mock.addonManager.getConfig.return_value = {
             "audio_vocab_deck_name": "mock_audio_vocab_deck_name",
             "audio_vocab_note_type": "mock_audio_vocab_note_type",
+            "audio_vocab_card_due_date": 1,
             "reading_vocab_deck_name": "mock_reading_vocab_deck_name",
             "reading_vocab_note_type": "mock_reading_vocab_note_type",
         }

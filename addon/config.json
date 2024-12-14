@@ -1,8 +1,8 @@
 {
+    "audio_vocab_card_due_date": -1,
     "audio_vocab_deck_name": "audio deck name",
-    "audio_vocab_note_due_date": -1,
     "audio_vocab_note_type": "audio note type",
+    "reading_vocab_card_due_date": -1,
     "reading_vocab_deck_name": "reading deck name",
-    "reading_vocab_note_due_date": -1,
     "reading_vocab_note_type": "reading note type"
 }

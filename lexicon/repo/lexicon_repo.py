@@ -189,6 +189,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         app_config = AppConfig(
             audio_deck_name=user_defined_config["audio_vocab_deck_name"],
             audio_note_template_name=user_defined_config["audio_vocab_note_type"],
+            audio_vocab_card_due_date=user_defined_config["audio_vocab_card_due_date"],
             reading_deck_name=user_defined_config["reading_vocab_deck_name"],
             reading_note_template_name=user_defined_config["reading_vocab_note_type"]
         )
