@@ -1,13 +1,15 @@
 from abc import ABC, abstractmethod
 import logging
 
-from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
+from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 
 class LearnJapaneseWordInterface(ABC):
     @abstractmethod
     def create_audio_vocab_card(
-        self, create_vocab_request: JapaneseVocabRequest
-    ) -> bool:
+        self,
+        app_config: AppConfig,
+        create_vocab_request: JapaneseVocabRequest
+    ) -> FlashCard:
         pass
 
     @abstractmethod
@@ -67,6 +69,7 @@ def learn_japanese_word(
     logging.info(f"learn_japanese_word - Obtained runtime_config")
 
     japanese_word_plugin.create_audio_vocab_card(
+        runtime_config,
         vocab_request_with_hiragana
     )
     logging.info(f"learn_japanese_word - created audio card")

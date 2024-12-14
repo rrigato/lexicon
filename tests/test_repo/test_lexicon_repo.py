@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
+from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 
 
 class TestLexiconRepo(unittest.TestCase):
@@ -22,16 +22,26 @@ class TestLexiconRepo(unittest.TestCase):
         main_window_mock.col.decks.by_name.return_value = {
             "id": 0
         }
+        main_window_mock.col.new_note.return_value.id = 1
+        main_window_mock.col.new_note.return_value.cards.return_value = [
+            MagicMock(id=2)
+        ]
 
-        FlashCardRepo.create_audio_vocab_card(
+        mock_created_flash_card = FlashCardRepo.create_audio_vocab_card(
+            mock_app_config(),
             mock_japanese_vocab_request()
         )
 
 
+        retrieve_app_config_mock.assert_not_called()
         main_window_mock.col.models.by_name.assert_called_once()
         main_window_mock.col.decks.by_name.assert_called_once()
         main_window_mock.col.new_note.assert_called_once()
         main_window_mock.col.add_note.assert_called_once()
+        self.assertIsInstance(
+            mock_created_flash_card,
+            FlashCard
+        )
 
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_create_reading_vocab_card(

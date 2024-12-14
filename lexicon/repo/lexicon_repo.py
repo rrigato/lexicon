@@ -48,6 +48,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
     """"""
     @staticmethod
     def create_audio_vocab_card(
+        app_config: AppConfig,
         create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         """
@@ -55,7 +56,6 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             - collection (mw.col) is loaded
         """
         logging.info(f"create_audio_vocab_card - invocation begin")
-        app_config = FlashCardRepo.retrieve_app_config()
 
         current_collection = mw.col
 
@@ -82,7 +82,12 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         logging.info(f"create_audio_vocab_card - saved new_note")
 
 
-        return(True)
+        return(
+            FlashCard(
+                anki_card_id=new_note.cards()[0].id,
+                anki_note_id=new_note.id,
+            )
+        )
 
     @staticmethod
     def create_reading_vocab_card(
