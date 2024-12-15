@@ -76,7 +76,7 @@ def learn_japanese_word(
 
     logging.info(f"learn_japanese_word - Obtained runtime_config")
 
-    japanese_word_plugin.create_audio_vocab_card(
+    audio_flash_card = japanese_word_plugin.create_audio_vocab_card(
         runtime_config,
         vocab_request_with_hiragana
     )
@@ -89,3 +89,8 @@ def learn_japanese_word(
     logging.info(f"learn_japanese_word - created reading vocab card")
 
 
+    #TODO - extract into own function
+    japanese_word_plugin.set_flash_card_due_date_in_embeded_application(
+        runtime_config,
+        audio_flash_card
+    )
