@@ -22,4 +22,4 @@ class TestLexiconRepo(unittest.TestCase):
         )
         mock_plugin.create_audio_vocab_card.assert_called()
         mock_plugin.create_reading_vocab_card.assert_called()
-        # mock_plugin.set_note_due_dates.assert_called()
+        mock_plugin.set_flash_card_due_date_in_embeded_application.assert_called()
