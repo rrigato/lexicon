@@ -192,7 +192,7 @@ class TestLexiconRepo(unittest.TestCase):
         ]
 
     @patch("lexicon.repo.lexicon_repo.mw")
-    def set_flash_card_due_date_in_embeded_application(
+    def test_set_flash_card_due_date_in_embeded_application(
         self,
         main_window_mock: MagicMock
     ):
@@ -207,3 +207,23 @@ class TestLexiconRepo(unittest.TestCase):
         )
 
         main_window_mock.col.sched.set_due_date.assert_called_once()
+
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_set_flash_card_due_date_in_embeded_application_due_date_is_none(
+        self,
+        main_window_mock: MagicMock
+    ):
+        """AppConfig.audio_vocab_card_due_date of None
+        does not call set_due_date on collection"""
+        from fixtures.lexicon_fixtures import mock_flash_cards
+        from fixtures.lexicon_fixtures import mock_app_config
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        mock_config_with_no_due_date = mock_app_config()
+        mock_config_with_no_due_date.audio_vocab_card_due_date = None
+        FlashCardRepo.set_flash_card_due_date_in_embeded_application(
+            mock_config_with_no_due_date,
+            mock_flash_cards(1)[0]
+        )
+
+        main_window_mock.col.sched.set_due_date.assert_not_called()
