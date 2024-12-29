@@ -1,13 +1,15 @@
 from abc import ABC, abstractmethod
 import logging
 
-from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
+from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 
 class LearnJapaneseWordInterface(ABC):
     @abstractmethod
     def create_audio_vocab_card(
-        self, create_vocab_request: JapaneseVocabRequest
-    ) -> bool:
+        self,
+        app_config: AppConfig,
+        create_vocab_request: JapaneseVocabRequest
+    ) -> FlashCard:
         pass
 
     @abstractmethod
@@ -33,6 +35,14 @@ class LearnJapaneseWordInterface(ABC):
     def retrieve_app_config(
         self
     ) -> AppConfig:
+        pass
+
+    @abstractmethod
+    def set_flash_card_due_date_in_embeded_application(
+        self,
+        app_config: AppConfig,
+        flash_card: FlashCard
+    ) -> None:
         pass
 
 
@@ -66,7 +76,8 @@ def learn_japanese_word(
 
     logging.info(f"learn_japanese_word - Obtained runtime_config")
 
-    japanese_word_plugin.create_audio_vocab_card(
+    audio_flash_card = japanese_word_plugin.create_audio_vocab_card(
+        runtime_config,
         vocab_request_with_hiragana
     )
     logging.info(f"learn_japanese_word - created audio card")
@@ -78,3 +89,8 @@ def learn_japanese_word(
     logging.info(f"learn_japanese_word - created reading vocab card")
 
 
+    #TODO - extract into own function
+    japanese_word_plugin.set_flash_card_due_date_in_embeded_application(
+        runtime_config,
+        audio_flash_card
+    )

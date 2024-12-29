@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
+from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 
 
 class TestLexiconRepo(unittest.TestCase):
@@ -22,16 +22,26 @@ class TestLexiconRepo(unittest.TestCase):
         main_window_mock.col.decks.by_name.return_value = {
             "id": 0
         }
+        main_window_mock.col.new_note.return_value.id = 1
+        main_window_mock.col.new_note.return_value.cards.return_value = [
+            MagicMock(id=2)
+        ]
 
-        FlashCardRepo.create_audio_vocab_card(
+        mock_created_flash_card = FlashCardRepo.create_audio_vocab_card(
+            mock_app_config(),
             mock_japanese_vocab_request()
         )
 
 
+        retrieve_app_config_mock.assert_not_called()
         main_window_mock.col.models.by_name.assert_called_once()
         main_window_mock.col.decks.by_name.assert_called_once()
         main_window_mock.col.new_note.assert_called_once()
         main_window_mock.col.add_note.assert_called_once()
+        self.assertIsInstance(
+            mock_created_flash_card,
+            FlashCard
+        )
 
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_create_reading_vocab_card(
@@ -74,7 +84,13 @@ class TestLexiconRepo(unittest.TestCase):
 
         set_logger()
 
-        rotating_file_handler_mock.assert_called_once()
+        args, kwargs = rotating_file_handler_mock.call_args
+
+        self.assertEqual(
+            kwargs["encoding"],
+            "utf-8",
+            msg="e2e bug where not setting encoding cannot log non-ascii characters"
+        )
 
 
 
@@ -156,6 +172,7 @@ class TestLexiconRepo(unittest.TestCase):
         main_window_mock.addonManager.getConfig.return_value = {
             "audio_vocab_deck_name": "mock_audio_vocab_deck_name",
             "audio_vocab_note_type": "mock_audio_vocab_note_type",
+            "audio_vocab_card_due_date": 1,
             "reading_vocab_deck_name": "mock_reading_vocab_deck_name",
             "reading_vocab_note_type": "mock_reading_vocab_note_type",
         }
@@ -173,3 +190,40 @@ class TestLexiconRepo(unittest.TestCase):
             if not attr_name.startswith("_")
 
         ]
+
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_set_flash_card_due_date_in_embeded_application(
+        self,
+        main_window_mock: MagicMock
+    ):
+        """Outgoing arguement to set due date"""
+        from fixtures.lexicon_fixtures import mock_flash_cards
+        from fixtures.lexicon_fixtures import mock_app_config
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        FlashCardRepo.set_flash_card_due_date_in_embeded_application(
+            mock_app_config(),
+            mock_flash_cards(1)[0]
+        )
+
+        main_window_mock.col.sched.set_due_date.assert_called_once()
+
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_set_flash_card_due_date_in_embeded_application_due_date_is_none(
+        self,
+        main_window_mock: MagicMock
+    ):
+        """AppConfig.audio_vocab_card_due_date of None
+        does not call set_due_date on collection"""
+        from fixtures.lexicon_fixtures import mock_flash_cards
+        from fixtures.lexicon_fixtures import mock_app_config
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        mock_config_with_no_due_date = mock_app_config()
+        mock_config_with_no_due_date.audio_vocab_card_due_date = None
+        FlashCardRepo.set_flash_card_due_date_in_embeded_application(
+            mock_config_with_no_due_date,
+            mock_flash_cards(1)[0]
+        )
+
+        main_window_mock.col.sched.set_due_date.assert_not_called()

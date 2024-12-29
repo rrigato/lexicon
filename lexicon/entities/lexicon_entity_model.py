@@ -7,12 +7,14 @@ class AppConfig():
         self,
         audio_deck_name: Optional[str] = None,
         audio_note_template_name: Optional[str] = None,
+        audio_vocab_card_due_date: Optional[int] = None,
         reading_deck_name: Optional[str] = None,
         reading_note_template_name: Optional[str] = None
     ):
         """Initialize all attributes to None"""
         self.audio_deck_name = audio_deck_name
         self.audio_note_template_name =  audio_note_template_name
+        self.audio_vocab_card_due_date =  audio_vocab_card_due_date
         self.reading_deck_name = reading_deck_name
         self.reading_note_template_name = reading_note_template_name
 
@@ -45,6 +47,19 @@ class AppConfig():
         self._audio_note_template_name = audio_note_template_name
 
     @property
+    def audio_vocab_card_due_date(self) -> Optional[int]:
+        return(self._audio_vocab_card_due_date)
+    @audio_vocab_card_due_date.setter
+    def audio_vocab_card_due_date(self, audio_vocab_card_due_date: Optional[int]):
+        if type(audio_vocab_card_due_date) not in (
+            int, type(None)):
+            raise TypeError(
+                "AppConfig - audio_vocab_card_due_date datatype " +
+                "must be a int or None"
+            )
+        self._audio_vocab_card_due_date = audio_vocab_card_due_date
+
+    @property
     def reading_deck_name(self) -> Optional[str]:
         return(self._reading_deck_name)
 
@@ -75,13 +90,50 @@ class AppConfig():
 
 class FlashCard():
     """Represents a flash car in a spaced repition system"""
-    def __init__(self):
+    def __init__(
+            self,
+            anki_card_id: Optional[int] = None,
+            anki_note_id: Optional[int] = None,
+        ):
         """Initialize all attributes to None"""
+        self.anki_card_id = anki_card_id
+        self.anki_note_id = anki_note_id
         self.english_definition = None
         self.front_text = None
         self.hiragana_text = None
         self.kanji_text = None
         self.note_type = None
+
+    @property
+    def anki_card_id(self) -> Optional[int]:
+        """each note can have multiple cards
+        that each have a unique id"""
+        return(self._anki_card_id)
+
+    @anki_card_id.setter
+    def anki_card_id(self, anki_card_id: Optional[int]):
+        if type(anki_card_id) not in (
+            int, type(None)):
+            raise TypeError(
+                "FlashCard - anki_card_id datatype " +
+                "must be a int or None"
+            )
+        self._anki_card_id = anki_card_id
+
+    @property
+    def anki_note_id(self) -> Optional[int]:
+        """Unique identifier for the flash card in the Anki database"""
+        return(self._anki_note_id)
+
+    @anki_note_id.setter
+    def anki_note_id(self, anki_note_id: Optional[int]):
+        if type(anki_note_id) not in (
+            int, type(None)):
+            raise TypeError(
+                "FlashCard - anki_note_id datatype " +
+                "must be a int or None"
+            )
+        self._anki_note_id = anki_note_id
 
     @property
     def english_definition(self) -> Optional[str]:

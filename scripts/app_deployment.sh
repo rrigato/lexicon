@@ -1,51 +1,55 @@
 #! /bin/bash
+(
+    #exits program immediately if a command is not successful
+    set -e
 
-#exits program immediately if a command is not successful
-set -e
+    if [ -z "$1" ]; then
+        echo "Missing commit message argument 1"
+        exit 1
+    fi
 
-if [ -z "$1" ]; then
-    echo "Missing commit message argument 1"
-    exit 1
-fi
+    git add -A
 
-git add -A
+    git commit -m "$1"
 
-git commit -m "$1"
+    which python
+    
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+    eval "$(pyenv init -)"
 
-#deactivate pyenv if it is active
-if pyenv version-name > /dev/null 2>&1; then
-    pyenv deactivate lexicon
-fi
-pyenv activate lexicon
+    pyenv which python
 
+    pyenv shell lexicon
 
-secret_scan_results=$(detect-secrets scan | \
-python3 -c "import sys, json; print(json.load(sys.stdin)['results'])" )
-
-# static scan for security credentials that terminates if any secrets are found
-if [ "${secret_scan_results}" != "{}" ]; then
-    echo "detect-secrets scan failed"
-    exit 125
-fi
-
-python -m unittest
+    pyenv which python
 
 
-git push origin dev
+    secret_scan_results=$(detect-secrets scan | \
+    python3 -c "import sys, json; print(json.load(sys.stdin)['results'])" )
 
-echo "pushed to remote"
+    # static scan for security credentials that terminates if any secrets are found
+    if [ "${secret_scan_results}" != "{}" ]; then
+        echo "detect-secrets scan failed"
+        exit 125
+    fi
 
-gh pr create --title "$1" \
---body "Automated PR creation" \
---head dev \
---base master
+    python -m unittest
 
-echo "created PR"
 
-echo "----------------------"
-echo "deployment successful"
+    git push origin dev
+
+    echo "pushed to remote"
+
+    gh pr create --title "$1" \
+    --body "Automated PR creation" \
+    --head dev \
+    --base master
+
+    echo "created PR"
+
+    echo "----------------------"
+    echo "deployment successful"
+
+)

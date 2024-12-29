@@ -1,6 +1,8 @@
 {
-    "audio_vocab_deck_name": "Jlab's beginner course",
-    "audio_vocab_note_type": "Japanese-c6f51",
-    "reading_vocab_deck_name": "Core2.3k Version 3",
-    "reading_vocab_note_type": "core2.3k-anime-card"
+    "audio_vocab_card_due_date": null,
+    "audio_vocab_deck_name": "audio deck name",
+    "audio_vocab_note_type": "audio note type",
+    "reading_vocab_card_due_date": null,
+    "reading_vocab_deck_name": "reading deck name",
+    "reading_vocab_note_type": "reading note type"
 }

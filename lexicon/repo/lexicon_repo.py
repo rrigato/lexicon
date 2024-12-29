@@ -25,7 +25,8 @@ def set_logger() -> None:
             "lexicon_addon.log"
         ),
         maxBytes=3 * 1024 * 1024,
-        backupCount=3
+        backupCount=3,
+        encoding="utf-8"
     )
 
 
@@ -47,6 +48,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
     """"""
     @staticmethod
     def create_audio_vocab_card(
+        app_config: AppConfig,
         create_vocab_request: JapaneseVocabRequest
     ) -> bool:
         """
@@ -54,7 +56,6 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             - collection (mw.col) is loaded
         """
         logging.info(f"create_audio_vocab_card - invocation begin")
-        app_config = FlashCardRepo.retrieve_app_config()
 
         current_collection = mw.col
 
@@ -81,7 +82,12 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         logging.info(f"create_audio_vocab_card - saved new_note")
 
 
-        return(True)
+        return(
+            FlashCard(
+                anki_card_id=new_note.cards()[0].id,
+                anki_note_id=new_note.id,
+            )
+        )
 
     @staticmethod
     def create_reading_vocab_card(
@@ -183,9 +189,32 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         app_config = AppConfig(
             audio_deck_name=user_defined_config["audio_vocab_deck_name"],
             audio_note_template_name=user_defined_config["audio_vocab_note_type"],
+            audio_vocab_card_due_date=user_defined_config["audio_vocab_card_due_date"],
             reading_deck_name=user_defined_config["reading_vocab_deck_name"],
             reading_note_template_name=user_defined_config["reading_vocab_note_type"]
         )
 
         logging.info(f"retrieve_app_config - invocation end")
         return(app_config)
+
+    @staticmethod
+    def set_flash_card_due_date_in_embeded_application(
+        app_config: AppConfig,
+        flash_card: FlashCard
+    ) -> None:
+        """Sets the due date for the flash card in
+        the external spaced repetition system SRS application Anki
+        """
+        logging.info(f"set_flash_card_due_date_in_embeded_application - invocation begin")
+
+        if app_config.audio_vocab_card_due_date is None:
+            logging.info(f"set_flash_card_due_date_in_embeded_application - due date not set")
+            return(None)
+
+        mw.col.sched.set_due_date(
+            card_ids=[flash_card.anki_card_id],
+            days=str(app_config.audio_vocab_card_due_date)
+        )
+
+        logging.info(f"set_flash_card_due_date_in_embeded_application - invocation end")
+        return(None)

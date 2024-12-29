@@ -34,6 +34,7 @@ def mock_app_config(
 
     mock_app_config.audio_deck_name = "mock_audio_deck_name"
     mock_app_config.audio_note_template_name = "mock_audio_note_template_name"
+    mock_app_config.audio_vocab_card_due_date = random.randint(-1, 100)
     mock_app_config.reading_deck_name = "mock_reading_deck_name"
     mock_app_config.reading_note_template_name = "mock_reading_note_template_name"
 
@@ -51,6 +52,8 @@ def mock_flash_cards(
 
         mock_entity = FlashCard()
 
+        mock_entity.anki_card_id = entity_num
+        mock_entity.anki_note_id = entity_num
         mock_entity.english_definition = (
             f"mock english_definition {entity_num}"
         )
