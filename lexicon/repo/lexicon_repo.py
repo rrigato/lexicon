@@ -93,7 +93,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
     def create_reading_vocab_card(
         create_vocab_request: JapaneseVocabRequest,
         app_config: AppConfig
-    ) -> bool:
+    ) -> FlashCard:
         """Creates a new reading vocab card
         """
         logging.info(f"create_reading_vocab_card - invocation begin")
@@ -119,7 +119,12 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         logging.info(f"create_reading_vocab_card - saved new_note")
 
-        return(True)
+        return(
+            FlashCard(
+                anki_card_id=new_note.cards()[0].id,
+                anki_note_id=new_note.id
+            )
+        )
 
     @staticmethod
     def is_only_japanese_characters(

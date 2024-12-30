@@ -57,9 +57,14 @@ class TestLexiconRepo(unittest.TestCase):
         main_window_mock.col.decks.by_name.return_value = {
             "id": 1
         }
+        mock_new_note = MagicMock(id=4)
+        mock_new_note.cards.return_value = [
+            MagicMock(id=3)
+        ]
+        main_window_mock.col.new_note.return_value = mock_new_note
         mock_runtime_config = mock_app_config()
 
-        FlashCardRepo.create_reading_vocab_card(
+        mock_reading_vocab_card = FlashCardRepo.create_reading_vocab_card(
             mock_japanese_vocab_request(),
             mock_runtime_config
 
@@ -69,6 +74,14 @@ class TestLexiconRepo(unittest.TestCase):
         main_window_mock.col.decks.by_name.assert_called_once()
         main_window_mock.col.new_note.assert_called_once()
         main_window_mock.col.add_note.assert_called_once()
+        self.assertEqual(
+            mock_reading_vocab_card.anki_card_id,
+            3
+        )
+        self.assertEqual(
+            mock_reading_vocab_card.anki_note_id,
+            4
+        )
 
 
     @patch("lexicon.repo.lexicon_repo.RotatingFileHandler")
@@ -167,7 +180,7 @@ class TestLexiconRepo(unittest.TestCase):
         main_window_mock: MagicMock
     ):
         """All properties of AppConfig are populated
-        and e2e test of """
+        and e2e test of config.json shipped with application"""
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
