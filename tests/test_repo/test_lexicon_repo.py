@@ -198,15 +198,19 @@ class TestLexiconRepo(unittest.TestCase):
     ):
         """Outgoing arguement to set due date"""
         from fixtures.lexicon_fixtures import mock_flash_cards
-        from fixtures.lexicon_fixtures import mock_app_config
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
         FlashCardRepo.set_flash_card_due_date_in_embeded_application(
-            mock_app_config(),
+            5,
             mock_flash_cards(1)[0]
         )
 
-        main_window_mock.col.sched.set_due_date.assert_called_once()
+        args, kwargs = main_window_mock.col.sched.set_due_date.call_args
+        self.assertEqual(
+            kwargs["days"],
+            '5',
+            msg="Outgoing arguement to set_due_date should be days_from_today"
+        )
 
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_set_flash_card_due_date_in_embeded_application_due_date_is_none(
@@ -216,13 +220,11 @@ class TestLexiconRepo(unittest.TestCase):
         """AppConfig.audio_vocab_card_due_date of None
         does not call set_due_date on collection"""
         from fixtures.lexicon_fixtures import mock_flash_cards
-        from fixtures.lexicon_fixtures import mock_app_config
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
-        mock_config_with_no_due_date = mock_app_config()
-        mock_config_with_no_due_date.audio_vocab_card_due_date = None
+
         FlashCardRepo.set_flash_card_due_date_in_embeded_application(
-            mock_config_with_no_due_date,
+            None,
             mock_flash_cards(1)[0]
         )
 
