@@ -191,7 +191,8 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             audio_note_template_name=user_defined_config["audio_vocab_note_type"],
             audio_vocab_card_due_date=user_defined_config["audio_vocab_card_due_date"],
             reading_deck_name=user_defined_config["reading_vocab_deck_name"],
-            reading_note_template_name=user_defined_config["reading_vocab_note_type"]
+            reading_note_template_name=user_defined_config["reading_vocab_note_type"],
+            reading_vocab_card_due_date=user_defined_config["reading_vocab_card_due_date"]
         )
 
         logging.info(f"retrieve_app_config - invocation end")
@@ -218,4 +219,3 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         )
 
         logging.info(f"set_flash_card_due_date_in_embeded_application - invocation end")
-        

@@ -34,9 +34,10 @@ def mock_app_config(
 
     mock_app_config.audio_deck_name = "mock_audio_deck_name"
     mock_app_config.audio_note_template_name = "mock_audio_note_template_name"
-    mock_app_config.audio_vocab_card_due_date = random.randint(-1, 100)
+    mock_app_config.audio_vocab_card_due_date = random.randint(0, 100)
     mock_app_config.reading_deck_name = "mock_reading_deck_name"
     mock_app_config.reading_note_template_name = "mock_reading_note_template_name"
+    mock_app_config.reading_vocab_card_due_date = random.randint(0, 100)
 
     _validate_drift(mock_app_config)
 

@@ -1,3 +1,4 @@
+import json
 import unittest
 from unittest.mock import MagicMock, patch
 
@@ -165,21 +166,20 @@ class TestLexiconRepo(unittest.TestCase):
         self,
         main_window_mock: MagicMock
     ):
-        """All properties of AppConfig are populated"""
+        """All properties of AppConfig are populated
+        and e2e test of """
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
-        main_window_mock.addonManager.getConfig.return_value = {
-            "audio_vocab_deck_name": "mock_audio_vocab_deck_name",
-            "audio_vocab_note_type": "mock_audio_vocab_note_type",
-            "audio_vocab_card_due_date": 1,
-            "reading_vocab_deck_name": "mock_reading_vocab_deck_name",
-            "reading_vocab_note_type": "mock_reading_vocab_note_type",
-        }
+        with open("addon/config.json") as json_file:
+            mock_dict_config = json.load(json_file)
 
+        mock_dict_config["audio_vocab_card_due_date"] = 1
+        mock_dict_config["reading_vocab_card_due_date"] = 2
+
+        main_window_mock.addonManager.getConfig.return_value = mock_dict_config
 
         mock_app_config = FlashCardRepo.retrieve_app_config()
-
 
         [
             self.assertIsNotNone(
