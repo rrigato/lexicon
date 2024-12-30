@@ -27,7 +27,7 @@ class TestLexiconEntityModel(unittest.TestCase):
 
 
                 for object_property in object_properties:
-                    with self.assertRaises(TypeError):
+                    with self.assertRaises(TypeError, msg=f"check property - {object_property}"):
                         setattr(
                             mock_entity,
                             object_property,

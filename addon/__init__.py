@@ -46,7 +46,7 @@ def get_user_input():
         input_for_creating_flashcard=vocab_word,
         japanese_word_plugin=FlashCardRepo
     )
-    
+
 
 '''
 NOTE -
@@ -83,5 +83,4 @@ if "unittest" not in sys.modules.keys():
     # add addon to the tools menu
     mw.form.menuTools.addAction(action)
 
-    '''log any exceptions'''
-    logging.exception("addon.__init__.py - unexpected error")
+    
