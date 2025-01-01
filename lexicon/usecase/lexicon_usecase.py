@@ -17,7 +17,7 @@ class LearnJapaneseWordInterface(ABC):
         self,
         app_config: AppConfig,
         create_vocab_request: JapaneseVocabRequest
-    ) -> bool:
+    ) -> FlashCard:
         pass
 
     @abstractmethod
@@ -82,7 +82,7 @@ def learn_japanese_word(
     )
     logging.info(f"learn_japanese_word - created audio card")
 
-    japanese_word_plugin.create_reading_vocab_card(
+    reading_flash_card = japanese_word_plugin.create_reading_vocab_card(
         vocab_request_with_hiragana,
         runtime_config
     )
@@ -93,4 +93,9 @@ def learn_japanese_word(
     japanese_word_plugin.set_flash_card_due_date_in_embeded_application(
         runtime_config.audio_vocab_card_due_date,
         audio_flash_card
+    )
+
+    japanese_word_plugin.set_flash_card_due_date_in_embeded_application(
+        runtime_config.reading_vocab_card_due_date,
+        reading_flash_card
     )
