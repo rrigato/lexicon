@@ -30,7 +30,7 @@ def e2e_test_validation():
     # QMessageBox.information(mw, "Validated Lexicon addon", "Hello from external")
     logging.info("Validated Lexicon addon")
 
-def get_user_input():
+def main():
     """Get user input and display greeting"""
     logging.info("Lexicon input dialog")
     vocab_word, no_errors = QInputDialog.getText(
@@ -78,9 +78,8 @@ if "unittest" not in sys.modules.keys():
         is registering a slot that listens to emitted signals
     outside the flow of control of the the main thread'''
     qconnect(action.triggered, e2e_test_validation)
-    qconnect(action.triggered, get_user_input)
+    qconnect(action.triggered, main)
 
     # add addon to the tools menu
     mw.form.menuTools.addAction(action)
 
-    

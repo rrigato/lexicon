@@ -1,20 +1,20 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+class TestAddonInit(unittest.TestCase):
 
+    @patch("addon.__init__")
+    def test_main(
+        self,
+        mock_init_module
+    ):
+        """external plugin calles clean architecture"""
+        from addon import main
 
-class TestLexiconEntry(unittest.TestCase):
+        
 
-    def test_learn_japanese_word(self):
-        """audio and reading vocab card created """
-        from lexicon.entry.lexicon_entry import learn_japanese_word
-
-        mock_plugin = MagicMock()
-        mock_plugin.is_only_japanese_characters.return_value = True
-        mock_plugin.populate_hiragana_text.return_value = mock_japanese_vocab_request()
-
-        new_word_learned = learn_japanese_word(
+        new_word_learned = main(
             "mock_input",
             mock_plugin
         )
@@ -28,4 +28,4 @@ class TestLexiconEntry(unittest.TestCase):
             mock_plugin.set_flash_card_due_date_in_embeded_application.call_count,
             2,
             msg="set_flash_card_due_date_in_embeded_application should be set for both audio and reading flash cards"
-        )
+       )
