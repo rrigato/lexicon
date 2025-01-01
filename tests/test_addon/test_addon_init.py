@@ -1,31 +1,23 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from fixtures.lexicon_fixtures import mock_japanese_vocab_request
 class TestAddonInit(unittest.TestCase):
 
-    @patch("addon.__init__")
+    @patch("aqt.qt.QInputDialog.getText")
+    @patch("addon.learn_japanese_word")
     def test_main(
         self,
-        mock_init_module
+        learn_japanese_word_mock: MagicMock,
+        getText_mock: MagicMock
     ):
         """external plugin calles clean architecture"""
         from addon import main
+        getText_mock.return_value = ("救済", True)
 
-        
 
-        new_word_learned = main(
-            "mock_input",
-            mock_plugin
-        )
+        main()
 
-        self.assertFalse(
-            new_word_learned
-        )
-        mock_plugin.create_audio_vocab_card.assert_called()
-        mock_plugin.create_reading_vocab_card.assert_called()
-        self.assertEqual(
-            mock_plugin.set_flash_card_due_date_in_embeded_application.call_count,
-            2,
-            msg="set_flash_card_due_date_in_embeded_application should be set for both audio and reading flash cards"
-       )
+        learn_japanese_word_mock.assert_called()
+
+

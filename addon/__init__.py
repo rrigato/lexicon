@@ -5,24 +5,9 @@ from aqt import mw
 
 from aqt.qt import QAction, QMessageBox, QInputDialog
 from aqt.utils import qconnect
+from lexicon.entry.lexicon_entry import learn_japanese_word
+from lexicon.repo.lexicon_repo import FlashCardRepo
 
-'''
-Adds the third party dependencies to the python
-runtime path.
-refer to scripts/build_lexicon.sh for more on how third
-parties are bundled
-'''
-try:
-    from lexicon.repo.lexicon_repo import set_logger
-except ModuleNotFoundError:
-    os.sys.path.insert(
-        0,
-        os.path.join(
-            mw.addonManager.addonsFolder("lexicon"),
-            "third_party_dependencies"
-        )
-    )
-    from lexicon.repo.lexicon_repo import set_logger
 
 def e2e_test_validation():
     """End to end test for validation"""
@@ -39,8 +24,7 @@ def main():
 
     if no_errors and vocab_word:  # Check if input was provided and OK was pressed
         logging.info(vocab_word)
-    from lexicon.usecase.lexicon_usecase import learn_japanese_word
-    from lexicon.repo.lexicon_repo import FlashCardRepo
+
 
     learn_japanese_word(
         input_for_creating_flashcard=vocab_word,
@@ -62,6 +46,23 @@ in this case
 This block is ignored when running tests
 '''
 if "unittest" not in sys.modules.keys():
+    '''
+    Adds the third party dependencies to the python
+    runtime path.
+    refer to scripts/build_lexicon.sh for more on how third
+    parties are bundled
+    '''
+    try:
+        from lexicon.repo.lexicon_repo import set_logger
+    except ModuleNotFoundError:
+        os.sys.path.insert(
+            0,
+            os.path.join(
+                mw.addonManager.addonsFolder("lexicon"),
+                "third_party_dependencies"
+            )
+        )
+        from lexicon.repo.lexicon_repo import set_logger
     '''TODO - setup tox configuration and check for environment variable?'''
     set_logger()
 
