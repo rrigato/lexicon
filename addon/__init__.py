@@ -3,11 +3,33 @@ import os
 import sys
 from aqt import mw
 
-from aqt.qt import QAction, QMessageBox, QInputDialog
+from aqt.qt import QAction, QInputDialog
 from aqt.utils import qconnect
-from lexicon.entry.lexicon_entry import learn_japanese_word
-from lexicon.repo.lexicon_repo import FlashCardRepo
 
+'''
+TODO - extract into module that checks whether unittest or not
+to handle import
+
+Adds the third party dependencies to the python
+runtime path.
+refer to scripts/build_lexicon.sh for more on how third
+parties are bundled
+'''
+try:
+    from lexicon.repo.lexicon_repo import set_logger
+    from lexicon.entry.lexicon_entry import learn_japanese_word
+    from lexicon.repo.lexicon_repo import FlashCardRepo
+except ModuleNotFoundError:
+    os.sys.path.insert(
+        0,
+        os.path.join(
+            mw.addonManager.addonsFolder("lexicon"),
+            "third_party_dependencies"
+        )
+    )
+    from lexicon.repo.lexicon_repo import set_logger
+    from lexicon.entry.lexicon_entry import learn_japanese_word
+    from lexicon.repo.lexicon_repo import FlashCardRepo
 
 def e2e_test_validation():
     """End to end test for validation"""
@@ -17,6 +39,7 @@ def e2e_test_validation():
 
 def main():
     """Get user input and display greeting"""
+
     logging.info("Lexicon input dialog")
     vocab_word, no_errors = QInputDialog.getText(
         mw, "Input Dialog", "Please enter the vocabulary word:"
@@ -46,23 +69,7 @@ in this case
 This block is ignored when running tests
 '''
 if "unittest" not in sys.modules.keys():
-    '''
-    Adds the third party dependencies to the python
-    runtime path.
-    refer to scripts/build_lexicon.sh for more on how third
-    parties are bundled
-    '''
-    try:
-        from lexicon.repo.lexicon_repo import set_logger
-    except ModuleNotFoundError:
-        os.sys.path.insert(
-            0,
-            os.path.join(
-                mw.addonManager.addonsFolder("lexicon"),
-                "third_party_dependencies"
-            )
-        )
-        from lexicon.repo.lexicon_repo import set_logger
+
     '''TODO - setup tox configuration and check for environment variable?'''
     set_logger()
 
