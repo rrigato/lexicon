@@ -3,10 +3,13 @@ import os
 import sys
 from aqt import mw
 
-from aqt.qt import QAction, QMessageBox, QInputDialog
+from aqt.qt import QAction, QInputDialog
 from aqt.utils import qconnect
 
 '''
+TODO - extract into module that checks whether unittest or not
+to handle import
+
 Adds the third party dependencies to the python
 runtime path.
 refer to scripts/build_lexicon.sh for more on how third
@@ -14,6 +17,8 @@ parties are bundled
 '''
 try:
     from lexicon.repo.lexicon_repo import set_logger
+    from lexicon.entry.lexicon_entry import learn_japanese_word
+    from lexicon.repo.lexicon_repo import FlashCardRepo
 except ModuleNotFoundError:
     os.sys.path.insert(
         0,
@@ -23,6 +28,8 @@ except ModuleNotFoundError:
         )
     )
     from lexicon.repo.lexicon_repo import set_logger
+    from lexicon.entry.lexicon_entry import learn_japanese_word
+    from lexicon.repo.lexicon_repo import FlashCardRepo
 
 def e2e_test_validation():
     """End to end test for validation"""
@@ -30,8 +37,9 @@ def e2e_test_validation():
     # QMessageBox.information(mw, "Validated Lexicon addon", "Hello from external")
     logging.info("Validated Lexicon addon")
 
-def get_user_input():
+def main():
     """Get user input and display greeting"""
+
     logging.info("Lexicon input dialog")
     vocab_word, no_errors = QInputDialog.getText(
         mw, "Input Dialog", "Please enter the vocabulary word:"
@@ -39,8 +47,7 @@ def get_user_input():
 
     if no_errors and vocab_word:  # Check if input was provided and OK was pressed
         logging.info(vocab_word)
-    from lexicon.usecase.lexicon_usecase import learn_japanese_word
-    from lexicon.repo.lexicon_repo import FlashCardRepo
+
 
     learn_japanese_word(
         input_for_creating_flashcard=vocab_word,
@@ -62,6 +69,7 @@ in this case
 This block is ignored when running tests
 '''
 if "unittest" not in sys.modules.keys():
+
     '''TODO - setup tox configuration and check for environment variable?'''
     set_logger()
 
@@ -78,9 +86,8 @@ if "unittest" not in sys.modules.keys():
         is registering a slot that listens to emitted signals
     outside the flow of control of the the main thread'''
     qconnect(action.triggered, e2e_test_validation)
-    qconnect(action.triggered, get_user_input)
+    qconnect(action.triggered, main)
 
     # add addon to the tools menu
     mw.form.menuTools.addAction(action)
 
-    
