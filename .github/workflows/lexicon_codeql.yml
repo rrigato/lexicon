@@ -1,0 +1,67 @@
+name: "lexicon_codeql"
+
+on:
+  push:
+    branches: [ "master" ]
+  schedule:
+    #runs on first day of month
+    - cron: '20 17 1 * *'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
+
+  prevent-script-disable:
+    permissions:
+      contents: write
+      id-token: write
+    needs: analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: checkout-current-branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      ##################
+      #Unnecessary orchestration because public workflows are auto
+      #disabled after 60 days
+      #
+      #https://docs.github.com/en/actions/managing-workflow-runs/disabling-and-enabling-a-workflow
+      ##################
+      - name: script-execution-permissions-disable
+        run: chmod +x scripts/prevent_disable.sh
+
+      - name: prevent-disabled-workflow
+        shell: bash
+        run: scripts/prevent_disable.sh
