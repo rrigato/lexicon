@@ -1,5 +1,9 @@
 name: "lexicon_codeql"
 
+#only run when manually triggered until pipeline is fully tested
+on:
+  workflow_dispatch:
+
 # on:
 #   push:
 #     branches: [ "master" ]
