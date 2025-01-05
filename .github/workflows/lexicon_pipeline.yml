@@ -1,0 +1,32 @@
+name: lexicon application pipeline
+on:
+  push:
+    branches:
+      - master
+jobs:
+  run-build-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+
+    name: Build and tests application code
+    steps:
+      - name: checkout-current-branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: make-scripts-executable
+        run: |
+          chmod +x 'scripts/lexicon_build_test.sh'
+
+      - name: test-and-build-deployment-archive
+        shell: bash
+        run: 'scripts/lexicon_build_test.sh'
