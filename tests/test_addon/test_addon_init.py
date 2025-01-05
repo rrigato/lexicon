@@ -14,10 +14,31 @@ class TestAddonInit(unittest.TestCase):
         """external plugin calles clean architecture"""
         from addon import main
         getText_mock.return_value = ("救済", True)
+        learn_japanese_word_mock.return_value = None
 
 
         main()
 
         learn_japanese_word_mock.assert_called()
 
+
+    @patch("aqt.qt.QMessageBox.information")
+    @patch("aqt.qt.QInputDialog.getText")
+    @patch("addon.learn_japanese_word")
+    def test_main_unexpected_error(
+        self,
+        learn_japanese_word_mock: MagicMock,
+        getText_mock: MagicMock,
+        information_mock: MagicMock
+    ):
+        """text message is displayed to user on bad input"""
+        from addon import main
+        getText_mock.return_value = ("not a japanese character", True)
+        learn_japanese_word_mock.return_value = "Error message from input validation that we only accept japanese characters"
+
+
+        main()
+
+        learn_japanese_word_mock.assert_called()
+        information_mock.assert_called()
 

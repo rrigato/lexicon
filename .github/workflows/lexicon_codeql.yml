@@ -1,11 +1,11 @@
 name: "lexicon_codeql"
 
-on:
-  push:
-    branches: [ "master" ]
-  schedule:
-    #runs on first day of month
-    - cron: '20 17 1 * *'
+# on:
+#   push:
+#     branches: [ "master" ]
+#   schedule:
+#     #runs on first day of month
+#     - cron: '20 17 1 * *'
 
 jobs:
   analyze:

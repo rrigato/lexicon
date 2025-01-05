@@ -3,7 +3,7 @@ import os
 import sys
 from aqt import mw
 
-from aqt.qt import QAction, QInputDialog
+from aqt.qt import QAction, QInputDialog, QMessageBox
 from aqt.utils import qconnect
 
 '''
@@ -49,10 +49,15 @@ def main():
         logging.info(vocab_word)
 
 
-    learn_japanese_word(
+    flash_card_creation_error_message = learn_japanese_word(
         input_for_creating_flashcard=vocab_word,
         japanese_word_plugin=FlashCardRepo
     )
+
+    if flash_card_creation_error_message:
+        QMessageBox.information(
+            mw, "Invalid Input", flash_card_creation_error_message
+        )
 
 
 '''
