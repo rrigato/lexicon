@@ -1,5 +1,6 @@
 
 import logging
+from typing import Optional
 
 from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 
@@ -9,7 +10,7 @@ from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
 def learn_japanese_word(
         input_for_creating_flashcard: str,
         japanese_word_plugin: LearnJapaneseWordInterface
-    )-> bool:
+    )-> Optional[str]:
     """Usecase for storing a new japanese word in
     the spaced repetition system"""
     is_japanese = japanese_word_plugin.is_only_japanese_characters(
@@ -18,7 +19,7 @@ def learn_japanese_word(
 
     if not is_japanese:
         logging.info(f"learn_japanese_word - Input is not Japanese: {input_for_creating_flashcard}")
-        return(False)
+        return("Only Japanese characters are allowed")
 
     valid_vocab_request = JapaneseVocabRequest(
         vocab_to_create=input_for_creating_flashcard
