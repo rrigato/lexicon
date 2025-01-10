@@ -42,3 +42,22 @@ class TestAddonInit(unittest.TestCase):
         learn_japanese_word_mock.assert_called()
         information_mock.assert_called()
 
+
+    @patch.dict("sys.modules", {"lexicon.repo.lexicon_repo": None})
+    @patch("os.sys.path")
+    @patch("os.path")
+    @patch("addon.mw")
+    def test_configure_runtime_path(
+        self,
+        main_window_mock: MagicMock,
+        os_path_mock: MagicMock,
+        sys_path_mock: MagicMock
+    ):
+        """Not being able to import lexicon_repo should call sys path"""
+        from addon import configure_runtime_path
+
+
+        configure_runtime_path()
+
+        sys_path_mock.insert.assert_called_once()
+        main_window_mock.addonManager.addonsFolder.assert_called_once()
