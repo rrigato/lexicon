@@ -1,0 +1,4 @@
+aqt[qt6]
+detect-secrets==1.5.0
+mypy
+-r requirements-prod.in
