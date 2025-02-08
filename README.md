@@ -13,7 +13,8 @@ pip install requirements/requirements-dev.txt
 
 #### add-python-debug-breakpoint
 ```python
-from aqt.qt import debug; debug()
+import pdb; pdb.set_trace();
+
 ```
 
 #### anki-debug-in-terminal

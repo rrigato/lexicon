@@ -1,15 +1,20 @@
-from copy import deepcopy
+import base64
 import logging
 import os
-from logging.handlers import RotatingFileHandler
 import re
+from copy import deepcopy
+from logging.handlers import RotatingFileHandler
+import tempfile
 from time import strftime
 
 import pykakasi
-from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 from aqt import mw
-from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
+from gtts import gTTS
 
+from aqt.qt import debug
+from lexicon.entities.lexicon_entity_model import (AppConfig, FlashCard,
+                                                   JapaneseVocabRequest)
+from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
 
 
 def set_logger() -> None:
@@ -74,6 +79,31 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         new_note.fields[0] = create_vocab_request.vocab_to_create
         new_note.fields[1] = create_vocab_request.hiragana_text
 
+
+        '''TODO - extract into its own interface'''
+        tts = gTTS(
+            text=create_vocab_request.vocab_to_create,
+            lang="ja"
+        )
+        temp_dir = tempfile.gettempdir()
+        temp_path = os.path.join(
+            temp_dir,
+            create_vocab_request.vocab_to_create + ".mp3"
+        )
+        tts.save(temp_path)
+
+        # Now, add the MP3 file to Anki’s media collection.
+        # This copies the file into Anki’s media folder and returns a (possibly renamed) filename.
+        media_filename = mw.col.media.add_file(temp_path)
+
+        # Insert a sound reference into one of the note's fields.
+        # For example, if you have an “Audio” field, you can set it to:
+        sound_reference = f"[sound:{media_filename}]"
+        # Here, we assume field index 1 is meant to hold the audio; adjust as appropriate.
+
+        new_note.fields[4] = sound_reference
+
+        '''END extraction'''
         logging.info(f"create_audio_vocab_card - populated new_note")
 
 
