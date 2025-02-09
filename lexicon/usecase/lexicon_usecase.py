@@ -26,6 +26,14 @@ class LearnJapaneseWordInterface(ABC):
         pass
 
     @abstractmethod
+    def make_mp3_for_anki(
+        self,
+        app_config: AppConfig,
+        vocab_request: JapaneseVocabRequest
+    ) -> str:
+        pass
+
+    @abstractmethod
     def populate_hiragana_text(
         self, initial_vocab_request: JapaneseVocabRequest
     ) -> JapaneseVocabRequest:

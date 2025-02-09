@@ -145,6 +145,21 @@ class TestLexiconRepo(unittest.TestCase):
                     msg=f"\n check when {mock_input_text['mock_vocab_request']} is passed to interface"
                 )
 
+    def test_make_mp3_for_anki(self):
+        """
+            GIVEN - a JapaneVocabRequest
+            WHEN - the request is passed to make_mp3_for_anki
+            THEN - the mp3 file name is returned in a FlashCard
+        """
+        from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        self.assertEqual(
+            FlashCardRepo.make_mp3_for_anki(
+                mock_japanese_vocab_request()
+            ).mp3_file_name,
+            "輪廻.mp3"
+        )
 
     def test_populate_hiraragana_text(self):
         from lexicon.repo.lexicon_repo import FlashCardRepo
