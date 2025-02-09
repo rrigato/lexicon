@@ -79,32 +79,41 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         new_note.fields[0] = create_vocab_request.vocab_to_create
         new_note.fields[1] = create_vocab_request.hiragana_text
 
+        logging.info(f"create_audio_vocab_card - populated new_note")
 
-        '''TODO - extract into its own interface'''
+        '''TODO - extract into its own interface
+        config for field number'''
         tts = gTTS(
             text=create_vocab_request.vocab_to_create,
             lang="ja"
         )
         temp_dir = tempfile.gettempdir()
+
         temp_path = os.path.join(
             temp_dir,
             create_vocab_request.vocab_to_create + ".mp3"
         )
         tts.save(temp_path)
 
-        # Now, add the MP3 file to Anki’s media collection.
-        # This copies the file into Anki’s media folder and returns a (possibly renamed) filename.
+        logging.info(
+            f"create_audio_vocab_card - saved mp3 "
+            + f"file to - {temp_path}"
+        )
+
         media_filename = mw.col.media.add_file(temp_path)
+        logging.info(
+            f"create_audio_vocab_card - added mp3 file to Anki’s"
+             + " media collection"
+        )
 
-        # Insert a sound reference into one of the note's fields.
-        # For example, if you have an “Audio” field, you can set it to:
-        sound_reference = f"[sound:{media_filename}]"
-        # Here, we assume field index 1 is meant to hold the audio; adjust as appropriate.
+        # Add a sound reference to the notes field
+        new_note.fields[4] = f"[sound:{media_filename}]"
 
-        new_note.fields[4] = sound_reference
 
+        os.remove(temp_path)
+        logging.info(f"create_audio_vocab_card - cleaned up temp file")
         '''END extraction'''
-        logging.info(f"create_audio_vocab_card - populated new_note")
+
 
 
         mw.col.add_note(new_note, card_deck["id"])
