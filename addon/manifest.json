@@ -1,4 +1,7 @@
 {
-    "name": "lexicon flash card creator",
-    "package": "lexicon"
+    "author": "Ryan Rigato",
+    "homepage": "https://github.com/rrigato/",
+    "name": "Japanese flash card creator",
+    "package": "lexicon",
+    "version": "0.0.1"
 }

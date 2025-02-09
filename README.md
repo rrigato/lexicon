@@ -31,3 +31,6 @@ cmd+shift+;
 [debug-documentation](https://docs.ankiweb.net/misc.html#debug-console)
 
 
+### addon-directory-overview
+- [config.json](addon/config.json) = configuration that users can set within the anki user interface
+- [manifest.json](addon/manifest.json) = for distributing anki addons outside of anki web

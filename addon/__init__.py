@@ -10,26 +10,30 @@ from aqt.utils import qconnect
 TODO - extract into module that checks whether unittest or not
 to handle import
 
-Adds the third party dependencies to the python
-runtime path.
-refer to scripts/build_lexicon.sh for more on how third
-parties are bundled
 '''
-try:
-    from lexicon.repo.lexicon_repo import set_logger
-    from lexicon.entry.lexicon_entry import learn_japanese_word
-    from lexicon.repo.lexicon_repo import FlashCardRepo
-except ModuleNotFoundError:
-    os.sys.path.insert(
-        0,
-        os.path.join(
-            mw.addonManager.addonsFolder("lexicon"),
-            "third_party_dependencies"
+
+def configure_runtime_path():
+    """Adds the third party dependencies to the python
+    runtime path.
+    refer to scripts/build_lexicon.sh for more on how third
+    parties are bundled
+    """
+
+    try:
+        from lexicon.repo.lexicon_repo import set_logger
+    except ModuleNotFoundError:
+        os.sys.path.insert(
+            0,
+            os.path.join(
+                mw.addonManager.addonsFolder("lexicon"),
+                "third_party_dependencies"
+            )
         )
-    )
-    from lexicon.repo.lexicon_repo import set_logger
-    from lexicon.entry.lexicon_entry import learn_japanese_word
-    from lexicon.repo.lexicon_repo import FlashCardRepo
+
+configure_runtime_path()
+from lexicon.repo.lexicon_repo import set_logger
+from lexicon.entry.lexicon_entry import learn_japanese_word
+from lexicon.repo.lexicon_repo import FlashCardRepo
 
 def e2e_test_validation():
     """End to end test for validation"""
