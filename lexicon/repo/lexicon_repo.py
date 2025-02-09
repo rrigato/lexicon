@@ -81,37 +81,21 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         logging.info(f"create_audio_vocab_card - populated new_note")
 
-        '''TODO - extract into its own interface
-        config for field number'''
-        tts = gTTS(
-            text=create_vocab_request.vocab_to_create,
-            lang="ja"
-        )
-        temp_dir = tempfile.gettempdir()
-
-        temp_path = os.path.join(
-            temp_dir,
-            create_vocab_request.vocab_to_create + ".mp3"
-        )
-        tts.save(temp_path)
-
-        logging.info(
-            f"create_audio_vocab_card - saved mp3 "
-            + f"file to - {temp_path}"
-        )
-
-        media_filename = mw.col.media.add_file(temp_path)
         logging.info(
             f"create_audio_vocab_card - added mp3 file to Anki's"
              + " media collection"
         )
 
+        media_filename = FlashCardRepo.make_mp3_for_anki(
+            app_config,
+            create_vocab_request
+        )
         # Add a sound reference to the notes field
-        new_note.fields[4] = f"[sound:{media_filename}]"
+        new_note.fields[4] = "[sound:{anki_media_file}]".format(
+            anki_media_file=media_filename
+        )
 
-
-        os.remove(temp_path)
-        logging.info(f"create_audio_vocab_card - cleaned up temp file")
+        logging.info(f"create_audio_vocab_card - cleaned up mp3 file")
         '''END extraction'''
 
 
@@ -222,11 +206,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
              + " media collection"
         )
 
-        # Add a sound reference to the notes field
-        vocab_request.hiragana_text = f"[sound:{media_filename}]"
 
-
-        os.remove(temp_path)
         logging.info(f"make_mp3_for_anki - cleaned up temp file")
 
         return(media_filename)
