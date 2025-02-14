@@ -11,7 +11,6 @@ import pykakasi
 from aqt import mw
 from gtts import gTTS
 
-from aqt.qt import debug
 from lexicon.entities.lexicon_entity_model import (AppConfig, FlashCard,
                                                    JapaneseVocabRequest)
 from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface

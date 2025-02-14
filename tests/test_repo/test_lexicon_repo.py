@@ -1,5 +1,7 @@
+from ast import main
 import json
 import unittest
+from unittest import mock
 from unittest.mock import MagicMock, patch
 
 from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
@@ -145,20 +147,35 @@ class TestLexiconRepo(unittest.TestCase):
                     msg=f"\n check when {mock_input_text['mock_vocab_request']} is passed to interface"
                 )
 
-    def test_make_mp3_for_anki(self):
+    @patch("lexicon.repo.lexicon_repo.tempfile")
+    @patch("lexicon.repo.lexicon_repo.gTTS")
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_make_mp3_for_anki(
+        self,
+        main_window_mock: MagicMock,
+        gtts_mock: MagicMock,
+        tempfile_mock: MagicMock
+        ):
         """
             GIVEN - a JapaneVocabRequest
             WHEN - the request is passed to make_mp3_for_anki
             THEN - the mp3 file name is returned in a FlashCard
         """
+        from fixtures.lexicon_fixtures import mock_app_config
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
+        mock_mp3_path = "temporary/os/dir/駆逐.mp3"
+        tempfile_mock.gettempdir.return_value = "temporary/os/dir"
+        gtts_mock.return_value.save.return_value = None
+        main_window_mock.col.media.add_file.return_value = mock_mp3_path
+
         self.assertEqual(
             FlashCardRepo.make_mp3_for_anki(
+                mock_app_config(),
                 mock_japanese_vocab_request()
-            ).mp3_file_name,
-            "輪廻.mp3"
+            ),
+            mock_mp3_path
         )
 
     def test_populate_hiraragana_text(self):
