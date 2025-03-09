@@ -1,5 +1,7 @@
+from ast import main
 import json
 import unittest
+from unittest import mock
 from unittest.mock import MagicMock, patch
 
 from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
@@ -7,12 +9,14 @@ from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, Japanese
 
 class TestLexiconRepo(unittest.TestCase):
 
+    @patch("lexicon.repo.lexicon_repo.FlashCardRepo.make_mp3_for_anki")
     @patch("lexicon.repo.lexicon_repo.FlashCardRepo.retrieve_app_config")
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_create_audio_vocab_card(
         self,
         main_window_mock: MagicMock,
-        retrieve_app_config_mock: MagicMock
+        retrieve_app_config_mock: MagicMock,
+        make_mp3_for_anki_mock: MagicMock
     ):
         """Anki Note created"""
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
@@ -35,6 +39,7 @@ class TestLexiconRepo(unittest.TestCase):
 
 
         retrieve_app_config_mock.assert_not_called()
+        make_mp3_for_anki_mock.assert_called_once()
         main_window_mock.col.models.by_name.assert_called_once()
         main_window_mock.col.decks.by_name.assert_called_once()
         main_window_mock.col.new_note.assert_called_once()
@@ -145,6 +150,36 @@ class TestLexiconRepo(unittest.TestCase):
                     msg=f"\n check when {mock_input_text['mock_vocab_request']} is passed to interface"
                 )
 
+    @patch("lexicon.repo.lexicon_repo.tempfile")
+    @patch("lexicon.repo.lexicon_repo.gTTS")
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_make_mp3_for_anki(
+        self,
+        main_window_mock: MagicMock,
+        gtts_mock: MagicMock,
+        tempfile_mock: MagicMock
+        ):
+        """
+            GIVEN - a JapaneVocabRequest
+            WHEN - the request is passed to make_mp3_for_anki
+            THEN - the mp3 file name is returned in a FlashCard
+        """
+        from fixtures.lexicon_fixtures import mock_app_config
+        from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        mock_mp3_path = "temporary/os/dir/駆逐.mp3"
+        tempfile_mock.gettempdir.return_value = "temporary/os/dir"
+        gtts_mock.return_value.save.return_value = None
+        main_window_mock.col.media.add_file.return_value = mock_mp3_path
+
+        self.assertEqual(
+            FlashCardRepo.make_mp3_for_anki(
+                mock_app_config(),
+                mock_japanese_vocab_request()
+            ),
+            mock_mp3_path
+        )
 
     def test_populate_hiraragana_text(self):
         from lexicon.repo.lexicon_repo import FlashCardRepo

@@ -1,15 +1,19 @@
-from copy import deepcopy
+import base64
 import logging
 import os
-from logging.handlers import RotatingFileHandler
 import re
+from copy import deepcopy
+from logging.handlers import RotatingFileHandler
+import tempfile
 from time import strftime
 
 import pykakasi
-from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 from aqt import mw
-from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
+from gtts import gTTS
 
+from lexicon.entities.lexicon_entity_model import (AppConfig, FlashCard,
+                                                   JapaneseVocabRequest)
+from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
 
 
 def set_logger() -> None:
@@ -75,6 +79,24 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         new_note.fields[1] = create_vocab_request.hiragana_text
 
         logging.info(f"create_audio_vocab_card - populated new_note")
+
+        logging.info(
+            f"create_audio_vocab_card - added mp3 file to Anki's"
+             + " media collection"
+        )
+
+        media_filename = FlashCardRepo.make_mp3_for_anki(
+            app_config,
+            create_vocab_request
+        )
+        # Add a sound reference to the notes field
+        new_note.fields[4] = "[sound:{anki_media_file}]".format(
+            anki_media_file=media_filename
+        )
+
+        logging.info(f"create_audio_vocab_card - cleaned up mp3 file")
+        '''END extraction'''
+
 
 
         mw.col.add_note(new_note, card_deck["id"])
@@ -149,6 +171,44 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         logging.info(f"is_only_japanese_characters - invocation end")
         return(is_entirely_japanese)
+
+    @staticmethod
+    def make_mp3_for_anki(
+        app_config: AppConfig,
+        vocab_request: JapaneseVocabRequest
+    ) -> str:
+        """Creates an mp3 file for the vocab_request.vocab_to_create
+        and returns the path to the sound file
+        """
+        logging.info(f"make_mp3_for_anki - invocation begin")
+
+        tts = gTTS(
+            text=vocab_request.vocab_to_create,
+            lang="ja"
+        )
+        temp_dir = tempfile.gettempdir()
+
+        temp_path = os.path.join(
+            temp_dir,
+            vocab_request.vocab_to_create + ".mp3"
+        )
+        tts.save(temp_path)
+
+        logging.info(
+            f"make_mp3_for_anki - saved mp3 "
+            + f"file to - {temp_path}"
+        )
+
+        media_filename = mw.col.media.add_file(temp_path)
+        logging.info(
+            f"make_mp3_for_anki - added mp3 file to Anki's"
+             + " media collection"
+        )
+
+
+        logging.info(f"make_mp3_for_anki - cleaned up temp file")
+
+        return(media_filename)
 
     @staticmethod
     def populate_hiragana_text(
