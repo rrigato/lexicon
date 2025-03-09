@@ -2,6 +2,7 @@
     "audio_vocab_card_due_date": null,
     "audio_vocab_deck_name": "audio deck name",
     "audio_vocab_note_type": "audio note type",
+    "audio_vocab_card_audio_column_number": 0,
     "reading_vocab_card_due_date": null,
     "reading_vocab_deck_name": "reading deck name",
     "reading_vocab_note_type": "reading note type"
