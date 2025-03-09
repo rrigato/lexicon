@@ -9,12 +9,14 @@ from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, Japanese
 
 class TestLexiconRepo(unittest.TestCase):
 
+    @patch("lexicon.repo.lexicon_repo.FlashCardRepo.make_mp3_for_anki")
     @patch("lexicon.repo.lexicon_repo.FlashCardRepo.retrieve_app_config")
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_create_audio_vocab_card(
         self,
         main_window_mock: MagicMock,
-        retrieve_app_config_mock: MagicMock
+        retrieve_app_config_mock: MagicMock,
+        make_mp3_for_anki_mock: MagicMock
     ):
         """Anki Note created"""
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
@@ -37,6 +39,7 @@ class TestLexiconRepo(unittest.TestCase):
 
 
         retrieve_app_config_mock.assert_not_called()
+        make_mp3_for_anki_mock.assert_called_once()
         main_window_mock.col.models.by_name.assert_called_once()
         main_window_mock.col.decks.by_name.assert_called_once()
         main_window_mock.col.new_note.assert_called_once()
