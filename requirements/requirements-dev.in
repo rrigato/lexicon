@@ -1,5 +1,3 @@
-aqt[qt6]
 detect-secrets==1.5.0
 mypy
-pip-tools
 -r requirements-prod.in
