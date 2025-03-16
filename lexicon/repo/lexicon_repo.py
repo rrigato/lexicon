@@ -95,8 +95,6 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         )
 
         logging.info(f"create_audio_vocab_card - cleaned up mp3 file")
-        '''END extraction'''
-
 
 
         mw.col.add_note(new_note, card_deck["id"])
@@ -178,7 +176,8 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         vocab_request: JapaneseVocabRequest
     ) -> str:
         """Creates an mp3 file for the vocab_request.vocab_to_create
-        and returns the path to the sound file
+        and returns the path to the sound file on the file system
+        of the process
         """
         logging.info(f"make_mp3_for_anki - invocation begin")
 
@@ -252,12 +251,27 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         user_defined_config = mw.addonManager.getConfig(__name__)
 
         app_config = AppConfig(
-            audio_deck_name=user_defined_config["audio_vocab_deck_name"],
-            audio_note_template_name=user_defined_config["audio_vocab_note_type"],
-            audio_vocab_card_due_date=user_defined_config["audio_vocab_card_due_date"],
-            reading_deck_name=user_defined_config["reading_vocab_deck_name"],
-            reading_note_template_name=user_defined_config["reading_vocab_note_type"],
-            reading_vocab_card_due_date=user_defined_config["reading_vocab_card_due_date"]
+            audio_deck_name=user_defined_config[
+                "audio_vocab_deck_name"
+            ],
+            audio_note_template_name=user_defined_config[
+                "audio_vocab_note_type"
+            ],
+            audio_vocab_card_due_date=user_defined_config[
+                "audio_vocab_card_due_date"
+            ],
+            audio_vocab_card_audio_column_number=user_defined_config[
+                "audio_vocab_card_audio_column_number"
+            ],
+            reading_deck_name=user_defined_config[
+                "reading_vocab_deck_name"
+            ],
+            reading_note_template_name=user_defined_config[
+                "reading_vocab_note_type"
+            ],
+            reading_vocab_card_due_date=user_defined_config[
+                "reading_vocab_card_due_date"
+            ],
         )
 
         logging.info(f"retrieve_app_config - invocation end")

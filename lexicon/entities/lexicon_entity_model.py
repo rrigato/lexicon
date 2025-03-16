@@ -8,6 +8,7 @@ class AppConfig():
         audio_deck_name: Optional[str] = None,
         audio_note_template_name: Optional[str] = None,
         audio_vocab_card_due_date: Optional[int] = None,
+        audio_vocab_card_audio_column_number: Optional[int] = None,
         reading_deck_name: Optional[str] = None,
         reading_note_template_name: Optional[str] = None,
         reading_vocab_card_due_date: Optional[int] = None
@@ -16,6 +17,7 @@ class AppConfig():
         self.audio_deck_name = audio_deck_name
         self.audio_note_template_name =  audio_note_template_name
         self.audio_vocab_card_due_date =  audio_vocab_card_due_date
+        self.audio_vocab_card_audio_column_number = audio_vocab_card_audio_column_number
         self.reading_deck_name = reading_deck_name
         self.reading_note_template_name = reading_note_template_name
         self.reading_vocab_card_due_date = reading_vocab_card_due_date
@@ -60,6 +62,22 @@ class AppConfig():
                 "must be a int or None"
             )
         self._audio_vocab_card_due_date = audio_vocab_card_due_date
+
+    @property
+    def audio_vocab_card_audio_column_number(self) -> Optional[int]:
+        return(self._audio_vocab_card_audio_column_number)
+    @audio_vocab_card_audio_column_number.setter
+    def audio_vocab_card_audio_column_number(
+        self,
+        audio_vocab_card_audio_column_number: Optional[int]
+    ):
+        if type(audio_vocab_card_audio_column_number) not in (
+            int, type(None)):
+            raise TypeError(
+                "AppConfig - audio_vocab_card_audio_column_number datatype " +
+                "must be a int or None"
+            )
+        self._audio_vocab_card_audio_column_number = audio_vocab_card_audio_column_number
 
     @property
     def reading_deck_name(self) -> Optional[str]:
