@@ -162,7 +162,7 @@ class TestLexiconRepo(unittest.TestCase):
         """
             GIVEN - a JapaneVocabRequest
             WHEN - the request is passed to make_mp3_for_anki
-            THEN - the mp3 file name is returned in a FlashCard
+            THEN - the str path to the mp3 file is returned
         """
         from fixtures.lexicon_fixtures import mock_app_config
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
