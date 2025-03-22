@@ -1,5 +1,7 @@
-avenv/
 __pycache__/
-*.zip
 .DS_Store
+.venv/
 .vscode/
+*.zip
+avenv/
+venv/
