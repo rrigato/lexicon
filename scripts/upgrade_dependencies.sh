@@ -9,7 +9,7 @@ pip install --upgrade setuptools
 # Installs requirments-dev.txt
 # TODO - create fresh venv and install
 ###########################################
-pip-compile requirements/requirements-dev.in
 pip-compile requirements/requirements-prod.in
+pip-compile requirements/requirements-dev.in
 
 pip install --upgrade -r requirements/requirements-dev.txt
