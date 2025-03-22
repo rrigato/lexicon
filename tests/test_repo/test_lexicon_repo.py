@@ -1,7 +1,6 @@
-from ast import main
+from copy import deepcopy
 import json
 import unittest
-from unittest import mock
 from unittest.mock import MagicMock, patch
 
 from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
@@ -23,7 +22,10 @@ class TestLexiconRepo(unittest.TestCase):
         from fixtures.lexicon_fixtures import mock_app_config
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
-        retrieve_app_config_mock.return_value = mock_app_config()
+        stubbed_app_config = mock_app_config()
+
+        stubbed_app_config.audio_vocab_card_audio_column_number = 4
+        main_window_mock.col.new_note.return_value.fields = [""] * 10
         main_window_mock.col.decks.by_name.return_value = {
             "id": 0
         }
@@ -32,8 +34,9 @@ class TestLexiconRepo(unittest.TestCase):
             MagicMock(id=2)
         ]
 
+
         mock_created_flash_card = FlashCardRepo.create_audio_vocab_card(
-            mock_app_config(),
+            deepcopy(stubbed_app_config),
             mock_japanese_vocab_request()
         )
 
@@ -43,7 +46,19 @@ class TestLexiconRepo(unittest.TestCase):
         main_window_mock.col.models.by_name.assert_called_once()
         main_window_mock.col.decks.by_name.assert_called_once()
         main_window_mock.col.new_note.assert_called_once()
-        main_window_mock.col.add_note.assert_called_once()
+        args, kwargs = main_window_mock.col.add_note.call_args
+        self.assertIn(
+            "[sound:",
+            args[0].fields[
+                stubbed_app_config.audio_vocab_card_audio_column_number
+            ],
+            msg=(
+                "\n\nsound reference should be in fields element - "
+                f"{stubbed_app_config.audio_vocab_card_audio_column_number} - "
+
+            )
+        )
+
         self.assertIsInstance(
             mock_created_flash_card,
             FlashCard
