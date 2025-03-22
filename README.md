@@ -43,5 +43,7 @@ cmd+shift+;
 - Check the pyqt version locally from an interpreter
 ```python
 from aqt import PYQT_VERSION_STR, qVersion
-print(PYQT_VERSION_STR) #
+print(PYQT_VERSION_STR) #PyQt version
+print(qVersion) #qt version
 ```
+- The latest dependencies that aqt uses can be found [here](https://github.com/ankitects/anki/tree/main/python)
