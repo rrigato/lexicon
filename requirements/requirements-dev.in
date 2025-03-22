@@ -1,4 +1,4 @@
+aqt==25.02
 detect-secrets==1.5.0
 mypy
-pip-tools
 -r requirements-prod.in
