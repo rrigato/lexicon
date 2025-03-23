@@ -90,7 +90,9 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             create_vocab_request
         )
         # Add a sound reference to the notes field
-        new_note.fields[4] = "[sound:{anki_media_file}]".format(
+        new_note.fields[
+            app_config.audio_vocab_card_audio_column_number
+        ] = "[sound:{anki_media_file}]".format(
             anki_media_file=media_filename
         )
 
