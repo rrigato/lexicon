@@ -7,13 +7,14 @@ from logging.handlers import RotatingFileHandler
 import tempfile
 from time import strftime
 
+from flask import app
 import pykakasi
 from aqt import mw
 from gtts import gTTS
 
 from lexicon.entities.lexicon_entity_model import (AppConfig, FlashCard,
                                                    JapaneseVocabRequest)
-from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
+from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface, audio_column_selector
 
 
 def set_logger() -> None:
@@ -274,6 +275,12 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             reading_vocab_card_due_date=user_defined_config[
                 "reading_vocab_card_due_date"
             ],
+        )
+
+        app_config.audio_vocab_card_audio_column_number = (
+            audio_column_selector(
+                app_config
+            )
         )
 
         logging.info(f"retrieve_app_config - invocation end")
