@@ -2,6 +2,8 @@ from copy import deepcopy
 import json
 import unittest
 from unittest.mock import MagicMock, patch
+from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+from lexicon.repo.lexicon_repo import FlashCardRepo
 
 from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 
@@ -231,8 +233,6 @@ class TestLexiconRepo(unittest.TestCase):
     ):
         """All properties of AppConfig are populated
         and e2e test of config.json shipped with application"""
-        from fixtures.lexicon_fixtures import mock_japanese_vocab_request
-        from lexicon.repo.lexicon_repo import FlashCardRepo
 
         with open("addon/config.json") as json_file:
             mock_dict_config = json.load(json_file)
@@ -253,6 +253,37 @@ class TestLexiconRepo(unittest.TestCase):
             if not attr_name.startswith("_")
 
         ]
+
+    @patch("lexicon.repo.lexicon_repo.reading_column_selector")
+    @patch("lexicon.repo.lexicon_repo.audio_column_selector")
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_retrieve_app_config_audio_and_reading_column_selectors_called(
+        self,
+        main_window_mock: MagicMock,
+        audio_column_selector_mock: MagicMock,
+        reading_column_selector_mock: MagicMock,
+        ):
+        """
+        GIVEN -
+        - a valid config.json
+        WHEN -
+        - the retrieve_app_config method is called
+        THEN -
+        - the audio_column_selector and reading_column_selector methods are called
+        """
+        with open("addon/config.json") as json_file:
+            mock_dict_config = json.load(json_file)
+
+        main_window_mock.addonManager.getConfig.return_value = mock_dict_config
+        audio_column_selector_mock.return_value = 2
+        reading_column_selector_mock.return_value = 2
+
+
+        FlashCardRepo.retrieve_app_config()
+
+        audio_column_selector_mock.assert_called_once()
+        reading_column_selector_mock.assert_called_once()
+
 
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_set_flash_card_due_date_in_embeded_application(

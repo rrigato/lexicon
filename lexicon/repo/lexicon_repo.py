@@ -12,7 +12,7 @@ from gtts import gTTS
 
 from lexicon.entities.lexicon_entity_model import (AppConfig, FlashCard,
                                                    JapaneseVocabRequest)
-from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface, audio_column_selector
+from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface, audio_column_selector, reading_column_selector
 
 
 def set_logger() -> None:
@@ -280,6 +280,12 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         app_config.audio_vocab_card_audio_column_number = (
             audio_column_selector(
+                app_config
+            )
+        )
+
+        app_config.reading_vocab_card_audio_column_number = (
+            reading_column_selector(
                 app_config
             )
         )

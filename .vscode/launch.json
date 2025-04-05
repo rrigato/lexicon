@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "lexicon debug configuration",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "unittest",
+            "args": [
+                "-k",
+                "test_retrieve_app_config_audio_and_reading_column_selectors_called"
+            ]
+        }
+    ]
+}
