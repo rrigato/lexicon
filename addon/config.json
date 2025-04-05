@@ -5,5 +5,6 @@
     "audio_vocab_card_audio_column_number": 3,
     "reading_vocab_card_due_date": null,
     "reading_vocab_deck_name": "reading deck name",
-    "reading_vocab_note_type": "reading note type"
+    "reading_vocab_note_type": "reading note type",
+    "reading_vocab_card_audio_column_number": 3
 }

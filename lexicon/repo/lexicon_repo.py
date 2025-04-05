@@ -273,6 +273,9 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             reading_vocab_card_due_date=user_defined_config[
                 "reading_vocab_card_due_date"
             ],
+            reading_vocab_card_audio_column_number=user_defined_config[
+                "reading_vocab_card_audio_column_number"
+            ]
         )
 
         app_config.audio_vocab_card_audio_column_number = (
