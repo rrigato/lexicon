@@ -11,7 +11,8 @@ class AppConfig():
         audio_vocab_card_audio_column_number: Optional[int] = None,
         reading_deck_name: Optional[str] = None,
         reading_note_template_name: Optional[str] = None,
-        reading_vocab_card_due_date: Optional[int] = None
+        reading_vocab_card_due_date: Optional[int] = None,
+        reading_vocab_card_audio_column_number: Optional[int] = None
     ):
         """Initialize all attributes to None"""
         self.audio_deck_name = audio_deck_name
@@ -21,6 +22,7 @@ class AppConfig():
         self.reading_deck_name = reading_deck_name
         self.reading_note_template_name = reading_note_template_name
         self.reading_vocab_card_due_date = reading_vocab_card_due_date
+        self.reading_vocab_card_audio_column_number = reading_vocab_card_audio_column_number
 
 
     @property
@@ -119,7 +121,21 @@ class AppConfig():
             )
         self._reading_vocab_card_due_date = reading_vocab_card_due_date
 
-
+    @property
+    def reading_vocab_card_audio_column_number(self) -> Optional[int]:
+        return(self._reading_vocab_card_audio_column_number)
+    @reading_vocab_card_audio_column_number.setter
+    def reading_vocab_card_audio_column_number(
+        self,
+        reading_vocab_card_audio_column_number: Optional[int]
+    ):
+        if type(reading_vocab_card_audio_column_number) not in (
+            int, type(None)):
+            raise TypeError(
+                "AppConfig - reading_vocab_card_audio_column_number datatype " +
+                "must be a int or None"
+            )
+        self._reading_vocab_card_audio_column_number = reading_vocab_card_audio_column_number
 
 class FlashCard():
     """Represents a flash car in a spaced repition system"""

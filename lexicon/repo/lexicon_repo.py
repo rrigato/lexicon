@@ -1,4 +1,3 @@
-import base64
 import logging
 import os
 import re
@@ -7,7 +6,6 @@ from logging.handlers import RotatingFileHandler
 import tempfile
 from time import strftime
 
-from flask import app
 import pykakasi
 from aqt import mw
 from gtts import gTTS
