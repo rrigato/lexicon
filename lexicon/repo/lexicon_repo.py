@@ -12,7 +12,7 @@ from gtts import gTTS
 
 from lexicon.entities.lexicon_entity_model import (AppConfig, FlashCard,
                                                    JapaneseVocabRequest)
-from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface, audio_column_selector
+from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface, audio_column_selector, reading_column_selector
 
 
 def set_logger() -> None:
@@ -135,6 +135,16 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         logging.info(f"create_reading_vocab_card - populated new_note")
 
+        media_filename = FlashCardRepo.make_mp3_for_anki(
+            app_config,
+            create_vocab_request
+        )
+        # Add a sound reference to the notes field
+        new_note.fields[
+            app_config.reading_vocab_card_audio_column_number
+        ] = "[sound:{anki_media_file}]".format(
+            anki_media_file=media_filename
+        )
 
         mw.col.add_note(new_note, card_deck["id"])
 
@@ -280,6 +290,12 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         app_config.audio_vocab_card_audio_column_number = (
             audio_column_selector(
+                app_config
+            )
+        )
+
+        app_config.reading_vocab_card_audio_column_number = (
+            reading_column_selector(
                 app_config
             )
         )
