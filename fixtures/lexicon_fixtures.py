@@ -84,10 +84,10 @@ def mock_japanese_vocab_request(
     mock_japanese_vocab_request = JapaneseVocabRequest()
 
     mock_japanese_vocab_request.hiragana_text = "れい"
+    mock_japanese_vocab_request.vocab_to_create = "例"
     mock_japanese_vocab_request.word_definition = (
         "example, the aforementioned, usual"
     )
-    mock_japanese_vocab_request.vocab_to_create = "例"
 
     _validate_drift(mock_japanese_vocab_request)
 

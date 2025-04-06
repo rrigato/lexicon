@@ -263,13 +263,13 @@ class JapaneseVocabRequest():
     def __init__(
         self,
         hiragana_text: Optional[str] = None,
+        vocab_to_create: Optional[str] = None,
         word_definition: Optional[str] = None,
-        vocab_to_create: Optional[str] = None
     ):
         """Initialize all attributes to None"""
         self.hiragana_text = hiragana_text
-        self.word_definition = word_definition
         self.vocab_to_create = vocab_to_create
+        self.word_definition = word_definition
 
 
     @property
@@ -288,6 +288,19 @@ class JapaneseVocabRequest():
         self._hiragana_text = hiragana_text
 
     @property
+    def vocab_to_create(self) -> Optional[str]:
+        return(self._vocab_to_create)
+    @vocab_to_create.setter
+    def vocab_to_create(self, vocab_to_create: Optional[str]):
+        if type(vocab_to_create) not in (
+            str, type(None)):
+            raise TypeError(
+                "JapaneseVocabRequest - vocab_to_create datatype " +
+                "must be a str or None"
+            )
+        self._vocab_to_create = vocab_to_create
+
+    @property
     def word_definition(self) -> Optional[str]:
         return(self._word_definition)
 
@@ -300,17 +313,4 @@ class JapaneseVocabRequest():
                 "must be a str or None"
             )
         self._word_definition = word_definition
-
-    @property
-    def vocab_to_create(self) -> Optional[str]:
-        return(self._vocab_to_create)
-    @vocab_to_create.setter
-    def vocab_to_create(self, vocab_to_create: Optional[str]):
-        if type(vocab_to_create) not in (
-            str, type(None)):
-            raise TypeError(
-                "JapaneseVocabRequest - vocab_to_create datatype " +
-                "must be a str or None"
-            )
-        self._vocab_to_create = vocab_to_create
 
