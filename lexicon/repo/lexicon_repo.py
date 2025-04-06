@@ -167,11 +167,28 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         )
         card_deck = mw.col.decks.by_name(app_config.reading_deck_name)
 
-        logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
-
-        new_note = _create_new_reading_note(
-            create_vocab_request, app_config, card_note_model
+        new_note = mw.col.new_note(
+            card_note_model
         )
+
+        new_note.fields[0] = create_vocab_request.vocab_to_create
+        new_note.fields[1] = create_vocab_request.hiragana_text
+        '''TODO dynamically select column number'''
+        new_note.fields[2] = create_vocab_request.word_definition
+
+        logging.info(f"create_reading_vocab_card - populated new_note")
+
+        media_filename = FlashCardRepo.make_mp3_for_anki(
+            app_config,
+            create_vocab_request
+        )
+        # Add a sound reference to the notes field
+        new_note.fields[
+            app_config.reading_vocab_card_audio_column_number
+        ] = "[sound:{anki_media_file}]".format(
+            anki_media_file=media_filename
+        )
+
 
         mw.col.add_note(new_note, card_deck["id"])
 
