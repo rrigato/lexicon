@@ -83,3 +83,32 @@ def audio_column_selector(
         f"{app_config.audio_vocab_card_audio_column_number - 1}")
     return app_config.audio_vocab_card_audio_column_number - 1
 
+def reading_column_selector(
+    app_config: AppConfig
+) -> int:
+    """validates
+    app_config.reading_vocab_card_audio_column_number and
+    returns the value it should be assigned
+
+    Raises
+    ------
+        ValueError: if app_config.reading_vocab_card_audio_column_number
+        is not in range appropriate to business rules of flash
+        card application
+    """
+    if app_config.reading_vocab_card_audio_column_number is None:
+        raise ValueError(
+            "reading_vocab_card_audio_column_number must be set"
+        )
+
+    if app_config.reading_vocab_card_audio_column_number < 3:
+        raise ValueError(
+            "reading_vocab_card_audio_column_number must be greater than 2"
+        )
+    logging.info(
+        "reading_column_selector - offsetting"
+        " app_config.reading_vocab_card_audio_column_number from - "
+        f"{app_config.reading_vocab_card_audio_column_number} to "
+        f"{app_config.reading_vocab_card_audio_column_number - 1}")
+
+    return app_config.reading_vocab_card_audio_column_number - 1
