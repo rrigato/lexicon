@@ -66,10 +66,12 @@ class TestLexiconRepo(unittest.TestCase):
             FlashCard
         )
 
+    @patch("lexicon.repo.lexicon_repo.FlashCardRepo.make_mp3_for_anki")
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_create_reading_vocab_card(
         self,
-        main_window_mock: MagicMock
+        main_window_mock: MagicMock,
+        make_mp3_for_anki_mock: MagicMock
     ):
         """Anki reading Note created"""
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
@@ -84,7 +86,9 @@ class TestLexiconRepo(unittest.TestCase):
             MagicMock(id=3)
         ]
         main_window_mock.col.new_note.return_value = mock_new_note
+        main_window_mock.col.new_note.return_value.fields = [""] * 10
         mock_runtime_config = mock_app_config()
+        mock_runtime_config.reading_vocab_card_audio_column_number = 6
 
         mock_reading_vocab_card = FlashCardRepo.create_reading_vocab_card(
             mock_japanese_vocab_request(),
@@ -103,6 +107,18 @@ class TestLexiconRepo(unittest.TestCase):
         self.assertEqual(
             mock_reading_vocab_card.anki_note_id,
             4
+        )
+        args, kwargs = main_window_mock.col.add_note.call_args
+        self.assertIn(
+            "[sound:",
+            args[0].fields[
+                mock_runtime_config.reading_vocab_card_audio_column_number
+            ],
+            msg=(
+                "\n\nsound reference should be in fields element - "
+                f"{mock_runtime_config.reading_vocab_card_audio_column_number} - "
+
+            )
         )
 
 
