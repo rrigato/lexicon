@@ -135,6 +135,16 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         logging.info(f"create_reading_vocab_card - populated new_note")
 
+        media_filename = FlashCardRepo.make_mp3_for_anki(
+            app_config,
+            create_vocab_request
+        )
+        # Add a sound reference to the notes field
+        new_note.fields[
+            app_config.reading_vocab_card_audio_column_number
+        ] = "[sound:{anki_media_file}]".format(
+            anki_media_file=media_filename
+        )
 
         mw.col.add_note(new_note, card_deck["id"])
 
