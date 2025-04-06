@@ -16,7 +16,8 @@ class TestLexiconEntry(unittest.TestCase):
 
         word_creation_error = learn_japanese_word(
             "mock_input",
-            mock_plugin
+            mock_plugin,
+            "mock_word_definition"
         )
 
         self.assertIsNone(

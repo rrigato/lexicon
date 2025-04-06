@@ -20,6 +20,11 @@ class TestAddonInit(unittest.TestCase):
         main()
 
         learn_japanese_word_mock.assert_called()
+        self.assertEqual(
+            getText_mock.call_count,
+            2,
+            msg="getText should be called twice"
+        )
 
 
     @patch("aqt.qt.QMessageBox.information")

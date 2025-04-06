@@ -263,11 +263,13 @@ class JapaneseVocabRequest():
     def __init__(
         self,
         hiragana_text: Optional[str] = None,
-        vocab_to_create: Optional[str] = None
+        vocab_to_create: Optional[str] = None,
+        word_definition: Optional[str] = None,
     ):
         """Initialize all attributes to None"""
         self.hiragana_text = hiragana_text
         self.vocab_to_create = vocab_to_create
+        self.word_definition = word_definition
 
 
     @property
@@ -297,4 +299,18 @@ class JapaneseVocabRequest():
                 "must be a str or None"
             )
         self._vocab_to_create = vocab_to_create
+
+    @property
+    def word_definition(self) -> Optional[str]:
+        return(self._word_definition)
+
+    @word_definition.setter
+    def word_definition(self, word_definition: Optional[str]):
+        if type(word_definition) not in (
+            str, type(None)):
+            raise TypeError(
+                "JapaneseVocabRequest - word_definition datatype " +
+                "must be a str or None"
+            )
+        self._word_definition = word_definition
 

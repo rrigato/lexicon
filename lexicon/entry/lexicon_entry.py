@@ -9,7 +9,8 @@ from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
 
 def learn_japanese_word(
         input_for_creating_flashcard: str,
-        japanese_word_plugin: LearnJapaneseWordInterface
+        japanese_word_plugin: LearnJapaneseWordInterface,
+        word_definition: str
     )-> Optional[str]:
     """Usecase for storing a new japanese word in
     the spaced repetition system"""
@@ -22,7 +23,8 @@ def learn_japanese_word(
         return("Only Japanese characters are allowed")
 
     valid_vocab_request = JapaneseVocabRequest(
-        vocab_to_create=input_for_creating_flashcard
+        vocab_to_create=input_for_creating_flashcard,
+        word_definition=word_definition
     )
     logging.info(f"learn_japanese_word - Obtained valid_vocab_request")
 
