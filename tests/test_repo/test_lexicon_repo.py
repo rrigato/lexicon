@@ -84,6 +84,7 @@ class TestLexiconRepo(unittest.TestCase):
         from fixtures.lexicon_fixtures import mock_app_config
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
+        stubbed_vocab_request = mock_japanese_vocab_request()
         main_window_mock.col.decks.by_name.return_value = {
             "id": 1
         }
@@ -97,7 +98,7 @@ class TestLexiconRepo(unittest.TestCase):
         mock_runtime_config.reading_vocab_card_audio_column_number = 6
 
         mock_reading_vocab_card = FlashCardRepo.create_reading_vocab_card(
-            mock_japanese_vocab_request(),
+            deepcopy(stubbed_vocab_request),
             mock_runtime_config
 
         )
@@ -126,6 +127,13 @@ class TestLexiconRepo(unittest.TestCase):
 
             )
         )
+        self.assertEqual(
+            stubbed_vocab_request.word_definition,
+            args[0].fields[2],
+            msg="word_definition should be in fields element - 3"
+        )
+
+
 
 
     @patch("lexicon.repo.lexicon_repo.RotatingFileHandler")
