@@ -5,6 +5,7 @@ from copy import deepcopy
 from logging.handlers import RotatingFileHandler
 import tempfile
 from time import strftime
+from typing import TYPE_CHECKING
 
 import pykakasi
 from aqt import mw
@@ -13,6 +14,26 @@ from gtts import gTTS
 from lexicon.entities.lexicon_entity_model import (AppConfig, FlashCard,
                                                    JapaneseVocabRequest)
 from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface, audio_column_selector, reading_column_selector
+
+if TYPE_CHECKING:
+    from anki.decks import DeckDict
+    from anki.models import NotetypeDict
+
+def _obtain_audio_note_and_deck(
+        app_config: AppConfig
+    ) -> tuple["DeckDict", "NotetypeDict"]:
+    card_note_model = mw.col.models.by_name(
+        app_config.audio_note_template_name
+    )
+    card_deck = mw.col.decks.by_name(app_config.audio_deck_name)
+
+    logging.info(f"create_audio_vocab_card - found card_note_model and card_deck")
+
+    new_note = mw.col.new_note(
+        card_note_model
+    )
+
+    return card_deck, new_note
 
 
 def set_logger() -> None:
@@ -60,23 +81,12 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         """
         logging.info(f"create_audio_vocab_card - invocation begin")
 
-        current_collection = mw.col
 
-
-        card_note_model = mw.col.models.by_name(
-            app_config.audio_note_template_name
-        )
-        card_deck = mw.col.decks.by_name(app_config.audio_deck_name)
-
-        logging.info(f"create_audio_vocab_card - found card_note_model and card_deck")
-
-        new_note = mw.col.new_note(
-            card_note_model
-        )
+        card_deck, new_note = _obtain_audio_note_and_deck(app_config)
 
         new_note.fields[0] = create_vocab_request.vocab_to_create
         new_note.fields[1] = create_vocab_request.hiragana_text
-
+        new_note.fields[3] = create_vocab_request.word_definition
         logging.info(f"create_audio_vocab_card - populated new_note")
 
         logging.info(

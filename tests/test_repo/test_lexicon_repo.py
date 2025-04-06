@@ -25,6 +25,7 @@ class TestLexiconRepo(unittest.TestCase):
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
         stubbed_app_config = mock_app_config()
+        stubbed_vocab_request = mock_japanese_vocab_request()
 
         stubbed_app_config.audio_vocab_card_audio_column_number = 4
         main_window_mock.col.new_note.return_value.fields = [""] * 10
@@ -39,7 +40,7 @@ class TestLexiconRepo(unittest.TestCase):
 
         mock_created_flash_card = FlashCardRepo.create_audio_vocab_card(
             deepcopy(stubbed_app_config),
-            mock_japanese_vocab_request()
+            deepcopy(stubbed_vocab_request)
         )
 
 
@@ -61,6 +62,11 @@ class TestLexiconRepo(unittest.TestCase):
             )
         )
 
+        self.assertEqual(
+            stubbed_vocab_request.word_definition,
+            args[0].fields[3],
+            msg="word_definition should be in fields element - 4"
+        )
         self.assertIsInstance(
             mock_created_flash_card,
             FlashCard
