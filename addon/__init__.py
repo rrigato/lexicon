@@ -44,18 +44,25 @@ def e2e_test_validation():
 def main():
     """Get user input and display greeting"""
 
-    logging.info("Lexicon input dialog")
+    logging.info("main - Lexicon input dialog")
     vocab_word, no_errors = QInputDialog.getText(
         mw, "Input Dialog", "Please enter the vocabulary word:"
     )
 
     if no_errors and vocab_word:  # Check if input was provided and OK was pressed
-        logging.info(vocab_word)
+        logging.info("main - vocab_word: %s", vocab_word)
 
+    word_definition, no_errors = QInputDialog.getText(
+        mw, "Input Dialog", "Please enter the word definition:"
+    )
+
+    if no_errors and word_definition:
+        logging.info("main - word_definition: %s", word_definition)
 
     flash_card_creation_error_message = learn_japanese_word(
         input_for_creating_flashcard=vocab_word,
-        japanese_word_plugin=FlashCardRepo
+        japanese_word_plugin=FlashCardRepo,
+        word_definition=word_definition
     )
 
     if flash_card_creation_error_message:

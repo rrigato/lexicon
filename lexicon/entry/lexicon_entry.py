@@ -9,7 +9,8 @@ from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface
 
 def learn_japanese_word(
         input_for_creating_flashcard: str,
-        japanese_word_plugin: LearnJapaneseWordInterface
+        japanese_word_plugin: LearnJapaneseWordInterface,
+        word_definition: str
     )-> Optional[str]:
     """Usecase for storing a new japanese word in
     the spaced repetition system"""
