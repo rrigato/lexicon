@@ -23,7 +23,8 @@ def learn_japanese_word(
         return("Only Japanese characters are allowed")
 
     valid_vocab_request = JapaneseVocabRequest(
-        vocab_to_create=input_for_creating_flashcard
+        vocab_to_create=input_for_creating_flashcard,
+        word_definition=word_definition
     )
     logging.info(f"learn_japanese_word - Obtained valid_vocab_request")
 
