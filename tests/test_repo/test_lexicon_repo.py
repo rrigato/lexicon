@@ -2,6 +2,8 @@ from copy import deepcopy
 import json
 import unittest
 from unittest.mock import MagicMock, patch
+from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+from lexicon.repo.lexicon_repo import FlashCardRepo
 
 from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
 
@@ -64,10 +66,12 @@ class TestLexiconRepo(unittest.TestCase):
             FlashCard
         )
 
+    @patch("lexicon.repo.lexicon_repo.FlashCardRepo.make_mp3_for_anki")
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_create_reading_vocab_card(
         self,
-        main_window_mock: MagicMock
+        main_window_mock: MagicMock,
+        make_mp3_for_anki_mock: MagicMock
     ):
         """Anki reading Note created"""
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
@@ -82,7 +86,9 @@ class TestLexiconRepo(unittest.TestCase):
             MagicMock(id=3)
         ]
         main_window_mock.col.new_note.return_value = mock_new_note
+        main_window_mock.col.new_note.return_value.fields = [""] * 10
         mock_runtime_config = mock_app_config()
+        mock_runtime_config.reading_vocab_card_audio_column_number = 6
 
         mock_reading_vocab_card = FlashCardRepo.create_reading_vocab_card(
             mock_japanese_vocab_request(),
@@ -101,6 +107,18 @@ class TestLexiconRepo(unittest.TestCase):
         self.assertEqual(
             mock_reading_vocab_card.anki_note_id,
             4
+        )
+        args, kwargs = main_window_mock.col.add_note.call_args
+        self.assertIn(
+            "[sound:",
+            args[0].fields[
+                mock_runtime_config.reading_vocab_card_audio_column_number
+            ],
+            msg=(
+                "\n\nsound reference should be in fields element - "
+                f"{mock_runtime_config.reading_vocab_card_audio_column_number} - "
+
+            )
         )
 
 
@@ -231,8 +249,6 @@ class TestLexiconRepo(unittest.TestCase):
     ):
         """All properties of AppConfig are populated
         and e2e test of config.json shipped with application"""
-        from fixtures.lexicon_fixtures import mock_japanese_vocab_request
-        from lexicon.repo.lexicon_repo import FlashCardRepo
 
         with open("addon/config.json") as json_file:
             mock_dict_config = json.load(json_file)
@@ -253,6 +269,37 @@ class TestLexiconRepo(unittest.TestCase):
             if not attr_name.startswith("_")
 
         ]
+
+    @patch("lexicon.repo.lexicon_repo.reading_column_selector")
+    @patch("lexicon.repo.lexicon_repo.audio_column_selector")
+    @patch("lexicon.repo.lexicon_repo.mw")
+    def test_retrieve_app_config_audio_and_reading_column_selectors_called(
+        self,
+        main_window_mock: MagicMock,
+        audio_column_selector_mock: MagicMock,
+        reading_column_selector_mock: MagicMock,
+        ):
+        """
+        GIVEN -
+        - a valid config.json
+        WHEN -
+        - the retrieve_app_config method is called
+        THEN -
+        - the audio_column_selector and reading_column_selector methods are called
+        """
+        with open("addon/config.json") as json_file:
+            mock_dict_config = json.load(json_file)
+
+        main_window_mock.addonManager.getConfig.return_value = mock_dict_config
+        audio_column_selector_mock.return_value = 2
+        reading_column_selector_mock.return_value = 2
+
+
+        FlashCardRepo.retrieve_app_config()
+
+        audio_column_selector_mock.assert_called_once()
+        reading_column_selector_mock.assert_called_once()
+
 
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_set_flash_card_due_date_in_embeded_application(
