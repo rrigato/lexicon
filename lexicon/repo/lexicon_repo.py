@@ -68,6 +68,20 @@ def _obtain_audio_note_and_deck(
     return card_deck, new_note
 
 
+def _obtain_reading_note_and_deck(
+    app_config: AppConfig
+) -> tuple["DeckDict", "NotetypeDict"]:
+
+    card_note_model = mw.col.models.by_name(
+        app_config.reading_note_template_name
+    )
+
+    logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
+
+    card_deck = mw.col.decks.by_name(app_config.reading_deck_name)
+
+    return card_deck, card_note_model
+
 def set_logger() -> None:
     """Set logger configuration
     https://github.com/abdnh/ankiutils/blob/master/src/ankiutils/log.py
@@ -162,10 +176,8 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         """
         logging.info(f"create_reading_vocab_card - invocation begin")
 
-        card_note_model = mw.col.models.by_name(
-            app_config.reading_note_template_name
-        )
-        card_deck = mw.col.decks.by_name(app_config.reading_deck_name)
+        card_deck, card_note_model = _obtain_reading_note_and_deck(app_config)
+
 
         new_note = mw.col.new_note(
             card_note_model
