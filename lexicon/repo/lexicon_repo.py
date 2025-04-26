@@ -34,7 +34,10 @@ def _create_new_reading_note(
     '''TODO dynamically select column number'''
     new_note.fields[2] = create_vocab_request.word_definition
 
-    logging.info(f"create_reading_vocab_card - populated new_note")
+    logging.info(
+        "_create_new_reading_note -"
+        + " populated new_note"
+    )
 
     media_filename = FlashCardRepo.make_mp3_for_anki(
         app_config,
@@ -59,7 +62,10 @@ def _obtain_audio_note_and_deck(
     )
     card_deck = mw.col.decks.by_name(app_config.audio_deck_name)
 
-    logging.info(f"create_audio_vocab_card - found card_note_model and card_deck")
+    logging.info(
+        "_obtain_audio_note_and_deck -"
+        + " found card_note_model and card_deck"
+    )
 
     new_note = mw.col.new_note(
         card_note_model
@@ -76,7 +82,7 @@ def _obtain_reading_note_and_deck(
         app_config.reading_note_template_name
     )
 
-    logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
+    logging.info(f"_obtain_reading_note_and_deck - found card_note_model and card_deck")
 
     card_deck = mw.col.decks.by_name(app_config.reading_deck_name)
 
