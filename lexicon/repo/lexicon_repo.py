@@ -5,6 +5,7 @@ from copy import deepcopy
 from logging.handlers import RotatingFileHandler
 import tempfile
 from time import strftime
+from typing import TYPE_CHECKING
 
 import pykakasi
 from aqt import mw
@@ -14,6 +15,72 @@ from lexicon.entities.lexicon_entity_model import (AppConfig, FlashCard,
                                                    JapaneseVocabRequest)
 from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface, audio_column_selector, reading_column_selector
 
+if TYPE_CHECKING:
+    from anki.decks import DeckDict
+    from anki.models import NotetypeDict
+    from anki.notes import Note
+
+def _create_new_reading_note(
+    create_vocab_request: JapaneseVocabRequest,
+    app_config: AppConfig,
+    card_note_model: "NotetypeDict"
+) -> "Note":
+    new_note = mw.col.new_note(
+        card_note_model
+    )
+
+    new_note.fields[0] = create_vocab_request.vocab_to_create
+    new_note.fields[1] = create_vocab_request.hiragana_text
+    '''TODO dynamically select column number'''
+    new_note.fields[2] = create_vocab_request.word_definition
+
+    logging.info(f"create_reading_vocab_card - populated new_note")
+
+    media_filename = FlashCardRepo.make_mp3_for_anki(
+        app_config,
+        create_vocab_request
+    )
+    # Add a sound reference to the notes field
+    new_note.fields[
+        app_config.reading_vocab_card_audio_column_number
+    ] = "[sound:{anki_media_file}]".format(
+        anki_media_file=media_filename
+    )
+
+    return new_note
+
+
+
+def _obtain_audio_note_and_deck(
+        app_config: AppConfig
+    ) -> tuple["DeckDict", "NotetypeDict"]:
+    card_note_model = mw.col.models.by_name(
+        app_config.audio_note_template_name
+    )
+    card_deck = mw.col.decks.by_name(app_config.audio_deck_name)
+
+    logging.info(f"create_audio_vocab_card - found card_note_model and card_deck")
+
+    new_note = mw.col.new_note(
+        card_note_model
+    )
+
+    return card_deck, new_note
+
+
+def _obtain_reading_note_and_deck(
+    app_config: AppConfig
+) -> tuple["DeckDict", "NotetypeDict"]:
+
+    card_note_model = mw.col.models.by_name(
+        app_config.reading_note_template_name
+    )
+
+    logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
+
+    card_deck = mw.col.decks.by_name(app_config.reading_deck_name)
+
+    return card_deck, card_note_model
 
 def set_logger() -> None:
     """Set logger configuration
@@ -60,23 +127,13 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         """
         logging.info(f"create_audio_vocab_card - invocation begin")
 
-        current_collection = mw.col
 
-
-        card_note_model = mw.col.models.by_name(
-            app_config.audio_note_template_name
-        )
-        card_deck = mw.col.decks.by_name(app_config.audio_deck_name)
-
-        logging.info(f"create_audio_vocab_card - found card_note_model and card_deck")
-
-        new_note = mw.col.new_note(
-            card_note_model
-        )
+        card_deck, new_note = _obtain_audio_note_and_deck(app_config)
 
         new_note.fields[0] = create_vocab_request.vocab_to_create
         new_note.fields[1] = create_vocab_request.hiragana_text
-
+        '''TODO dynamically select column number'''
+        new_note.fields[3] = create_vocab_request.word_definition
         logging.info(f"create_audio_vocab_card - populated new_note")
 
         logging.info(
@@ -119,12 +176,8 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         """
         logging.info(f"create_reading_vocab_card - invocation begin")
 
-        card_note_model = mw.col.models.by_name(
-            app_config.reading_note_template_name
-        )
-        card_deck = mw.col.decks.by_name(app_config.reading_deck_name)
+        card_deck, card_note_model = _obtain_reading_note_and_deck(app_config)
 
-        logging.info(f"create_reading_vocab_card - found card_note_model and card_deck")
 
         new_note = mw.col.new_note(
             card_note_model
@@ -132,6 +185,8 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         new_note.fields[0] = create_vocab_request.vocab_to_create
         new_note.fields[1] = create_vocab_request.hiragana_text
+        '''TODO dynamically select column number'''
+        new_note.fields[2] = create_vocab_request.word_definition
 
         logging.info(f"create_reading_vocab_card - populated new_note")
 
@@ -146,6 +201,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             anki_media_file=media_filename
         )
 
+
         mw.col.add_note(new_note, card_deck["id"])
 
         logging.info(f"create_reading_vocab_card - saved new_note")
@@ -156,6 +212,8 @@ class FlashCardRepo(LearnJapaneseWordInterface):
                 anki_note_id=new_note.id
             )
         )
+
+
 
     @staticmethod
     def is_only_japanese_characters(
