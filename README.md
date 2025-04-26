@@ -38,12 +38,14 @@ cmd+shift+;
 
 
 ### viewing-anki-versions
-- The version of the aqt library used in the anki application can be found by clicking on Anki -> About Anki ![images/anki_python_version.png](images/anki_python_version.png)
-- Version should correspond to the `aqt` version in [requirements/requirements-prod.in](requirements/requirements-prod.in)
+- The version of the aqt library used in the anki application can be found by clicking on Anki -> About Anki
+
+![images/anki_python_version.png](images/anki_python_version.png)
+- Version should correspond to the `aqt` version in [requirements/requirements-dev.in](requirements/requirements-dev.in)
 - Check the pyqt version locally from an interpreter
 ```python
 from aqt import PYQT_VERSION_STR, qVersion
 print(PYQT_VERSION_STR) #PyQt version
-print(qVersion) #qt version
+print(qVersion()) #qt version
 ```
 - The latest dependencies that aqt uses can be found [here](https://github.com/ankitects/anki/tree/main/python)
