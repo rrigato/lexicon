@@ -6,12 +6,6 @@ from aqt import mw
 from aqt.qt import QAction, QInputDialog, QMessageBox
 from aqt.utils import qconnect
 
-'''
-TODO - extract into module that checks whether unittest or not
-to handle import
-
-'''
-
 def configure_runtime_path():
     """Adds the third party dependencies to the python
     runtime path.
@@ -35,29 +29,37 @@ from lexicon.repo.lexicon_repo import set_logger
 from lexicon.entry.lexicon_entry import learn_japanese_word
 from lexicon.repo.lexicon_repo import FlashCardRepo
 
-def e2e_test_validation():
-    """End to end test for validation"""
-    logging.info(mw.addonManager.addonsFolder(__name__))
-    # QMessageBox.information(mw, "Validated Lexicon addon", "Hello from external")
-    logging.info("Validated Lexicon addon")
-
-def main():
-    """Get user input and display greeting"""
-
-    logging.info("main - Lexicon input dialog")
+def _get_vocab_word_and_definition():
+    logging.info(
+        "_get_vocab_word_and_definition - Lexicon input dialog"
+    )
     vocab_word, no_errors = QInputDialog.getText(
         mw, "Input Dialog", "Please enter the vocabulary word:"
     )
 
     if no_errors and vocab_word:  # Check if input was provided and OK was pressed
-        logging.info("main - vocab_word: %s", vocab_word)
+        logging.info(
+            "_get_vocab_word_and_definition - vocab_word: %s",
+            vocab_word
+        )
 
     word_definition, no_errors = QInputDialog.getText(
         mw, "Input Dialog", "Please enter the word definition:"
     )
 
     if no_errors and word_definition:
-        logging.info("main - word_definition: %s", word_definition)
+        logging.info(
+            "_get_vocab_word_and_definition - word_definition: %s",
+            word_definition
+        )
+
+    return vocab_word, word_definition
+
+
+def main():
+    """Get user input and display greeting"""
+
+    vocab_word, word_definition = _get_vocab_word_and_definition()
 
     flash_card_creation_error_message = learn_japanese_word(
         input_for_creating_flashcard=vocab_word,
