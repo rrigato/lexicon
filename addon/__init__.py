@@ -1,16 +1,11 @@
 import logging
 import os
 import sys
+from typing import Optional
 from aqt import mw
 
 from aqt.qt import QAction, QInputDialog, QMessageBox
 from aqt.utils import qconnect
-
-'''
-TODO - extract into module that checks whether unittest or not
-to handle import
-
-'''
 
 def configure_runtime_path():
     """Adds the third party dependencies to the python
@@ -35,29 +30,78 @@ from lexicon.repo.lexicon_repo import set_logger
 from lexicon.entry.lexicon_entry import learn_japanese_word
 from lexicon.repo.lexicon_repo import FlashCardRepo
 
-def e2e_test_validation():
-    """End to end test for validation"""
-    logging.info(mw.addonManager.addonsFolder(__name__))
-    # QMessageBox.information(mw, "Validated Lexicon addon", "Hello from external")
-    logging.info("Validated Lexicon addon")
 
-def main():
-    """Get user input and display greeting"""
-
-    logging.info("main - Lexicon input dialog")
+def _get_vocab_word_and_definition()-> tuple[str, str]:
+    logging.info(
+        "_get_vocab_word_and_definition - Lexicon input dialog"
+    )
     vocab_word, no_errors = QInputDialog.getText(
         mw, "Input Dialog", "Please enter the vocabulary word:"
     )
 
     if no_errors and vocab_word:  # Check if input was provided and OK was pressed
-        logging.info("main - vocab_word: %s", vocab_word)
+        logging.info(
+            "_get_vocab_word_and_definition - vocab_word: %s",
+            vocab_word
+        )
 
     word_definition, no_errors = QInputDialog.getText(
         mw, "Input Dialog", "Please enter the word definition:"
     )
 
     if no_errors and word_definition:
-        logging.info("main - word_definition: %s", word_definition)
+        logging.info(
+            "_get_vocab_word_and_definition - word_definition: %s",
+            word_definition
+        )
+
+    return vocab_word, word_definition
+
+
+def _flash_card_input_prequisites(
+        vocab_word: str,
+        word_definition: str
+)-> tuple[str, str, Optional[str]]:
+    if vocab_word == "":
+        logging.info(
+            "_flash_card_input_prequisites - vocab_word empty"
+        )
+        return (
+            vocab_word,
+            word_definition,
+            "Vocab word empty - no flash card created"
+        )
+    if word_definition == "":
+        logging.info(
+            "_flash_card_input_prequisites - word_definition empty"
+        )
+        return (
+            vocab_word,
+            word_definition,
+            "Word definition empty - no flash card created"
+        )
+    return vocab_word, word_definition, None
+
+def main():
+    """Get user input and display greeting"""
+    vocab_word, word_definition = _get_vocab_word_and_definition()
+
+    vocab_word, word_definition, info_message = (
+        _flash_card_input_prequisites(
+            vocab_word=vocab_word,
+            word_definition=word_definition
+        )
+    )
+
+    if info_message:
+        logging.info(
+            "main - info_message: %s",
+            info_message
+        )
+        QMessageBox.information(
+            mw, "Invalid Input", flash_card_creation_error_message
+        )
+        return
 
     flash_card_creation_error_message = learn_japanese_word(
         input_for_creating_flashcard=vocab_word,
@@ -98,10 +142,9 @@ if "unittest" not in sys.modules.keys():
     '''
     action.setShortcut("Ctrl+Shift+L")
 
-    '''Note that qconnec
+    '''Note that qconnect
         is registering a slot that listens to emitted signals
     outside the flow of control of the the main thread'''
-    qconnect(action.triggered, e2e_test_validation)
     qconnect(action.triggered, main)
 
     # add addon to the tools menu
