@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
+from addon import _flash_card_input_prequisites
 from fixtures.lexicon_fixtures import mock_japanese_vocab_request
 class TestAddonInit(unittest.TestCase):
 
@@ -13,7 +14,10 @@ class TestAddonInit(unittest.TestCase):
     ):
         """external plugin calles clean architecture"""
         from addon import main
-        getText_mock.return_value = ("救済", True)
+        getText_mock.side_effect = [
+            ("救済", True),
+            ("rescue", True)
+        ]
         learn_japanese_word_mock.return_value = None
 
 
@@ -25,6 +29,26 @@ class TestAddonInit(unittest.TestCase):
             2,
             msg="getText should be called twice"
         )
+
+
+    def test_flash_card_input_prequisites(self):
+        """
+        GIVEN -
+            - user inputs an empty vocab word
+        WHEN -
+            - flash_card_input_prequisites is called
+        THEN -
+            - an info message is returned
+        """
+        vocab_word, word_definition, info_message = (
+            _flash_card_input_prequisites(
+                vocab_word="",
+                word_definition=""
+            )
+        )
+        self.assertEqual(vocab_word, "")
+        self.assertEqual(word_definition, "")
+        self.assertEqual(info_message, "Vocab word empty - no flash card created")
 
 
     @patch("aqt.qt.QMessageBox.information")
