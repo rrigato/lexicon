@@ -86,20 +86,20 @@ def main():
     """Get user input and display greeting"""
     vocab_word, word_definition = _get_vocab_word_and_definition()
 
-    vocab_word, word_definition, info_message = (
+    vocab_word, word_definition, bad_input = (
         _flash_card_input_prequisites(
             vocab_word=vocab_word,
             word_definition=word_definition
         )
     )
 
-    if info_message:
+    if bad_input:
         logging.info(
-            "main - info_message: %s",
-            info_message
+            "main - bad_input: %s",
+            bad_input
         )
         QMessageBox.information(
-            mw, "Invalid Input", flash_card_creation_error_message
+            mw, "Invalid Input", bad_input
         )
         return
 
