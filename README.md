@@ -1,11 +1,18 @@
 Anki add-on to create flash cards
 
 ### getting-started
-```
+
+1) Download the Anki app for [your platform here](https://apps.ankiweb.net/)
+2)
+```sh
 pyenv install 3.9
 pyenv virtualenv 3.9 lexicon
 pyenv activate lexicon
-pip install requirements/requirements-dev.txt
+
+# Make sure DYLIB_PATH and VENV_PATH arguements
+# Match your local setup
+make install
+
 ```
 
 
@@ -51,19 +58,18 @@ print(qVersion()) #qt version
 - The latest dependencies that aqt uses can be found [here](https://github.com/ankitects/anki/tree/main/python)
 
 # missing libankihelper.dylib file
-If you received the following error, this means that the `libankihelper.dylib` dynamic library calling some of the C++ code for Qt was not included in the PIP install:
+If you received the following error, this means that the `libankihelper.dylib` dynamic library calling some of the C++ code for Qt was not included in the make install:
 
 ![images/anki_missing_dylib.jpg](images/anki_missing_dylib.jpg)
 
-1) Download the Anki app for [your platform here](https://apps.ankiweb.net/)
-2) The libankihelper.dylib file should be available from here, if you installed the .dmg to `/Applications`
+
+1) The libankihelper.dylib file should be available from here, if you installed the .dmg to `/Applications`
 ```
 /Applications/Anki.app/Contents/MacOS/libankihelper.dylib
 ```
-3) Copy the file into your virtual environment
+2) When calling make install pass the appropriate path to the dylib and virtualenv install location
 ```sh
-mkdir ~/.pyenv/versions/lexicon/lib/python3.9/site-packages/_aqt/data/lib/
-
-cp /Applications/Anki.app/Contents/MacOS/libankihelper.dylib \
-~/.pyenv/versions/lexicon/lib/python3.9/site-packages/_aqt/data/lib/
+make install \
+DYLIB_PATH=/Applications/Anki.app/Contents/MacOS/libankihelper.dylib \
+VENV_PATH=~/.pyenv/versions/lexicon/lib/python3.9/site-packages/_aqt/data/lib/
 ```
