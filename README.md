@@ -49,3 +49,21 @@ print(PYQT_VERSION_STR) #PyQt version
 print(qVersion()) #qt version
 ```
 - The latest dependencies that aqt uses can be found [here](https://github.com/ankitects/anki/tree/main/python)
+
+# missing libankihelper.dylib file
+If you received the following error, this means that the `libankihelper.dylib` dynamic library calling some of the C++ code for Qt was not included in the PIP install:
+
+![images/anki_missing_dylib.jpg](images/anki_missing_dylib.jpg)
+
+1) Download the Anki app for [your platform here](https://apps.ankiweb.net/)
+2) The libankihelper.dylib file should be available from here, if you installed the .dmg to `/Applications`
+```
+/Applications/Anki.app/Contents/MacOS/libankihelper.dylib
+```
+3) Copy the file into your virtual environment
+```sh
+mkdir ~/.pyenv/versions/lexicon/lib/python3.9/site-packages/_aqt/data/lib/
+
+cp /Applications/Anki.app/Contents/MacOS/libankihelper.dylib \
+~/.pyenv/versions/lexicon/lib/python3.9/site-packages/_aqt/data/lib/
+```

@@ -34,10 +34,13 @@ detect-secrets==1.5.0
     # via -r requirements/requirements-dev.in
 flask==3.1.0
     # via
+    #   -r requirements/requirements-dev.in
     #   aqt
     #   flask-cors
-flask-cors==5.0.1
-    # via aqt
+flask-cors==6.0.0
+    # via
+    #   -r requirements/requirements-dev.in
+    #   aqt
 gtts==2.5.4
     # via -r /Users/ryan/apps/lexicon/requirements/requirements-prod.in
 idna==3.10
