@@ -7,23 +7,24 @@ class AppConfig():
         self,
         audio_deck_name: Optional[str] = None,
         audio_note_template_name: Optional[str] = None,
-        audio_vocab_card_due_date: Optional[int] = None,
         audio_vocab_card_audio_column_number: Optional[int] = None,
+        audio_vocab_card_due_date: Optional[int] = None,
+        llm_api_key: Optional[str] = None,
         reading_deck_name: Optional[str] = None,
         reading_note_template_name: Optional[str] = None,
-        reading_vocab_card_due_date: Optional[int] = None,
-        reading_vocab_card_audio_column_number: Optional[int] = None
+        reading_vocab_card_audio_column_number: Optional[int] = None,
+        reading_vocab_card_due_date: Optional[int] = None
     ):
         """Initialize all attributes to None"""
         self.audio_deck_name = audio_deck_name
-        self.audio_note_template_name =  audio_note_template_name
-        self.audio_vocab_card_due_date =  audio_vocab_card_due_date
+        self.audio_note_template_name = audio_note_template_name
         self.audio_vocab_card_audio_column_number = audio_vocab_card_audio_column_number
+        self.audio_vocab_card_due_date = audio_vocab_card_due_date
+        self.llm_api_key = llm_api_key
         self.reading_deck_name = reading_deck_name
         self.reading_note_template_name = reading_note_template_name
-        self.reading_vocab_card_due_date = reading_vocab_card_due_date
         self.reading_vocab_card_audio_column_number = reading_vocab_card_audio_column_number
-
+        self.reading_vocab_card_due_date = reading_vocab_card_due_date
 
     @property
     def audio_deck_name(self) -> Optional[str]:
@@ -42,6 +43,7 @@ class AppConfig():
     @property
     def audio_note_template_name(self) -> Optional[str]:
         return(self._audio_note_template_name)
+
     @audio_note_template_name.setter
     def audio_note_template_name(self, audio_note_template_name: Optional[str]):
         if type(audio_note_template_name) not in (
@@ -53,21 +55,9 @@ class AppConfig():
         self._audio_note_template_name = audio_note_template_name
 
     @property
-    def audio_vocab_card_due_date(self) -> Optional[int]:
-        return(self._audio_vocab_card_due_date)
-    @audio_vocab_card_due_date.setter
-    def audio_vocab_card_due_date(self, audio_vocab_card_due_date: Optional[int]):
-        if type(audio_vocab_card_due_date) not in (
-            int, type(None)):
-            raise TypeError(
-                "AppConfig - audio_vocab_card_due_date datatype " +
-                "must be a int or None"
-            )
-        self._audio_vocab_card_due_date = audio_vocab_card_due_date
-
-    @property
     def audio_vocab_card_audio_column_number(self) -> Optional[int]:
         return(self._audio_vocab_card_audio_column_number)
+
     @audio_vocab_card_audio_column_number.setter
     def audio_vocab_card_audio_column_number(
         self,
@@ -80,6 +70,34 @@ class AppConfig():
                 "must be a int or None"
             )
         self._audio_vocab_card_audio_column_number = audio_vocab_card_audio_column_number
+
+    @property
+    def audio_vocab_card_due_date(self) -> Optional[int]:
+        return(self._audio_vocab_card_due_date)
+
+    @audio_vocab_card_due_date.setter
+    def audio_vocab_card_due_date(self, audio_vocab_card_due_date: Optional[int]):
+        if type(audio_vocab_card_due_date) not in (
+            int, type(None)):
+            raise TypeError(
+                "AppConfig - audio_vocab_card_due_date datatype " +
+                "must be a int or None"
+            )
+        self._audio_vocab_card_due_date = audio_vocab_card_due_date
+
+    @property
+    def llm_api_key(self) -> Optional[str]:
+        return(self._llm_api_key)
+
+    @llm_api_key.setter
+    def llm_api_key(self, llm_api_key: Optional[str]):
+        if type(llm_api_key) not in (
+            str, type(None)):
+            raise TypeError(
+                "AppConfig - llm_api_key datatype " +
+                "must be a str or None"
+            )
+        self._llm_api_key = llm_api_key
 
     @property
     def reading_deck_name(self) -> Optional[str]:
@@ -98,6 +116,7 @@ class AppConfig():
     @property
     def reading_note_template_name(self) -> Optional[str]:
         return(self._reading_note_template_name)
+
     @reading_note_template_name.setter
     def reading_note_template_name(self, reading_note_template_name: Optional[str]):
         if type(reading_note_template_name) not in (
@@ -109,21 +128,9 @@ class AppConfig():
         self._reading_note_template_name = reading_note_template_name
 
     @property
-    def reading_vocab_card_due_date(self) -> Optional[int]:
-        return(self._reading_vocab_card_due_date)
-    @reading_vocab_card_due_date.setter
-    def reading_vocab_card_due_date(self, reading_vocab_card_due_date: Optional[int]):
-        if type(reading_vocab_card_due_date) not in (
-            int, type(None)):
-            raise TypeError(
-                "AppConfig - reading_vocab_card_due_date datatype " +
-                "must be a int or None"
-            )
-        self._reading_vocab_card_due_date = reading_vocab_card_due_date
-
-    @property
     def reading_vocab_card_audio_column_number(self) -> Optional[int]:
         return(self._reading_vocab_card_audio_column_number)
+
     @reading_vocab_card_audio_column_number.setter
     def reading_vocab_card_audio_column_number(
         self,
@@ -136,6 +143,20 @@ class AppConfig():
                 "must be a int or None"
             )
         self._reading_vocab_card_audio_column_number = reading_vocab_card_audio_column_number
+
+    @property
+    def reading_vocab_card_due_date(self) -> Optional[int]:
+        return(self._reading_vocab_card_due_date)
+
+    @reading_vocab_card_due_date.setter
+    def reading_vocab_card_due_date(self, reading_vocab_card_due_date: Optional[int]):
+        if type(reading_vocab_card_due_date) not in (
+            int, type(None)):
+            raise TypeError(
+                "AppConfig - reading_vocab_card_due_date datatype " +
+                "must be a int or None"
+            )
+        self._reading_vocab_card_due_date = reading_vocab_card_due_date
 
 class FlashCard():
     """Represents a flash car in a spaced repition system"""

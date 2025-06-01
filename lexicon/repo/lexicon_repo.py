@@ -338,6 +338,9 @@ class FlashCardRepo(LearnJapaneseWordInterface):
             audio_vocab_card_audio_column_number=user_defined_config[
                 "audio_vocab_card_audio_column_number"
             ],
+            llm_api_key=user_defined_config[
+                "llm_api_key"
+            ],
             reading_deck_name=user_defined_config[
                 "reading_vocab_deck_name"
             ],

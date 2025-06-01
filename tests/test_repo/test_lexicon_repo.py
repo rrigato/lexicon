@@ -2,7 +2,7 @@ from copy import deepcopy
 import json
 import unittest
 from unittest.mock import MagicMock, patch
-from fixtures.lexicon_fixtures import mock_japanese_vocab_request
+from fixtures.lexicon_fixtures import mock_app_config
 from lexicon.repo.lexicon_repo import FlashCardRepo
 
 from lexicon.entities.lexicon_entity_model import AppConfig, FlashCard, JapaneseVocabRequest
@@ -21,7 +21,6 @@ class TestLexiconRepo(unittest.TestCase):
     ):
         """Anki Note created"""
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
-        from fixtures.lexicon_fixtures import mock_app_config
         from lexicon.repo.lexicon_repo import FlashCardRepo
 
         stubbed_app_config = mock_app_config()
@@ -269,14 +268,15 @@ class TestLexiconRepo(unittest.TestCase):
 
         mock_dict_config["audio_vocab_card_due_date"] = 1
         mock_dict_config["reading_vocab_card_due_date"] = 2
+        mock_dict_config["llm_api_key"] = mock_app_config().llm_api_key
 
         main_window_mock.addonManager.getConfig.return_value = mock_dict_config
 
-        mock_app_config = FlashCardRepo.retrieve_app_config()
+        retrieved_app_config = FlashCardRepo.retrieve_app_config()
 
         [
             self.assertIsNotNone(
-                getattr(mock_app_config, attr_name),
+                getattr(retrieved_app_config, attr_name),
                 msg=f"validate the following attribute is populated - {attr_name} "
             )
             for attr_name in dir(AppConfig)
