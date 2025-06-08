@@ -1,4 +1,3 @@
-
 from copy import deepcopy
 import random
 
@@ -34,12 +33,14 @@ def mock_app_config(
 
     mock_app_config.audio_deck_name = "mock_audio_deck_name"
     mock_app_config.audio_note_template_name = "mock_audio_note_template_name"
-    mock_app_config.audio_vocab_card_due_date = random.randint(0, 100)
     mock_app_config.audio_vocab_card_audio_column_number = random.randint(3, 10)
+    mock_app_config.audio_vocab_card_due_date = random.randint(0, 100)
+    # pragma: allowlist nextline secret
+    mock_app_config.llm_api_key = "mock value"
     mock_app_config.reading_deck_name = "mock_reading_deck_name"
     mock_app_config.reading_note_template_name = "mock_reading_note_template_name"
-    mock_app_config.reading_vocab_card_due_date = random.randint(0, 100)
     mock_app_config.reading_vocab_card_audio_column_number = random.randint(3, 10)
+    mock_app_config.reading_vocab_card_due_date = random.randint(0, 100)
 
     _validate_drift(mock_app_config)
 
