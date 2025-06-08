@@ -6,10 +6,12 @@ from fixtures.lexicon_fixtures import mock_japanese_vocab_request
 class TestAddonInit(unittest.TestCase):
 
     @patch("aqt.qt.QInputDialog.getText")
+    @patch("lexicon.repo.llm_connector.load_api_definition")
     @patch("addon.learn_japanese_word")
     def test_main(
         self,
         learn_japanese_word_mock: MagicMock,
+        load_api_definition_mock: MagicMock,
         getText_mock: MagicMock
     ):
         """external plugin calles clean architecture"""
@@ -18,12 +20,14 @@ class TestAddonInit(unittest.TestCase):
             ("救済", True),
             ("rescue", True)
         ]
+        load_api_definition_mock.return_value = mock_japanese_vocab_request()
         learn_japanese_word_mock.return_value = None
 
 
         main()
 
         learn_japanese_word_mock.assert_called()
+        load_api_definition_mock.assert_called_once()
         self.assertEqual(
             getText_mock.call_count,
             2,
@@ -52,17 +56,20 @@ class TestAddonInit(unittest.TestCase):
 
 
     @patch("aqt.qt.QMessageBox.information")
+    @patch("addon._lookup_api_definition")
     @patch("aqt.qt.QInputDialog.getText")
     @patch("addon.learn_japanese_word")
     def test_main_unexpected_error(
         self,
         learn_japanese_word_mock: MagicMock,
         getText_mock: MagicMock,
+        lookup_api_definition_mock: MagicMock,
         information_mock: MagicMock
     ):
         """text message is displayed to user on bad input"""
         from addon import main
         getText_mock.return_value = ("not a japanese character", True)
+        lookup_api_definition_mock.return_value = mock_japanese_vocab_request().word_definition
         learn_japanese_word_mock.return_value = "Error message from input validation that we only accept japanese characters"
 
 

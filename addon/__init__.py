@@ -7,6 +7,9 @@ from aqt import mw
 from aqt.qt import QAction, QInputDialog, QMessageBox
 from aqt.utils import qconnect
 
+from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
+from lexicon.repo.llm_connector import load_api_definition
+
 def configure_runtime_path():
     """Adds the third party dependencies to the python
     runtime path.
@@ -29,6 +32,17 @@ configure_runtime_path()
 from lexicon.repo.lexicon_repo import set_logger
 from lexicon.entry.lexicon_entry import learn_japanese_word
 from lexicon.repo.lexicon_repo import FlashCardRepo
+
+
+def _lookup_api_definition(
+        vocab_word: str
+) -> str:
+    return load_api_definition(
+        app_config=FlashCardRepo.retrieve_app_config(),
+        japanese_vocab_request=JapaneseVocabRequest(
+            vocab_to_create=vocab_word
+        )
+    ).word_definition
 
 
 def _get_vocab_word_and_definition()-> tuple[str, str]:
@@ -85,6 +99,13 @@ def _flash_card_input_prequisites(
 def main():
     """Get user input and display greeting"""
     vocab_word, word_definition = _get_vocab_word_and_definition()
+
+    '''TODO - only call load_api_definiton
+    if the word_definition is empty
+    and the AppConfig.llm_api_key is not empty'''
+    word_definition = _lookup_api_definition(
+        vocab_word=vocab_word
+    )
 
     '''TODO
     - Validate vocab_word is only japanese characters
