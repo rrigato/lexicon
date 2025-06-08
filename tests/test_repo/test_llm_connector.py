@@ -20,7 +20,7 @@ class TestLlmConnector(unittest.TestCase):
         A JapaneseVocabRequest object is returned
         with word_definition populated from an openai api call
         """
-        urlopen_mock.return_value = json.dumps({
+        urlopen_mock.return_value.__enter__.return_value.read.return_value = json.dumps({
             "choices": [
                 {
                     "index": 0,
@@ -31,7 +31,7 @@ class TestLlmConnector(unittest.TestCase):
                     "finish_reason": "stop"
                 }
             ]
-        })
+        }).encode("utf-8")
 
 
         api_definition = load_api_definition(
@@ -41,5 +41,9 @@ class TestLlmConnector(unittest.TestCase):
 
 
         args, kwargs = urlopen_mock.call_args
-        self.assertEqual(kwargs["data"]["model"], OPENAI_LLM_MODEL)
+
+        self.assertEqual(
+            json.loads(args[0].data.decode("utf-8"))["model"],
+            OPENAI_LLM_MODEL
+        )
         self.assertIsNotNone(api_definition.word_definition)

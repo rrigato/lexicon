@@ -1,8 +1,9 @@
 import json
+import os
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 
-from lexicon.entities.lexicon_constants import OPENAI_API_URL, OPENAI_LLM_MODEL
+from lexicon.entities.lexicon_constants import LLM_MODEL_TEMPERATURE, OPENAI_API_URL, OPENAI_LLM_MODEL
 from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
 
 def load_api_definition(
@@ -46,3 +47,15 @@ def load_api_definition(
         return JapaneseVocabRequest(
             word_definition=word_definition
         )
+
+
+if __name__ == "__main__":
+    api_definition = load_api_definition(
+        AppConfig(
+            llm_api_key=os.getenv("anki_openai_key")
+        ),
+        JapaneseVocabRequest(
+            vocab_to_create="洗脳"
+        )
+    )
+    print(api_definition.word_definition)
