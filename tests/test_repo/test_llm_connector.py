@@ -47,3 +47,5 @@ class TestLlmConnector(unittest.TestCase):
             OPENAI_LLM_MODEL
         )
         self.assertIsNotNone(api_definition.word_definition)
+
+
