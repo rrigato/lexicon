@@ -37,6 +37,12 @@ from lexicon.repo.lexicon_repo import FlashCardRepo
 def _lookup_api_definition(
         vocab_word: str
 ) -> str:
+    '''TODO - only call load_api_definiton
+    if the word_definition is empty
+    and the AppConfig.llm_api_key is not empty
+
+    test case for retrieval of app_config, rename, etc
+    '''
     return load_api_definition(
         app_config=FlashCardRepo.retrieve_app_config(),
         japanese_vocab_request=JapaneseVocabRequest(
@@ -100,9 +106,7 @@ def main():
     """Get user input and display greeting"""
     vocab_word, word_definition = _get_vocab_word_and_definition()
 
-    '''TODO - only call load_api_definiton
-    if the word_definition is empty
-    and the AppConfig.llm_api_key is not empty'''
+
     word_definition = _lookup_api_definition(
         vocab_word=vocab_word
     )
