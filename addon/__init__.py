@@ -86,6 +86,9 @@ def main():
     """Get user input and display greeting"""
     vocab_word, word_definition = _get_vocab_word_and_definition()
 
+    '''TODO
+    - Validate vocab_word is only japanese characters
+    '''
     vocab_word, word_definition, bad_input = (
         _flash_card_input_prequisites(
             vocab_word=vocab_word,
