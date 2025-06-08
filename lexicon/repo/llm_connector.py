@@ -1,3 +1,8 @@
+import json
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError
+
+from lexicon.entities.lexicon_constants import OPENAI_API_URL, OPENAI_LLM_MODEL
 from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
 
 def load_api_definition(
@@ -6,8 +11,38 @@ def load_api_definition(
 ) -> JapaneseVocabRequest:
     """
     Returns a new JapaneseVocabRequest object where only
-    the word_definition is populated
+    the word_definition is populated from an OpenAI API call
     """
-    return JapaneseVocabRequest(
-        word_definition="test_word_definition"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {app_config.llm_api_key}"
+    }
+
+    prompt = f"Provide a concise English definition for the Japanese word: {japanese_vocab_request.vocab_to_create}"
+
+    data = {
+        "model": OPENAI_LLM_MODEL,
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant that provides concise English definitions for Japanese words."},
+            {"role": "user", "content": prompt}
+        ],
+        "max_tokens": 100,
+        "temperature": LLM_MODEL_TEMPERATURE
+    }
+
+    request = Request(
+        OPENAI_API_URL,
+        data=json.dumps(data).encode(),
+        headers=headers,
+        method="POST"
     )
+
+    with urlopen(request) as response:
+        response_data = json.loads(response.read().decode())
+        word_definition = response_data[
+            "choices"
+        ][0]["message"]["content"]
+
+        return JapaneseVocabRequest(
+            word_definition=word_definition
+        )

@@ -1,11 +1,16 @@
+import json
 import unittest
+from unittest.mock import MagicMock, patch
 
+from lexicon.entities.lexicon_constants import OPENAI_LLM_MODEL
+from lexicon.repo.llm_connector import load_api_definition
 from fixtures.lexicon_fixtures import mock_app_config, mock_japanese_vocab_request
 
 class TestLlmConnector(unittest.TestCase):
 
 
-    def test_load_api_definition(self):
+    @patch("lexicon.repo.llm_connector.urlopen")
+    def test_load_api_definition(self, urlopen_mock: MagicMock):
         """
         GIVEN -
         - a populated AppConfig object
@@ -15,7 +20,19 @@ class TestLlmConnector(unittest.TestCase):
         A JapaneseVocabRequest object is returned
         with word_definition populated from an openai api call
         """
-        from lexicon.repo.llm_connector import load_api_definition
+        urlopen_mock.return_value = json.dumps({
+            "choices": [
+                {
+                    "index": 0,
+                    "message": {
+                        "role": "assistant",
+                        "content": "sample, definition"
+                    },
+                    "finish_reason": "stop"
+                }
+            ]
+        })
+
 
         api_definition = load_api_definition(
             mock_app_config(),
@@ -23,4 +40,6 @@ class TestLlmConnector(unittest.TestCase):
         )
 
 
+        args, kwargs = urlopen_mock.call_args
+        self.assertEqual(kwargs["data"]["model"], OPENAI_LLM_MODEL)
         self.assertIsNotNone(api_definition.word_definition)
