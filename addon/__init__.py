@@ -43,8 +43,24 @@ def _lookup_api_definition(
 
     test case for retrieval of app_config, rename, etc
     '''
+    if vocab_word == "":
+        logging.info(
+            "_lookup_api_definition - vocab_word is empty"
+        )
+        return ""
+
+    addon_app_config = FlashCardRepo.retrieve_app_config()
+
+    if addon_app_config.llm_api_key is None:
+        logging.info(
+            "_lookup_api_definition - llm_api_key is None"
+        )
+        return ""
+
+    '''TODO - Allow user to validate definition before creating
+    flash card'''
     return load_api_definition(
-        app_config=FlashCardRepo.retrieve_app_config(),
+        app_config=addon_app_config,
         japanese_vocab_request=JapaneseVocabRequest(
             vocab_to_create=vocab_word
         )
