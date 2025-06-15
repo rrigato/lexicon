@@ -9,7 +9,7 @@
             "module": "unittest",
             "args": [
                 "-k",
-                "test_load_api_definition"
+                "test_automatically_generate_definition"
             ]
         }
     ]

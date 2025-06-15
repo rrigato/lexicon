@@ -8,7 +8,7 @@ from aqt.qt import QAction, QInputDialog, QMessageBox
 from aqt.utils import qconnect
 
 from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
-from lexicon.repo.llm_connector import load_api_definition
+from lexicon.repo.llm_connector import automatically_generate_definition
 
 def configure_runtime_path():
     """Adds the third party dependencies to the python
@@ -59,7 +59,7 @@ def _lookup_api_definition(
 
     '''TODO - Allow user to validate definition before creating
     flash card'''
-    return load_api_definition(
+    return automatically_generate_definition(
         app_config=addon_app_config,
         japanese_vocab_request=JapaneseVocabRequest(
             vocab_to_create=vocab_word

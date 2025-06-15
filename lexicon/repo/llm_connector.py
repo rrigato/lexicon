@@ -7,7 +7,7 @@ from urllib.error import HTTPError
 from lexicon.entities.lexicon_constants import LLM_MODEL_TEMPERATURE, LLM_SYSTEM_PROMPT, OPENAI_API_URL, OPENAI_LLM_MODEL
 from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
 
-def load_api_definition(
+def automatically_generate_definition(
     app_config: AppConfig,
     japanese_vocab_request: JapaneseVocabRequest
 ) -> JapaneseVocabRequest:
@@ -43,7 +43,7 @@ def load_api_definition(
         method="POST"
     )
 
-    logging.info(f"load_api_definition - beginning api call")
+    logging.info(f"automatically_generate_definition - beginning api call")
 
     try:
         with urlopen(request) as response:
@@ -61,7 +61,7 @@ def load_api_definition(
         raise e
 
 if __name__ == "__main__":
-    api_definition = load_api_definition(
+    api_definition = automatically_generate_definition(
         AppConfig(
             llm_api_key=os.getenv("anki_openai_key")
         ),
@@ -70,4 +70,3 @@ if __name__ == "__main__":
         )
     )
     print(api_definition.word_definition)
-    
