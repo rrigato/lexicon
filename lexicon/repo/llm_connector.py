@@ -4,7 +4,7 @@ import os
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 
-from lexicon.entities.lexicon_constants import LLM_MODEL_TEMPERATURE, OPENAI_API_URL, OPENAI_LLM_MODEL
+from lexicon.entities.lexicon_constants import LLM_MODEL_TEMPERATURE, LLM_SYSTEM_PROMPT, OPENAI_API_URL, OPENAI_LLM_MODEL
 from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
 
 def load_api_definition(
@@ -20,13 +20,17 @@ def load_api_definition(
         "Authorization": f"Bearer {app_config.llm_api_key}"
     }
 
-    prompt = f"Provide a concise English definition for the Japanese word: {japanese_vocab_request.vocab_to_create}"
+    user_prompt = (
+        "Provide a concise English definition "
+        "for the Japanese word: "
+        f"{japanese_vocab_request.vocab_to_create}"
+    )
 
     data = {
         "model": OPENAI_LLM_MODEL,
         "messages": [
-            {"role": "system", "content": "You are a helpful assistant that provides concise English definitions for Japanese words."},
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": LLM_SYSTEM_PROMPT},
+            {"role": "user", "content": user_prompt}
         ],
         "max_tokens": 100,
         "temperature": LLM_MODEL_TEMPERATURE
@@ -40,7 +44,7 @@ def load_api_definition(
     )
 
     logging.info(f"load_api_definition - beginning api call")
-    
+
     try:
         with urlopen(request) as response:
             response_data = json.loads(response.read().decode())
@@ -66,3 +70,4 @@ if __name__ == "__main__":
         )
     )
     print(api_definition.word_definition)
+    
