@@ -3,19 +3,19 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 from lexicon.entities.lexicon_constants import OPENAI_LLM_MODEL
-from lexicon.repo.llm_connector import load_api_definition
+from lexicon.repo.llm_connector import automatically_generate_definition
 from fixtures.lexicon_fixtures import mock_app_config, mock_japanese_vocab_request
 
 class TestLlmConnector(unittest.TestCase):
 
 
     @patch("lexicon.repo.llm_connector.urlopen")
-    def test_load_api_definition(self, urlopen_mock: MagicMock):
+    def test_automatically_generate_definition(self, urlopen_mock: MagicMock):
         """
         GIVEN -
         - a populated AppConfig object
         WHEN -
-        - load_api_definition is called
+        - automatically_generate_definition is called
         THEN -
         A JapaneseVocabRequest object is returned
         with word_definition populated from an openai api call
@@ -34,7 +34,7 @@ class TestLlmConnector(unittest.TestCase):
         }).encode("utf-8")
 
 
-        api_definition = load_api_definition(
+        api_definition = automatically_generate_definition(
             mock_app_config(),
             mock_japanese_vocab_request(),
         )
