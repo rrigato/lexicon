@@ -45,7 +45,7 @@ gtts==2.5.4
     # via -r /Users/ryan/apps/lexicon/requirements/requirements-prod.in
 idna==3.10
     # via requests
-importlib-metadata==8.6.1
+importlib-metadata==8.7.0
     # via
     #   flask
     #   markdown
@@ -74,7 +74,7 @@ orjson==3.10.15
     # via anki
 pip-system-certs==4.0
     # via aqt
-protobuf==6.30.0
+protobuf==6.31.1
     # via anki
 pykakasi==2.3.0
     # via -r /Users/ryan/apps/lexicon/requirements/requirements-prod.in
@@ -121,7 +121,7 @@ typing-extensions==4.12.2
     #   beautifulsoup4
     #   mypy
     #   referencing
-urllib3==2.3.0
+urllib3==2.5.0
     # via requests
 waitress==3.0.2
     # via aqt
@@ -133,5 +133,5 @@ wrapt==1.17.2
     # via
     #   deprecated
     #   pip-system-certs
-zipp==3.21.0
+zipp==3.23.0
     # via importlib-metadata
