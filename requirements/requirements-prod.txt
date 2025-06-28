@@ -4,9 +4,9 @@
 #
 #    pip-compile requirements/requirements-prod.in
 #
-certifi==2025.1.31
+certifi==2025.6.15
     # via requests
-charset-normalizer==3.4.1
+charset-normalizer==3.4.2
     # via requests
 click==8.1.8
     # via gtts
@@ -22,7 +22,7 @@ pykakasi==2.3.0
     # via -r requirements/requirements-prod.in
 requests==2.32.4
     # via gtts
-urllib3==2.3.0
+urllib3==2.5.0
     # via requests
 wrapt==1.17.2
     # via deprecated
