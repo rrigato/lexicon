@@ -8,9 +8,13 @@
 # 6. Upgrade setuptools
 # 7. Upgrade requirements/requirements-prod.txt
 # 8. Upgrade requirements/requirements-dev.txt
+# TODO optionally delete virtualenv
 ###########################################
 (
     set -e
+
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
 
     if [[ "$(pyenv version-name)" == "lexicon" ]]; then
         pyenv deactivate lexicon
