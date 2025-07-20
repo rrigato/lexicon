@@ -36,7 +36,7 @@ remove_existing_lexicon() {
     echo "Checking for existing lexicon virtualenv..."
     if pyenv virtualenvs | grep -q "$VIRTUALENV_NAME"; then
         echo "Removing existing lexicon virtualenv..."
-        pyenv uninstall "$VIRTUALENV_NAME"
+        pyenv uninstall -f "$VIRTUALENV_NAME"
     fi
 }
 

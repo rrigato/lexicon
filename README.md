@@ -6,8 +6,6 @@ Anki add-on to create flash cards
 2)
 ```sh
 pyenv install 3.9
-pyenv virtualenv 3.9 lexicon
-pyenv activate lexicon
 
 # Make sure DYLIB_PATH and VENV_PATH arguements
 # Match your local setup
