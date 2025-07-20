@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ###########################################
 # Upgrade python dependencies
 # 1. Deactivate any existing lexicon virtualenv
@@ -8,43 +10,81 @@
 # 6. Upgrade setuptools
 # 7. Upgrade requirements/requirements-prod.txt
 # 8. Upgrade requirements/requirements-dev.txt
-# TODO optionally delete virtualenv
 ###########################################
-(
-    set -e
 
+set -e
+
+# Constants
+PYTHON_VERSION="3.9"
+VIRTUALENV_NAME="lexicon"
+
+init_pyenv() {
+    echo "Initializing pyenv environment..."
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
+}
 
-    if [[ "$(pyenv version-name)" == "lexicon" ]]; then
-        pyenv deactivate lexicon
+deactivate_lexicon() {
+    echo "Checking if lexicon virtualenv is active..."
+    if [[ "$(pyenv version-name)" == "$VIRTUALENV_NAME" ]]; then
+        echo "Deactivating lexicon virtualenv..."
+        pyenv deactivate "$VIRTUALENV_NAME"
     fi
+}
 
-    if pyenv virtualenvs | grep -q "lexicon"; then
-        pyenv uninstall lexicon
+remove_existing_lexicon() {
+    echo "Checking for existing lexicon virtualenv..."
+    if pyenv virtualenvs | grep -q "$VIRTUALENV_NAME"; then
+        echo "Removing existing lexicon virtualenv..."
+        pyenv uninstall "$VIRTUALENV_NAME"
     fi
+}
 
-    pyenv virtualenv 3.9 lexicon
+create_lexicon_virtualenv() {
+    echo "Creating new lexicon virtualenv with Python $PYTHON_VERSION..."
+    pyenv virtualenv "$PYTHON_VERSION" "$VIRTUALENV_NAME"
+}
 
+activate_lexicon() {
+    echo "Activating lexicon virtualenv..."
+    pyenv activate "$VIRTUALENV_NAME"
 
-
-
-    pyenv activate lexicon
-
-    if [[ "$(pyenv version-name)" != "lexicon" ]]; then
+    if [[ "$(pyenv version-name)" != "$VIRTUALENV_NAME" ]]; then
         echo "Error - lexicon virtualenv is not activated"
         exit 1
     fi
+    echo "Lexicon virtualenv activated successfully"
+}
+
+upgrade_core_tools() {
+    echo "Upgrading core pip tools..."
     pip install --upgrade pip
     pip install --upgrade pip-tools
     pip install --upgrade setuptools
-    ###########################################
-    # Upgrade python requirements/requirements-dev.txt
-    # and requirements/requirements-prod.txt
-    # Installs requirments-dev.txt
-    ###########################################
+}
+
+upgrade_requirements() {
+    echo "Compiling and upgrading requirements..."
     pip-compile requirements/requirements-prod.in
     pip-compile requirements/requirements-dev.in
-
     pip install --upgrade -r requirements/requirements-dev.txt
+}
+
+main() {
+    echo "Starting lexicon dependency upgrade process..."
+
+    init_pyenv
+    deactivate_lexicon
+    remove_existing_lexicon
+    create_lexicon_virtualenv
+    activate_lexicon
+    upgrade_core_tools
+    upgrade_requirements
+
+    echo "Lexicon dependency upgrade completed successfully!"
+}
+
+# Execute main function in subshell to prevent crashing parent shell
+(
+    main "$@"
 )
