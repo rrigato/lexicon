@@ -16,12 +16,8 @@ def _encoded_openapi_post_data(
     """
     return json.dumps({
         "model": OPENAI_LLM_MODEL,
-        "messages": [
-            {"role": "system", "content": LLM_SYSTEM_PROMPT},
-            {"role": "user", "content": user_prompt}
-        ],
-        "max_tokens": 100,
-        "temperature": LLM_MODEL_TEMPERATURE
+        "input": f"{LLM_SYSTEM_PROMPT}: {user_prompt}",
+        "reasoning": {"effort": "low"},
     }).encode()
 
 
