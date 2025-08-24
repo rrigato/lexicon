@@ -20,6 +20,22 @@ def _encoded_openapi_post_data(
         "reasoning": {"effort": "low"},
     }).encode()
 
+def _parse_openai_response(response_data: dict) -> str:
+    """
+    Parses the OpenAI API response
+
+    Parameters
+    ----------
+    response_data : dict
+        openai docs for response endpoint:
+        https://platform.openai.com/docs/api-reference/responses/create
+    """
+    response_message = [
+        message for message in response_data["output"]
+        if message["type"] == "message"
+    ]
+    return response_message[0]["content"][0]["text"]
+
 
 def automatically_generate_definition(
     app_config: AppConfig,
@@ -56,9 +72,7 @@ def automatically_generate_definition(
         with urlopen(request) as response:
             response_data = json.loads(response.read().decode())
             logging.info(f"automatically_generate_definition - response_data: \n {response_data}")
-            word_definition = response_data[
-                "choices"
-            ][0]["message"]["content"]
+            word_definition = _parse_openai_response(response_data)
 
             return JapaneseVocabRequest(
                 word_definition=word_definition
