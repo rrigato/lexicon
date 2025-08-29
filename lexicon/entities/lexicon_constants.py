@@ -9,5 +9,5 @@ LLM_SYSTEM_PROMPT = (
     "If you are not sure about the definition, say 'unknown'."
 )
 NOTE_FIELD_OFFSET = -1
-OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
-OPENAI_LLM_MODEL = "gpt-4.1"
+OPENAI_API_URL = "https://api.openai.com/v1/responses"
+OPENAI_LLM_MODEL = "gpt-5"

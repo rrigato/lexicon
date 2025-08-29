@@ -21,14 +21,22 @@ class TestLlmConnector(unittest.TestCase):
         with word_definition populated from an openai api call
         """
         urlopen_mock.return_value.__enter__.return_value.read.return_value = json.dumps({
-            "choices": [
+            "output": [
                 {
-                    "index": 0,
-                    "message": {
-                        "role": "assistant",
-                        "content": "sample, definition"
-                    },
-                    "finish_reason": "stop"
+                    "id": "rs_123",
+                    "type": "reasoning",
+                    "summary": []
+                },
+                {
+                    "id": "msg_123",
+                    "status": "completed",
+                    "type": "message",
+                    "content": [
+                        {
+                            "type": "output_text",
+                            "text": "sample, definition"
+                        }
+                    ]
                 }
             ]
         }).encode("utf-8")
