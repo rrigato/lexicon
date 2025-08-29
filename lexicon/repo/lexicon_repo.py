@@ -18,40 +18,6 @@ from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface, audio_co
 if TYPE_CHECKING:
     from anki.decks import DeckDict
     from anki.models import NotetypeDict
-    from anki.notes import Note
-
-def _create_new_reading_note(
-    create_vocab_request: JapaneseVocabRequest,
-    app_config: AppConfig,
-    card_note_model: "NotetypeDict"
-) -> "Note":
-    new_note = mw.col.new_note(
-        card_note_model
-    )
-
-    new_note.fields[0] = create_vocab_request.vocab_to_create
-    new_note.fields[1] = create_vocab_request.hiragana_text
-    '''TODO dynamically select column number'''
-    new_note.fields[2] = create_vocab_request.word_definition
-
-    logging.info(
-        "_create_new_reading_note -"
-        + " populated new_note"
-    )
-
-    media_filename = FlashCardRepo.make_mp3_for_anki(
-        app_config,
-        create_vocab_request
-    )
-    # Add a sound reference to the notes field
-    new_note.fields[
-        app_config.reading_vocab_card_audio_column_number
-    ] = "[sound:{anki_media_file}]".format(
-        anki_media_file=media_filename
-    )
-
-    return new_note
-
 
 
 def _obtain_audio_note_and_deck(
