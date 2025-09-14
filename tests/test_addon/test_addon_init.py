@@ -6,7 +6,7 @@ from fixtures.lexicon_fixtures import mock_japanese_vocab_request
 class TestAddonInit(unittest.TestCase):
 
     @patch("aqt.qt.QInputDialog.getText")
-    @patch("addon._lookup_api_definition")
+    @patch("addon.lookup_api_definition")
     @patch("addon.learn_japanese_word")
     def test_main(
         self,
@@ -56,7 +56,7 @@ class TestAddonInit(unittest.TestCase):
 
 
     @patch("aqt.qt.QMessageBox.information")
-    @patch("addon._lookup_api_definition")
+    @patch("addon.lookup_api_definition")
     @patch("aqt.qt.QInputDialog.getText")
     @patch("addon.learn_japanese_word")
     def test_main_unexpected_error(

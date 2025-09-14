@@ -26,8 +26,6 @@ def lookup_api_definition(vocab_word: str) -> str:
         logging.info("lookup_api_definition - llm_api_key is None")
         return ""
 
-    '''TODO - Allow user to validate definition before creating
-    flash card'''
     return automatically_generate_definition(
         app_config=addon_app_config,
         japanese_vocab_request=JapaneseVocabRequest(
