@@ -9,8 +9,6 @@ from lexicon.repo.lexicon_repo import FlashCardRepo
 def lookup_api_definition(vocab_word: str) -> str:
     '''Looks up a word definition using the LLM API
 
-    Args:
-        vocab_word: The vocabulary word to look up
 
     Returns:
         The word definition from the API, or empty string
