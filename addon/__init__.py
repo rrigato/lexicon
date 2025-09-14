@@ -7,8 +7,7 @@ from aqt import mw
 from aqt.qt import QAction, QInputDialog, QMessageBox
 from aqt.utils import qconnect
 
-from lexicon.entities.lexicon_entity_model import JapaneseVocabRequest
-from lexicon.repo.llm_connector import automatically_generate_definition
+
 
 def configure_runtime_path():
     """Adds the third party dependencies to the python
@@ -27,44 +26,13 @@ def configure_runtime_path():
                 "third_party_dependencies"
             )
         )
-
+# Need to setup runtime path for arhictecture dependencies
+# before importing the dependencies
 configure_runtime_path()
 from lexicon.repo.lexicon_repo import set_logger
 from lexicon.entry.lexicon_entry import learn_japanese_word
 from lexicon.repo.lexicon_repo import FlashCardRepo
-
-
-def _lookup_api_definition(
-        vocab_word: str
-) -> str:
-    '''TODO - only call load_api_definiton
-    if the word_definition is empty
-    and the AppConfig.llm_api_key is not empty
-
-    test case for retrieval of app_config, rename, etc
-    '''
-    if vocab_word == "":
-        logging.info(
-            "_lookup_api_definition - vocab_word is empty"
-        )
-        return ""
-
-    addon_app_config = FlashCardRepo.retrieve_app_config()
-
-    if addon_app_config.llm_api_key is None:
-        logging.info(
-            "_lookup_api_definition - llm_api_key is None"
-        )
-        return ""
-
-    '''TODO - Allow user to validate definition before creating
-    flash card'''
-    return automatically_generate_definition(
-        app_config=addon_app_config,
-        japanese_vocab_request=JapaneseVocabRequest(
-            vocab_to_create=vocab_word
-        )
-    ).word_definition
+from addon.flashcard_creation_orchestrator import lookup_api_definition
 
 
 def _get_vocab_word_and_definition()-> tuple[str, str]:
@@ -123,7 +91,7 @@ def main():
     vocab_word, word_definition = _get_vocab_word_and_definition()
 
 
-    word_definition = _lookup_api_definition(
+    word_definition = lookup_api_definition(
         vocab_word=vocab_word
     )
 
