@@ -32,7 +32,7 @@ configure_runtime_path()
 from lexicon.repo.lexicon_repo import set_logger
 from lexicon.entry.lexicon_entry import learn_japanese_word
 from lexicon.repo.lexicon_repo import FlashCardRepo
-from addon.flashcard_creation_orchestrator import lookup_api_definition
+from lexicon.entry.flashcard_creation_orchestrator import lookup_api_definition
 
 
 def _get_vocab_word_and_definition()-> tuple[str, str]:
