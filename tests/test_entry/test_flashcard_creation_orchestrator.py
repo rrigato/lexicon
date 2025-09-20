@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from addon.flashcard_creation_orchestrator import lookup_api_definition
+from lexicon.entry.flashcard_creation_orchestrator import lookup_api_definition
 from fixtures.lexicon_fixtures import mock_japanese_vocab_request, mock_app_config
 class TestOrchestrateFlashCards(unittest.TestCase):
 
-    @patch("addon.flashcard_creation_orchestrator.automatically_generate_definition")
-    @patch("addon.flashcard_creation_orchestrator.FlashCardRepo")
+    @patch("lexicon.entry.flashcard_creation_orchestrator.automatically_generate_definition")
+    @patch("lexicon.entry.flashcard_creation_orchestrator.FlashCardRepo")
     def test_lookup_api_definition(
         self,
         FlashCardRepo_mock: MagicMock,
