@@ -15,8 +15,8 @@
 set -e
 
 # Constants
-PYTHON_VERSION="3.9"
-VIRTUALENV_NAME="lexicon"
+PYTHON_VERSION="3.13"
+VIRTUALENV_NAME="lexicon3.13"
 
 init_pyenv() {
     echo "Initializing pyenv environment..."
