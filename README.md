@@ -69,5 +69,5 @@ If you received the following error, this means that the `libankihelper.dylib` d
 ```sh
 make install \
 DYLIB_PATH=/Applications/Anki.app/Contents/MacOS/libankihelper.dylib \
-VENV_PATH=~/.pyenv/versions/lexicon/lib/python3.9/site-packages/_aqt/data/lib/
+VENV_PATH=~/.pyenv/versions/lexicon3.13/lib/python3.13/site-packages/_aqt/data/lib/
 ```
