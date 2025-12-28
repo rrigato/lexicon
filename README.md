@@ -56,6 +56,8 @@ print(qVersion()) #qt version
 - The latest dependencies that aqt uses can be found [here](https://github.com/ankitects/anki/tree/main/python)
 
 # missing libankihelper.dylib file
+**libankihelper No longer used**
+
 If you received the following error, this means that the `libankihelper.dylib` dynamic library calling some of the C++ code for Qt was not included in the make install:
 
 ![images/anki_missing_dylib.jpg](images/anki_missing_dylib.jpg)
