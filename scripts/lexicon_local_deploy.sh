@@ -3,21 +3,27 @@ set -e
 
 scripts/build_lexicon.sh
 
-if [ -d ~/Library/'Application Support'/Anki2/addons21/lexicon ]; then
-    echo ~/Library/'Application Support'/Anki2/addons21/lexicon
+ANKI_ADDON_DIR=~/Library/'Application Support'/Anki2/addons21/lexicon
 
-    # remove all files except for user_files
-    find ~/Library/'Application Support'/Anki2/addons21/lexicon \
-    -path "*/user_files" -prune -o -mindepth 1 -print \
-    -exec rm -rf {} +
+if [ -d "$ANKI_ADDON_DIR" ]; then
+    echo "$ANKI_ADDON_DIR"
 
-    echo "Removed all files except user_files"
+    # Remove all files except for user_files and meta.json
+    find "$ANKI_ADDON_DIR" \
+        \( \
+            -path "*/user_files" -o \
+            -name "meta.json" \
+        \) -prune \
+        -o \
+        -mindepth 1 -print \
+        -exec rm -rf {} +
+
+    echo "Removed all files except user_files and meta.json"
 fi
 
-# move the zip file contents to the anki addon folder
+# Move the zip file contents to the anki addon folder
 # d for destination, o for overwrite, q for quiet
-unzip -oq lexicon.myaddon -d \
-~/Library/'Application Support'/Anki2/addons21/lexicon
+unzip -oq lexicon.myaddon -d "$ANKI_ADDON_DIR"
 
 rm lexicon.myaddon
 
