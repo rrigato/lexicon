@@ -265,6 +265,11 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         cloned_vocab_request = deepcopy(initial_vocab_request)
 
+        """TODO
+        - load_hiragana from llm_connector.load_hiragana
+        - Remove any pykakasi dependencies
+        """
+
         pykakasi_instance = pykakasi.kakasi()
 
 
