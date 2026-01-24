@@ -57,3 +57,15 @@ class TestLlmConnector(unittest.TestCase):
         self.assertIsNotNone(api_definition.word_definition)
 
 
+    def test_load_hiragana_from_api(self):
+        """
+        GIVEN -
+        - a populated AppConfig object
+        and a populated JapaneseVocabRequest object
+        WHEN -
+            load_hiragana is called
+        THEN -
+            a str is returned with the hiragana text
+            from an openai api call
+        """
+        pass

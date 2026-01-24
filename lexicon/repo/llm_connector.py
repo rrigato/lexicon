@@ -9,6 +9,7 @@ from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabReques
 
 
 def _encoded_openapi_post_data(
+    system_prompt: str,
     user_prompt: str,
 ) -> bytes:
     """
@@ -16,7 +17,7 @@ def _encoded_openapi_post_data(
     """
     return json.dumps({
         "model": OPENAI_LLM_MODEL,
-        "input": f"{LLM_SYSTEM_PROMPT}: {user_prompt}",
+        "input": f"{system_prompt}: {user_prompt}",
         "reasoning": {"effort": "low"},
     }).encode()
 
@@ -60,6 +61,7 @@ def automatically_generate_definition(
     request = Request(
         OPENAI_API_URL,
         data=_encoded_openapi_post_data(
+            system_prompt=LLM_SYSTEM_PROMPT,
             user_prompt=user_prompt
         ),
         headers=headers,
