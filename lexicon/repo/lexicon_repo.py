@@ -222,10 +222,18 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         """
         logging.info(f"make_mp3_for_anki - invocation begin")
 
+        '''
+            TODO -
+            - call llm_connector.write_audio_to_temp_file
+            - remove gTTS
+            - add temp_file_path to app_config
+            or create a new abstract data class?
+        '''
         tts = gTTS(
             text=vocab_request.vocab_to_create,
             lang="ja"
         )
+
         temp_dir = tempfile.gettempdir()
 
         temp_path = os.path.join(

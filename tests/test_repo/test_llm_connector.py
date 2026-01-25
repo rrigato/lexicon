@@ -69,3 +69,17 @@ class TestLlmConnector(unittest.TestCase):
             from an openai api call
         """
         pass
+
+    def test_write_audio_to_file(self):
+        """
+        GIVEN -
+            a app_config object
+            a JapaneseVocabRequest object
+            a AudioConfig object
+        WHEN -
+            write_audio_to_file is called
+        THEN -
+            an api is called to generate audio
+            a file with the audio is written to the file system
+        """
+        pass
