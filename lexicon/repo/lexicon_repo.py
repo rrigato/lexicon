@@ -225,9 +225,12 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         '''
             TODO -
             - call llm_connector.write_audio_to_temp_file
+            - Create a new AudioConfig object
+            - Use the following endpoint:
+            https://platform.openai.com/docs/guides/text-to-speech#supported-languages
             - remove gTTS
-            - add temp_file_path to app_config
-            or create a new abstract data class?
+
+
         '''
         tts = gTTS(
             text=vocab_request.vocab_to_create,
