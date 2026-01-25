@@ -161,8 +161,8 @@ class AppConfig():
 
 @dataclass
 class AudioConfig():
-    audio_file_name: str
-    audio_file_full_directory_path: str
+    file_name: str
+    full_directory_path_to_write_file: str
 
 class FlashCard():
     """Represents a flash car in a spaced repition system"""
