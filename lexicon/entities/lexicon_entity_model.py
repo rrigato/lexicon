@@ -1,4 +1,5 @@
 from typing import Optional
+from dataclasses import dataclass
 
 
 class AppConfig():
@@ -157,6 +158,12 @@ class AppConfig():
                 "must be a int or None"
             )
         self._reading_vocab_card_due_date = reading_vocab_card_due_date
+
+@dataclass
+class AudioConfig():
+    """Configuration for audio files related to flash card creation"""
+    file_name: str
+    full_directory_path_to_write_file: str
 
 class FlashCard():
     """Represents a flash car in a spaced repition system"""

@@ -1,4 +1,9 @@
-.PHONY: deploy debug install test
+.PHONY: deploy debug install test help
+
+.DEFAULT_GOAL := help
+
+help:
+	@echo "Read the makefile for commands you lazy developer"
 
 # Default path for the dylib file
 DYLIB_PATH ?= /Applications/Anki.app/Contents/MacOS/libankihelper.dylib
