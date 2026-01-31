@@ -5,7 +5,7 @@ from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 
 from lexicon.entities.lexicon_constants import LLM_MODEL_TEMPERATURE, LLM_SYSTEM_PROMPT, OPENAI_API_URL, OPENAI_LLM_MODEL
-from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest
+from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest, AudioConfig
 
 
 def _encoded_openapi_post_data(
@@ -82,6 +82,18 @@ def automatically_generate_definition(
     except HTTPError as e:
         logging.error(f"Error: {e}")
         raise e
+
+def write_audio_to_file(
+    app_config: AppConfig,
+    audio_config: AudioConfig,
+    japanese_vocab_request: JapaneseVocabRequest,
+    ) -> None:
+    """Loads the audio for japanese_vocab_request.vocab_to_create
+    into the location specified by audio_config
+    from the openai api
+    """
+    pass
+
 
 if __name__ == "__main__":
     api_definition = automatically_generate_definition(

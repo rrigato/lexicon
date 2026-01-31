@@ -161,6 +161,7 @@ class AppConfig():
 
 @dataclass
 class AudioConfig():
+    """Configuration for audio files related to flash card creation"""
     file_name: str
     full_directory_path_to_write_file: str
 

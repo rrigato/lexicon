@@ -3,7 +3,8 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 from lexicon.entities.lexicon_constants import OPENAI_LLM_MODEL
-from lexicon.repo.llm_connector import automatically_generate_definition
+from lexicon.entities.lexicon_entity_model import AudioConfig
+from lexicon.repo.llm_connector import automatically_generate_definition, write_audio_to_file
 from fixtures.lexicon_fixtures import mock_app_config, mock_japanese_vocab_request
 
 class TestLlmConnector(unittest.TestCase):
@@ -70,7 +71,11 @@ class TestLlmConnector(unittest.TestCase):
         """
         pass
 
-    def test_write_audio_to_file(self):
+    @patch("lexicon.repo.llm_connector.urlopen")
+    def test_write_audio_to_file(
+        self,
+        urlopen_mock: MagicMock
+    ):
         """
         GIVEN -
             a app_config object
@@ -82,4 +87,18 @@ class TestLlmConnector(unittest.TestCase):
             an api is called to generate audio
             a file with the audio is written to the file system
         """
-        pass
+        urlopen_mock.__enter__.return_value.read.return_value = b"audio"
+
+
+        write_audio_to_file(
+            mock_app_config(),
+            mock_japanese_vocab_request(),
+            AudioConfig(
+                file_name="mock_file.mp3",
+                full_directory_path_to_write_file="mock/directory"
+            )
+        )
+
+
+
+
