@@ -176,9 +176,9 @@ if __name__ == "__main__":
         ),
         AudioConfig(
             file_name="manual_speech_test.mp3",
-            full_directory_path_to_write_file="speech.mp3"
+            full_directory_path_to_write_file="."
         ),
         JapaneseVocabRequest(
-            vocab_to_create="洗脳"
+            vocab_to_create="愚痴る"
         )
     )
