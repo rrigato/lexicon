@@ -1,4 +1,8 @@
+LLM_AUDIO_PROMPT =(
+    "日本語で"
+)
 LLM_MODEL_TEMPERATURE = 0
+
 LLM_SYSTEM_PROMPT = (
     "You are a helpful assistant that provides "
     "concise English definitions for Japanese words."
@@ -8,6 +12,10 @@ LLM_SYSTEM_PROMPT = (
     "Only provide a definition if it is commonly used in Japanese."
     "If you are not sure about the definition, say 'unknown'."
 )
+
 NOTE_FIELD_OFFSET = -1
+OPENAI_AUDIO_MODEL = "gpt-4o-mini-tts"
+OPENAI_AUDIO_VOICE = "onyx"
+OPENAI_AUDIO_API_URL = "https://api.openai.com/v1/audio/speech"
 OPENAI_API_URL = "https://api.openai.com/v1/responses"
 OPENAI_LLM_MODEL = "gpt-5"

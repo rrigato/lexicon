@@ -1,12 +1,64 @@
 import json
 import logging
 import os
+from copy import deepcopy
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
-
-from lexicon.entities.lexicon_constants import LLM_MODEL_TEMPERATURE, LLM_SYSTEM_PROMPT, OPENAI_API_URL, OPENAI_LLM_MODEL
+from typing import TYPE_CHECKING
+from lexicon.entities.lexicon_constants import (
+    LLM_AUDIO_PROMPT,
+    LLM_SYSTEM_PROMPT,
+    OPENAI_AUDIO_API_URL,
+    OPENAI_AUDIO_MODEL,
+    OPENAI_AUDIO_VOICE,
+    OPENAI_API_URL,
+    OPENAI_LLM_MODEL,
+)
 from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest, AudioConfig
 
+if TYPE_CHECKING:
+    from http.client import HTTPResponse
+
+def _audio_request_to_file(
+    app_config: AppConfig,
+    audio_config: AudioConfig,
+    audio_request: Request,
+    japanese_vocab_request: JapaneseVocabRequest,
+) -> None:
+    """Orchestrates api call and writes to a file
+
+
+    """
+    path_to_audio_file = os.path.join(
+        audio_config.full_directory_path_to_write_file,
+        audio_config.file_name
+    )
+    try:
+        '''
+        openai contract for audio endpoint:
+        https://platform.openai.com/docs/api-reference/audio/create
+        '''
+        with urlopen(audio_request) as audio_response:
+            logging.info(f"_audio_request_to_file - audio_response recieved")
+            with open(
+                path_to_audio_file, "wb"
+            ) as audio_file:
+                audio_file.write(audio_response.read())
+                logging.info(f"_audio_request_to_file - audio_file written to {path_to_audio_file}")
+    except HTTPError as e:
+        logging.error(f"Error: {e}")
+        raise e
+
+def _encoded_audio_post_data(
+    japanese_vocab_request: JapaneseVocabRequest,
+) -> bytes:
+    """Post body for speech endpoint"""
+    return json.dumps({
+        "input": japanese_vocab_request.vocab_to_create,
+        "instructions": LLM_AUDIO_PROMPT,
+        "model": OPENAI_AUDIO_MODEL,
+        "voice": OPENAI_AUDIO_VOICE,
+    }).encode()
 
 def _encoded_openapi_post_data(
     system_prompt: str,
@@ -20,6 +72,14 @@ def _encoded_openapi_post_data(
         "input": f"{system_prompt}: {user_prompt}",
         "reasoning": {"effort": "low"},
     }).encode()
+
+def _openai_api_request_headers(app_config: AppConfig) -> dict:
+    """Returns a deepcopy of OpenAI API request headers"""
+
+    return deepcopy({
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {app_config.llm_api_key}"
+    })
 
 def _parse_openai_response(response_data: dict) -> str:
     """
@@ -47,10 +107,7 @@ def automatically_generate_definition(
     the word_definition is populated from an OpenAI API call
     """
     logging.info(f"automatically_generate_definition - start forming api call")
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {app_config.llm_api_key}"
-    }
+    headers = _openai_api_request_headers(app_config)
 
     user_prompt = (
         "Provide a concise English definition "
@@ -83,6 +140,7 @@ def automatically_generate_definition(
         logging.error(f"Error: {e}")
         raise e
 
+
 def write_audio_to_file(
     app_config: AppConfig,
     audio_config: AudioConfig,
@@ -92,16 +150,35 @@ def write_audio_to_file(
     into the location specified by audio_config
     from the openai api
     """
-    pass
+    logging.info(f"write_audio_to_file - start forming api call")
+
+    audio_request = Request(
+        OPENAI_AUDIO_API_URL,
+        data=_encoded_audio_post_data(
+            japanese_vocab_request=japanese_vocab_request
+        ),
+        headers=_openai_api_request_headers(app_config),
+        method="POST"
+    )
+
+    _audio_request_to_file(
+        app_config=app_config,
+        audio_config=audio_config,
+        audio_request=audio_request,
+        japanese_vocab_request=japanese_vocab_request
+    )
 
 
 if __name__ == "__main__":
-    api_definition = automatically_generate_definition(
+    write_audio_to_file(
         AppConfig(
             llm_api_key=os.getenv("anki_openai_key")
         ),
+        AudioConfig(
+            file_name="manual_speech_test.mp3",
+            full_directory_path_to_write_file="."
+        ),
         JapaneseVocabRequest(
-            vocab_to_create="洗脳"
+            vocab_to_create="愚痴る"
         )
     )
-    print(api_definition.word_definition)
