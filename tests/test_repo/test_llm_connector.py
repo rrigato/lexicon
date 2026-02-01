@@ -92,11 +92,11 @@ class TestLlmConnector(unittest.TestCase):
 
         write_audio_to_file(
             mock_app_config(),
-            mock_japanese_vocab_request(),
             AudioConfig(
                 file_name="mock_file.mp3",
                 full_directory_path_to_write_file="mock/directory"
-            )
+            ),
+            mock_japanese_vocab_request()
         )
 
 

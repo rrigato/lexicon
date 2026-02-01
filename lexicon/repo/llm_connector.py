@@ -3,9 +3,27 @@ import logging
 import os
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
-
-from lexicon.entities.lexicon_constants import LLM_MODEL_TEMPERATURE, LLM_SYSTEM_PROMPT, OPENAI_API_URL, OPENAI_LLM_MODEL
+from typing import TYPE_CHECKING
+from lexicon.entities.lexicon_constants import LLM_AUDIO_PROMPT, LLM_SYSTEM_PROMPT, LLM_AUDIO_PROMPT, OPENAI_API_URL, OPENAI_AUDIO_API_URL, OPENAI_LLM_MODEL
 from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest, AudioConfig
+
+if TYPE_CHECKING:
+    from http.client import HTTPResponse
+
+def _audio_request_to_file(
+    app_config: AppConfig,
+    audio_config: AudioConfig,
+    audio_request: Request,
+    japanese_vocab_request: JapaneseVocabRequest,
+) -> None:
+    """Orchestrates api call and write to a file"""
+    try:
+        with urlopen(audio_request) as response:
+            logging.info(f"_audio_request_to_file - response recieved")
+
+    except HTTPError as e:
+        logging.error(f"Error: {e}")
+        raise e
 
 
 def _encoded_openapi_post_data(
@@ -83,6 +101,7 @@ def automatically_generate_definition(
         logging.error(f"Error: {e}")
         raise e
 
+
 def write_audio_to_file(
     app_config: AppConfig,
     audio_config: AudioConfig,
@@ -92,7 +111,28 @@ def write_audio_to_file(
     into the location specified by audio_config
     from the openai api
     """
-    pass
+    logging.info(f"write_audio_to_file - start forming api call")
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {app_config.llm_api_key}"
+    }
+
+    audio_request = Request(
+        OPENAI_AUDIO_API_URL,
+        data=_encoded_openapi_post_data(
+            system_prompt=LLM_AUDIO_PROMPT,
+            user_prompt=japanese_vocab_request.vocab_to_create
+        ),
+        headers=headers,
+        method="POST"
+    )
+
+    _audio_request_to_file(
+        app_config=app_config,
+        audio_config=audio_config,
+        audio_request=audio_request,
+        japanese_vocab_request=japanese_vocab_request
+    )
 
 
 if __name__ == "__main__":
