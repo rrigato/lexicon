@@ -40,6 +40,16 @@ def _audio_request_to_file(
         logging.error(f"Error: {e}")
         raise e
 
+def _encoded_audio_post_data(
+    japanese_vocab_request: JapaneseVocabRequest,
+) -> bytes:
+    """Post body for speech endpoint"""
+    return json.dumps({
+        "input": japanese_vocab_request.vocab_to_create,
+        "instructions": LLM_AUDIO_PROMPT,
+        "model": OPENAI_AUDIO_MODEL,
+        "voice": OPENAI_AUDIO_VOICE,
+    }).encode()
 
 def _encoded_openapi_post_data(
     system_prompt: str,
@@ -134,9 +144,8 @@ def write_audio_to_file(
 
     audio_request = Request(
         OPENAI_AUDIO_API_URL,
-        data=_encoded_openapi_post_data(
-            system_prompt=LLM_AUDIO_PROMPT,
-            user_prompt=japanese_vocab_request.vocab_to_create
+        data=_encoded_audio_post_data(
+            japanese_vocab_request=japanese_vocab_request
         ),
         headers=headers,
         method="POST"
@@ -151,12 +160,15 @@ def write_audio_to_file(
 
 
 if __name__ == "__main__":
-    api_definition = automatically_generate_definition(
+    write_audio_to_file(
         AppConfig(
             llm_api_key=os.getenv("anki_openai_key")
+        ),
+        AudioConfig(
+            file_name="manual_speech_test.mp3",
+            full_directory_path_to_write_file="speech.mp3"
         ),
         JapaneseVocabRequest(
             vocab_to_create="洗脳"
         )
     )
-    print(api_definition.word_definition)
