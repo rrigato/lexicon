@@ -1,10 +1,19 @@
 import json
 import logging
 import os
+from copy import deepcopy
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 from typing import TYPE_CHECKING
-from lexicon.entities.lexicon_constants import LLM_AUDIO_PROMPT, LLM_SYSTEM_PROMPT, LLM_AUDIO_PROMPT, OPENAI_API_URL, OPENAI_AUDIO_API_URL, OPENAI_LLM_MODEL
+from lexicon.entities.lexicon_constants import (
+    LLM_AUDIO_PROMPT,
+    LLM_SYSTEM_PROMPT,
+    OPENAI_AUDIO_API_URL,
+    OPENAI_AUDIO_MODEL,
+    OPENAI_AUDIO_VOICE,
+    OPENAI_API_URL,
+    OPENAI_LLM_MODEL,
+)
 from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest, AudioConfig
 
 if TYPE_CHECKING:
@@ -64,6 +73,14 @@ def _encoded_openapi_post_data(
         "reasoning": {"effort": "low"},
     }).encode()
 
+def _openai_api_request_headers(app_config: AppConfig) -> dict:
+    """Returns a deepcopy of OpenAI API request headers"""
+
+    return deepcopy({
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {app_config.llm_api_key}"
+    })
+
 def _parse_openai_response(response_data: dict) -> str:
     """
     Parses the OpenAI API response
@@ -90,10 +107,7 @@ def automatically_generate_definition(
     the word_definition is populated from an OpenAI API call
     """
     logging.info(f"automatically_generate_definition - start forming api call")
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {app_config.llm_api_key}"
-    }
+    headers = _openai_api_request_headers(app_config)
 
     user_prompt = (
         "Provide a concise English definition "
@@ -137,17 +151,13 @@ def write_audio_to_file(
     from the openai api
     """
     logging.info(f"write_audio_to_file - start forming api call")
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {app_config.llm_api_key}"
-    }
 
     audio_request = Request(
         OPENAI_AUDIO_API_URL,
         data=_encoded_audio_post_data(
             japanese_vocab_request=japanese_vocab_request
         ),
-        headers=headers,
+        headers=_openai_api_request_headers(app_config),
         method="POST"
     )
 
