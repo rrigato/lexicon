@@ -16,11 +16,26 @@ def _audio_request_to_file(
     audio_request: Request,
     japanese_vocab_request: JapaneseVocabRequest,
 ) -> None:
-    """Orchestrates api call and write to a file"""
-    try:
-        with urlopen(audio_request) as response:
-            logging.info(f"_audio_request_to_file - response recieved")
+    """Orchestrates api call and writes to a file
 
+
+    """
+    path_to_audio_file = os.path.join(
+        audio_config.full_directory_path_to_write_file,
+        audio_config.file_name
+    )
+    try:
+        '''
+        openai contract for audio endpoint:
+        https://platform.openai.com/docs/api-reference/audio/create
+        '''
+        with urlopen(audio_request) as audio_response:
+            logging.info(f"_audio_request_to_file - audio_response recieved")
+            with open(
+                path_to_audio_file, "wb"
+            ) as audio_file:
+                audio_file.write(audio_response.read())
+                logging.info(f"_audio_request_to_file - audio_file written to {path_to_audio_file}")
     except HTTPError as e:
         logging.error(f"Error: {e}")
         raise e

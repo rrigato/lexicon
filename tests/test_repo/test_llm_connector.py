@@ -1,6 +1,6 @@
 import json
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, mock_open
 
 from lexicon.entities.lexicon_constants import OPENAI_LLM_MODEL
 from lexicon.entities.lexicon_entity_model import AudioConfig
@@ -71,10 +71,12 @@ class TestLlmConnector(unittest.TestCase):
         """
         pass
 
+    @patch("builtins.open", new_callable=mock_open)
     @patch("lexicon.repo.llm_connector.urlopen")
     def test_write_audio_to_file(
         self,
-        urlopen_mock: MagicMock
+        urlopen_mock: MagicMock,
+        open_mock: MagicMock
     ):
         """
         GIVEN -
@@ -98,6 +100,8 @@ class TestLlmConnector(unittest.TestCase):
             ),
             mock_japanese_vocab_request()
         )
+
+        open_mock.assert_called_once()
 
 
 
