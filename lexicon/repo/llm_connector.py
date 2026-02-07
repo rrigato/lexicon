@@ -4,7 +4,7 @@ import os
 from copy import deepcopy
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
-from typing import TYPE_CHECKING
+
 from lexicon.entities.lexicon_constants import (
     LLM_AUDIO_PROMPT,
     LLM_SYSTEM_PROMPT,
@@ -16,8 +16,6 @@ from lexicon.entities.lexicon_constants import (
 )
 from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest, AudioConfig
 
-if TYPE_CHECKING:
-    from http.client import HTTPResponse
 
 def _audio_request_to_file(
     app_config: AppConfig,
@@ -107,7 +105,6 @@ def automatically_generate_definition(
     the word_definition is populated from an OpenAI API call
     """
     logging.info(f"automatically_generate_definition - start forming api call")
-    headers = _openai_api_request_headers(app_config)
 
     user_prompt = (
         "Provide a concise English definition "
@@ -121,7 +118,7 @@ def automatically_generate_definition(
             system_prompt=LLM_SYSTEM_PROMPT,
             user_prompt=user_prompt
         ),
-        headers=headers,
+        headers=_openai_api_request_headers(app_config),
         method="POST"
     )
 
