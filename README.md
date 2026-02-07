@@ -60,7 +60,7 @@ print(qVersion()) #qt version
 
 If you received the following error, this means that the `libankihelper.dylib` dynamic library calling some of the C++ code for Qt was not included in the make install:
 
-![images/anki_missing_dylib.jpg](images/anki_missing_dylib.jpg)
+![images/anki_missing_dylib.png](images/anki_missing_dylib.png)
 
 
 1) The libankihelper.dylib file should be available from here, if you installed the .dmg to `/Applications`
