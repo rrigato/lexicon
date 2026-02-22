@@ -196,6 +196,7 @@ class TestLexiconRepo(unittest.TestCase):
                     msg=f"\n check when {mock_input_text['mock_vocab_request']} is passed to interface"
                 )
 
+    @patch("lexicon.repo.lexicon_repo.write_audio_to_file")
     @patch("lexicon.repo.lexicon_repo.tempfile")
     @patch("lexicon.repo.lexicon_repo.gTTS")
     @patch("lexicon.repo.lexicon_repo.mw")
@@ -203,12 +204,13 @@ class TestLexiconRepo(unittest.TestCase):
         self,
         main_window_mock: MagicMock,
         gtts_mock: MagicMock,
-        tempfile_mock: MagicMock
+        tempfile_mock: MagicMock,
+        write_audio_to_file_mock: MagicMock
         ):
         """
-            GIVEN - a JapaneVocabRequest
-            WHEN - the request is passed to make_mp3_for_anki
-            THEN - the str path to the mp3 file is returned
+            GIVEN - Invocation of FlashCardRepo.make_mp3_for_anki
+            WHEN - write_audio_to_file is called
+            THEN - The mp3 file is added to Anki's media collection
         """
         from fixtures.lexicon_fixtures import mock_app_config
         from fixtures.lexicon_fixtures import mock_japanese_vocab_request
@@ -226,6 +228,8 @@ class TestLexiconRepo(unittest.TestCase):
             ),
             mock_mp3_path
         )
+
+        write_audio_to_file_mock.assert_called_once()
 
     def test_populate_hiraragana_text(self):
         from lexicon.repo.lexicon_repo import FlashCardRepo

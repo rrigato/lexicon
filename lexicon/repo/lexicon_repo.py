@@ -10,8 +10,8 @@ from typing import TYPE_CHECKING
 import pykakasi
 from aqt import mw
 from gtts import gTTS
-
-from lexicon.entities.lexicon_entity_model import (AppConfig, FlashCard,
+from lexicon.repo.llm_connector import write_audio_to_file
+from lexicon.entities.lexicon_entity_model import (AppConfig, AudioConfig, FlashCard,
                                                    JapaneseVocabRequest)
 from lexicon.usecase.lexicon_usecase import LearnJapaneseWordInterface, audio_column_selector, reading_column_selector
 
@@ -243,6 +243,18 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         logging.info(
             f"make_mp3_for_anki - saved mp3 "
             + f"file to - {temp_path}"
+        )
+
+        audio_config = AudioConfig(
+            file_name=vocab_request.vocab_to_create + ".mp3",
+            full_directory_path_to_write_file=tempfile.gettempdir(),
+
+        )
+
+        write_audio_to_file(
+            app_config=app_config,
+            audio_config=audio_config,
+            japanese_vocab_request=vocab_request.vocab_to_create
         )
 
         media_filename = mw.col.media.add_file(temp_path)
