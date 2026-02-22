@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING
 
 import pykakasi
 from aqt import mw
-from gtts import gTTS
 from lexicon.repo.llm_connector import write_audio_to_file
 from lexicon.entities.lexicon_entity_model import (AppConfig, AudioConfig, FlashCard,
                                                    JapaneseVocabRequest)
@@ -222,23 +221,12 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         """
         logging.info(f"make_mp3_for_anki - invocation begin")
 
-        '''
-            TODO -
-            - call llm_connector.write_audio_to_temp_file
-            - remove gTTS
-        '''
-        tts = gTTS(
-            text=vocab_request.vocab_to_create,
-            lang="ja"
-        )
-
         temp_dir = tempfile.gettempdir()
 
         temp_path = os.path.join(
             temp_dir,
             vocab_request.vocab_to_create + ".mp3"
         )
-        tts.save(temp_path)
 
         logging.info(
             f"make_mp3_for_anki - saved mp3 "
@@ -254,7 +242,7 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         write_audio_to_file(
             app_config=app_config,
             audio_config=audio_config,
-            japanese_vocab_request=vocab_request.vocab_to_create
+            japanese_vocab_request=vocab_request
         )
 
         media_filename = mw.col.media.add_file(temp_path)
