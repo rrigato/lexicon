@@ -198,12 +198,10 @@ class TestLexiconRepo(unittest.TestCase):
 
     @patch("lexicon.repo.lexicon_repo.write_audio_to_file")
     @patch("lexicon.repo.lexicon_repo.tempfile")
-    @patch("lexicon.repo.lexicon_repo.gTTS")
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_make_mp3_for_anki(
         self,
         main_window_mock: MagicMock,
-        gtts_mock: MagicMock,
         tempfile_mock: MagicMock,
         write_audio_to_file_mock: MagicMock
         ):
@@ -218,7 +216,6 @@ class TestLexiconRepo(unittest.TestCase):
 
         mock_mp3_path = "temporary/os/dir/駆逐.mp3"
         tempfile_mock.gettempdir.return_value = "temporary/os/dir"
-        gtts_mock.return_value.save.return_value = None
         main_window_mock.col.media.add_file.return_value = mock_mp3_path
 
         self.assertEqual(
