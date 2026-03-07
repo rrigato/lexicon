@@ -1,5 +1,5 @@
 LLM_AUDIO_PROMPT =(
-    "日本語で"
+    "Pronunciation: How a native Japanese speaker would pronounce this word."
 )
 LLM_MODEL_TEMPERATURE = 0
 
@@ -15,7 +15,7 @@ LLM_SYSTEM_PROMPT = (
 
 NOTE_FIELD_OFFSET = -1
 OPENAI_AUDIO_MODEL = "gpt-4o-mini-tts"
-OPENAI_AUDIO_VOICE = "onyx"
+OPENAI_AUDIO_VOICE = "ash"
 OPENAI_AUDIO_API_URL = "https://api.openai.com/v1/audio/speech"
 OPENAI_API_URL = "https://api.openai.com/v1/responses"
 OPENAI_LLM_MODEL = "gpt-5.2"
