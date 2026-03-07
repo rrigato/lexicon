@@ -5,7 +5,7 @@ Anki add-on to create flash cards
 1) Download the Anki app for [your platform here](https://apps.ankiweb.net/)
 2)
 ```sh
-pyenv install 3.9
+pyenv install 3.13
 
 # Make sure DYLIB_PATH and VENV_PATH arguements
 # Match your local setup

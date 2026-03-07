@@ -1,5 +1,5 @@
 #Allow patch versions of aqt
-aqt~=25.09.2
+-~=25.09.2
 detect-secrets==1.5.0
 mypy
 urllib3>=2.6.0
