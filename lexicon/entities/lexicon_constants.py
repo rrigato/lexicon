@@ -1,5 +1,9 @@
 LLM_AUDIO_PROMPT =(
-    "Pronunciation: How a native Japanese speaker would pronounce this word."
+    "Speak only the Japanese word. "
+    "Use the provided hiragana as the pronunciation guide. "
+    "Pronounce it naturally, as a native Japanese speaker would say it in everyday conversation. "
+    "Use normal Japanese pitch accent and rhythm. "
+    "Do not spell it out, explain it, translate it, or add any extra words."
 )
 LLM_MODEL_TEMPERATURE = 0
 

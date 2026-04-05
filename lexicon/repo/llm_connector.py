@@ -51,8 +51,16 @@ def _encoded_audio_post_data(
     japanese_vocab_request: JapaneseVocabRequest,
 ) -> bytes:
     """Post body for speech endpoint"""
+    audio_input = (
+        "Original text: "
+        f"{japanese_vocab_request.vocab_to_create}\n"
+        "Hiragana reading: "
+        f"{japanese_vocab_request.hiragana_text}\n"
+        "Target spoken output: the Japanese word only"
+    )
+
     return json.dumps({
-        "input": japanese_vocab_request.vocab_to_create,
+        "input": audio_input,
         "instructions": LLM_AUDIO_PROMPT,
         "model": OPENAI_AUDIO_MODEL,
         "voice": OPENAI_AUDIO_VOICE,
