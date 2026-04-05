@@ -2,9 +2,9 @@ import json
 import unittest
 from unittest.mock import MagicMock, patch, mock_open
 
-from lexicon.entities.lexicon_constants import OPENAI_LLM_MODEL
-from lexicon.entities.lexicon_entity_model import AudioConfig
-from lexicon.repo.llm_connector import automatically_generate_definition, write_audio_to_file
+from lexicon.entities.lexicon_constants import LLM_AUDIO_PROMPT, OPENAI_LLM_MODEL
+from lexicon.entities.lexicon_entity_model import AudioConfig, JapaneseVocabRequest
+from lexicon.repo.llm_connector import _encoded_audio_post_data, automatically_generate_definition, write_audio_to_file
 from fixtures.lexicon_fixtures import mock_app_config, mock_japanese_vocab_request
 
 class TestLlmConnector(unittest.TestCase):
@@ -58,18 +58,52 @@ class TestLlmConnector(unittest.TestCase):
         self.assertIsNotNone(api_definition.word_definition)
 
 
-    def test_load_hiragana_from_api(self):
+    def test_encoded_audio_post_data_includes_hiragana_guidance(self):
         """
         GIVEN -
-        - a populated AppConfig object
-        and a populated JapaneseVocabRequest object
+        - a populated JapaneseVocabRequest object
         WHEN -
-            load_hiragana is called
+            _encoded_audio_post_data is called
         THEN -
-            a str is returned with the hiragana text
-            from an openai api call
+            the audio payload includes the original word,
+            hiragana reading, and native-speaker prompt
         """
-        pass
+        payload = json.loads(
+            _encoded_audio_post_data(
+                mock_japanese_vocab_request()
+            ).decode("utf-8")
+        )
+
+        self.assertIn("Original text: 例", payload["input"])
+        self.assertIn("Hiragana reading: れい", payload["input"])
+        self.assertIn(
+            "Target spoken output: the Japanese word only",
+            payload["input"]
+        )
+        self.assertEqual(payload["instructions"], LLM_AUDIO_PROMPT)
+
+    def test_encoded_audio_post_data_uses_hiragana_for_katakana_and_kanji(self):
+        """
+        GIVEN -
+        - a JapaneseVocabRequest with kanji surface form and hiragana reading
+        WHEN -
+            _encoded_audio_post_data is called
+        THEN -
+            the request payload includes both the original text
+            and hiragana guidance for pronunciation
+        """
+        payload = json.loads(
+            _encoded_audio_post_data(
+                JapaneseVocabRequest(
+                    vocab_to_create="輪廻",
+                    hiragana_text="りんね",
+                    word_definition="cycle of rebirth"
+                )
+            ).decode("utf-8")
+        )
+
+        self.assertIn("Original text: 輪廻", payload["input"])
+        self.assertIn("Hiragana reading: りんね", payload["input"])
 
     @patch("builtins.open", new_callable=mock_open)
     @patch("lexicon.repo.llm_connector.urlopen")
@@ -101,8 +135,13 @@ class TestLlmConnector(unittest.TestCase):
             mock_japanese_vocab_request()
         )
 
-        open_mock.assert_called_once()
+        args, _kwargs = urlopen_mock.call_args
+        payload = json.loads(args[0].data.decode("utf-8"))
 
+        self.assertIn("Original text: 例", payload["input"])
+        self.assertIn("Hiragana reading: れい", payload["input"])
+        self.assertEqual(payload["instructions"], LLM_AUDIO_PROMPT)
+        open_mock.assert_called_once()
 
 
 
