@@ -256,6 +256,32 @@ class TestLexiconRepo(unittest.TestCase):
             "まったり"
         )
 
+    @patch("lexicon.repo.lexicon_repo.pykakasi.kakasi")
+    def test_populate_hiragana_text_joins_all_chunks_for_mixed_script_input(
+        self,
+        kakasi_mock: MagicMock
+    ):
+        from lexicon.repo.lexicon_repo import FlashCardRepo
+
+        kakasi_instance_mock = MagicMock()
+        kakasi_instance_mock.convert.return_value = [
+            {"hira": "かんじ"},
+            {"hira": "かな"},
+            {"hira": "まじり"},
+        ]
+        kakasi_mock.return_value = kakasi_instance_mock
+
+        populated_request = FlashCardRepo.populate_hiragana_text(
+            JapaneseVocabRequest(
+                vocab_to_create="漢字かな交じり"
+            )
+        )
+
+        self.assertEqual(
+            populated_request.hiragana_text,
+            "かんじかなまじり"
+        )
+
     @patch("lexicon.repo.lexicon_repo.mw")
     def test_retrieve_app_config(
         self,

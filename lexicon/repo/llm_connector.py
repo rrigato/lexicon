@@ -10,6 +10,7 @@ from lexicon.entities.lexicon_constants import (
     LLM_SYSTEM_PROMPT,
     OPENAI_AUDIO_API_URL,
     OPENAI_AUDIO_MODEL,
+    OPENAI_AUDIO_SPEED,
     OPENAI_AUDIO_VOICE,
     OPENAI_API_URL,
     OPENAI_LLM_MODEL,
@@ -52,11 +53,9 @@ def _encoded_audio_post_data(
 ) -> bytes:
     """Post body for speech endpoint"""
     audio_input = (
-        "Original text: "
-        f"{japanese_vocab_request.vocab_to_create}\n"
-        "Hiragana reading: "
-        f"{japanese_vocab_request.hiragana_text}\n"
-        "Target spoken output: the Japanese word only"
+        japanese_vocab_request.hiragana_text
+        or japanese_vocab_request.vocab_to_create
+        or ""
     )
 
     return json.dumps({
@@ -64,6 +63,7 @@ def _encoded_audio_post_data(
         "instructions": LLM_AUDIO_PROMPT,
         "model": OPENAI_AUDIO_MODEL,
         "voice": OPENAI_AUDIO_VOICE,
+        "speed": OPENAI_AUDIO_SPEED,
     }).encode()
 
 def _encoded_openapi_post_data(
@@ -115,7 +115,8 @@ def automatically_generate_definition(
     logging.info(f"automatically_generate_definition - start forming api call")
 
     user_prompt = (
-        "Provide a concise English definition "
+        "Provide a very concise Japanese definition "
+        "using simple Japanese vocabulary "
         "for the Japanese word: "
         f"{japanese_vocab_request.vocab_to_create}"
     )

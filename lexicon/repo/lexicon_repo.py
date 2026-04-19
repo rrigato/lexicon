@@ -285,9 +285,13 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         in the input string
         https://pykakasi.readthedocs.io/en/stable/api.html#api-documents-ref
         '''
-        cloned_vocab_request.hiragana_text = pykakasi_instance.convert(
+        converted_chunks = pykakasi_instance.convert(
             cloned_vocab_request.vocab_to_create
-        )[0]["hira"]
+        )
+        cloned_vocab_request.hiragana_text = "".join(
+            converted_chunk["hira"]
+            for converted_chunk in converted_chunks
+        )
 
         logging.info(f"populate_hiragana_text - initial_vocab_request.vocab_to_create: {initial_vocab_request.vocab_to_create}")
         logging.info(f"populate_hiragana_text - cloned_vocab_request.hiragana_text: {cloned_vocab_request.hiragana_text}")
