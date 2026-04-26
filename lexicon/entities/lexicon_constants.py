@@ -27,4 +27,5 @@ OPENAI_AUDIO_VOICE = "ash"
 OPENAI_AUDIO_SPEED = 1.2
 OPENAI_AUDIO_API_URL = "https://api.openai.com/v1/audio/speech"
 OPENAI_API_URL = "https://api.openai.com/v1/responses"
-OPENAI_LLM_MODEL = "gpt-5.2"
+OPENAI_LLM_MODEL = "gpt-5.4-mini"
+OPENAI_LLM_REASONING_EFFORT = "none"
