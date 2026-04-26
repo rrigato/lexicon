@@ -14,6 +14,7 @@ from lexicon.entities.lexicon_constants import (
     OPENAI_AUDIO_VOICE,
     OPENAI_API_URL,
     OPENAI_LLM_MODEL,
+    OPENAI_LLM_REASONING_EFFORT,
 )
 from lexicon.entities.lexicon_entity_model import AppConfig, JapaneseVocabRequest, AudioConfig
 
@@ -76,7 +77,8 @@ def _encoded_openapi_post_data(
     return json.dumps({
         "model": OPENAI_LLM_MODEL,
         "input": f"{system_prompt}: {user_prompt}",
-        "reasoning": {"effort": "low"},
+        "reasoning": {"effort": OPENAI_LLM_REASONING_EFFORT},
+        "text": {"verbosity": "low"},
     }).encode()
 
 def _openai_api_request_headers(app_config: AppConfig) -> dict:
