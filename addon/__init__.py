@@ -127,22 +127,11 @@ def main():
         )
 
 
-'''
-NOTE -
-anki addons working directory is /
-The following directory is included in the sys.path:
-    - /Users/<mac_user>/Library/Application Support/Anki2/addons21
+def _should_register_addon() -> bool:
+    return os.getenv("LEXICON_SKIP_ADDON_REGISTRATION") != "1"
 
-entry point is the __init__.py file in
-/Users/<mac_user>/Library/Application Support/Anki2/addons21/<addon_name>
-in this case
-/Users/<mac_user>/Library/Application Support/Anki2/addons21/lexicon
 
-This block is ignored when running tests
-'''
-if "unittest" not in sys.modules.keys():
-
-    '''TODO - setup tox configuration and check for environment variable?'''
+def register_addon() -> None:
     set_logger()
 
     logging.info("addon.__init__.py - Lexicon addon loaded")
@@ -162,3 +151,20 @@ if "unittest" not in sys.modules.keys():
     # add addon to the tools menu
     mw.form.menuTools.addAction(action)
 
+
+'''
+NOTE -
+anki addons working directory is /
+The following directory is included in the sys.path:
+    - /Users/<mac_user>/Library/Application Support/Anki2/addons21
+
+entry point is the __init__.py file in
+/Users/<mac_user>/Library/Application Support/Anki2/addons21/<addon_name>
+in this case
+/Users/<mac_user>/Library/Application Support/Anki2/addons21/lexicon
+
+Set LEXICON_SKIP_ADDON_REGISTRATION=1 to import this module without
+registering Anki UI actions.
+'''
+if _should_register_addon():
+    register_addon()

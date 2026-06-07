@@ -1,9 +1,49 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from addon import _flash_card_input_prequisites
+from addon import (
+    _flash_card_input_prequisites,
+    _should_register_addon,
+    main,
+    register_addon,
+)
 from fixtures.lexicon_fixtures import mock_japanese_vocab_request
 class TestAddonInit(unittest.TestCase):
+
+    @patch.dict("os.environ", {}, clear=True)
+    def test_should_register_addon_by_default(self):
+        self.assertTrue(_should_register_addon())
+
+
+    @patch.dict("os.environ", {"LEXICON_SKIP_ADDON_REGISTRATION": "1"})
+    def test_should_not_register_addon_when_skip_env_var_set(self):
+        self.assertFalse(_should_register_addon())
+
+
+    @patch("addon.mw")
+    @patch("addon.qconnect")
+    @patch("addon.QAction")
+    @patch("addon.set_logger")
+    def test_register_addon(
+        self,
+        set_logger_mock: MagicMock,
+        qaction_mock: MagicMock,
+        qconnect_mock: MagicMock,
+        main_window_mock: MagicMock
+    ):
+        action_mock = MagicMock()
+        qaction_mock.return_value = action_mock
+
+        register_addon()
+
+        set_logger_mock.assert_called_once()
+        qaction_mock.assert_called_once_with("lexicon", main_window_mock)
+        action_mock.setShortcut.assert_called_once_with("Ctrl+Shift+L")
+        qconnect_mock.assert_called_once_with(action_mock.triggered, main)
+        main_window_mock.form.menuTools.addAction.assert_called_once_with(
+            action_mock
+        )
+
 
     @patch("aqt.qt.QInputDialog.getText")
     @patch("addon.lookup_api_definition")

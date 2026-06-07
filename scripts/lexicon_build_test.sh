@@ -7,6 +7,7 @@ python -m venv avenv
 
 source avenv/bin/activate
 pip install -r requirements/requirements-dev.txt
+export LEXICON_SKIP_ADDON_REGISTRATION=1
 
 secret_scan_results=$(detect-secrets scan | \
 python3 -c "import sys, json; print(json.load(sys.stdin)['results'])" )
@@ -19,5 +20,4 @@ fi
 
 
 python -m unittest
-
 
