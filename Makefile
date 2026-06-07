@@ -27,6 +27,7 @@ test:
 		set -e; \
 		export PYENV_ROOT="$$HOME/.pyenv"; \
 		export PATH="$$PYENV_ROOT/bin:$$PATH"; \
+		export LEXICON_SKIP_ADDON_REGISTRATION=1; \
 		eval "$$(pyenv init -)"; \
 		pyenv shell lexicon; \
 		python -m unittest; \
