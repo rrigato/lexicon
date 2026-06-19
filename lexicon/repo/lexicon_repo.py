@@ -103,7 +103,6 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         new_note.fields[0] = create_vocab_request.vocab_to_create
         new_note.fields[1] = create_vocab_request.hiragana_text
-        '''TODO dynamically select column number'''
         new_note.fields[3] = create_vocab_request.word_definition
         logging.info(f"create_audio_vocab_card - populated new_note")
 
@@ -156,7 +155,6 @@ class FlashCardRepo(LearnJapaneseWordInterface):
 
         new_note.fields[0] = create_vocab_request.vocab_to_create
         new_note.fields[1] = create_vocab_request.hiragana_text
-        '''TODO dynamically select column number'''
         new_note.fields[2] = create_vocab_request.word_definition
 
         logging.info(f"create_reading_vocab_card - populated new_note")
@@ -270,11 +268,6 @@ class FlashCardRepo(LearnJapaneseWordInterface):
         logging.info(f"populate_hiragana_text - invocation begin")
 
         cloned_vocab_request = deepcopy(initial_vocab_request)
-
-        """TODO
-        - load_hiragana from llm_connector.load_hiragana
-        - Remove any pykakasi dependencies
-        """
 
         pykakasi_instance = pykakasi.kakasi()
 
