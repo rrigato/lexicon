@@ -46,7 +46,13 @@ def _audio_request_to_file(
                 audio_file.write(audio_response.read())
                 logging.info(f"_audio_request_to_file - audio_file written to {path_to_audio_file}")
     except HTTPError as e:
-        logging.error(f"Error: {e}")
+        error_body = e.read().decode("utf-8", errors="replace")
+        logging.error(
+            "OpenAI audio API error status=%s reason=%s body=%s",
+            e.code,
+            e.reason,
+            error_body,
+        )
         raise e
 
 def _encoded_audio_post_data(
@@ -145,7 +151,13 @@ def automatically_generate_definition(
                 word_definition=word_definition
             )
     except HTTPError as e:
-        logging.error(f"Error: {e}")
+        error_body = e.read().decode("utf-8", errors="replace")
+        logging.error(
+            "OpenAI API error status=%s reason=%s body=%s",
+            e.code,
+            e.reason,
+            error_body,
+        )
         raise e
 
 
