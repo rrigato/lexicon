@@ -65,8 +65,8 @@ upgrade_core_tools() {
 
 upgrade_requirements() {
     echo "Compiling and upgrading requirements..."
-    pip-compile requirements/requirements-prod.in
-    pip-compile requirements/requirements-dev.in
+    pip-compile --upgrade requirements/requirements-prod.in
+    pip-compile --upgrade requirements/requirements-dev.in
     pip install --upgrade -r requirements/requirements-dev.txt
 }
 
