@@ -4,11 +4,13 @@
 #
 #    pip-compile requirements/requirements-prod.in
 #
-deprecated==1.2.18
+deprecated==3.0.1
     # via pykakasi
-jaconv==0.4.0
+jaconv==0.5.0
     # via pykakasi
 pykakasi==2.3.0
     # via -r requirements/requirements-prod.in
-wrapt==1.17.2
+websocket-client==1.9.2
+    # via -r requirements/requirements-prod.in
+wrapt==2.5.2
     # via deprecated

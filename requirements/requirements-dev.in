@@ -1,5 +1,5 @@
-#Allow patch versions of aqt
-aqt~=25.09.4
+# Match Anki 26.09.3 and its bundled Qt 6.11.2.
+aqt[qt]==26.9.3
 detect-secrets==1.5.0
 mypy
 urllib3>=2.6.0
